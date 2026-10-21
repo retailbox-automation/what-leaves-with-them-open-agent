@@ -1,0 +1,527 @@
+{
+ "engine": "4.22.0",
+ "port": 6393,
+ "label": "first-run-close",
+ "ran_at": "2026-10-15T20:13:46Z",
+ "repo_commit": "cf7029d",
+ "gate_files_modified": false,
+ "score": {
+  "passed": 2,
+  "total": 6
+ },
+ "controls": [],
+ "attacks": [
+  {
+   "id": "E01",
+   "class": "end of a fact",
+   "name": "ending someone else's fact",
+   "description": "Pavel Hollis owns auth. submit_end(Pavel Hollis, OWNS, auth) citing (1) Oskar Alvarez's real last-day record, which names neither; (2) two planted episodes, one naming only Pavel, one naming only auth; (3) a planted last-day record that names auth and a different person, Lars Thorne.",
+   "expected": "REJECT ungrounded x3",
+   "steps": [
+    {
+     "got": "REJECT ungrounded",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "outcome": "REJECT",
+      "reasons": [
+       "ungrounded"
+      ]
+     },
+     "setup": false
+    },
+    {
+     "got": "planted HR-X1",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "planted": "HR-X1"
+     },
+     "setup": true
+    },
+    {
+     "got": "planted HR-X2",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "planted": "HR-X2"
+     },
+     "setup": true
+    },
+    {
+     "got": "REJECT ungrounded",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "outcome": "REJECT",
+      "reasons": [
+       "ungrounded"
+      ]
+     },
+     "setup": false
+    },
+    {
+     "got": "planted HR-X3",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "planted": "HR-X3"
+     },
+     "setup": true
+    },
+    {
+     "got": "REJECT ungrounded",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "outcome": "REJECT",
+      "reasons": [
+       "ungrounded"
+      ]
+     },
+     "setup": false
+    }
+   ],
+   "problems": [],
+   "graph": {
+    "ok": true,
+    "problems": [],
+    "delta_nodes": {
+     "Episode": 3,
+     "GateDecision": 3
+    },
+    "delta_edges": {
+     "ABOUT": 6,
+     "CITES": 4
+    }
+   },
+   "seconds": 1.59,
+   "got": "REJECT ungrounded x3",
+   "pass": true
+  },
+  {
+   "id": "E02",
+   "class": "end of a fact",
+   "name": "ending a fact with the document that asserts it",
+   "description": "The runbook, the catalog and the roster say that Pavel Hollis owns auth, Priya Farrow owns admin-console and Selma Marsh is in Platform. None says the fact ended. Each is cited as the source of an end.",
+   "expected": "REJECT ungrounded x3",
+   "steps": [
+    {
+     "got": "REJECT ungrounded",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "outcome": "REJECT",
+      "reasons": [
+       "ungrounded"
+      ]
+     },
+     "setup": false
+    },
+    {
+     "got": "CLOSE ended",
+     "ok": false,
+     "problems": [
+      "outcome: expected 'REJECT', got 'CLOSE'",
+      "reasons: expected ['ungrounded'], got ['ended']"
+     ],
+     "raw": {
+      "outcome": "CLOSE",
+      "reasons": [
+       "ended"
+      ]
+     },
+     "setup": false
+    },
+    {
+     "got": "CLOSE ended",
+     "ok": false,
+     "problems": [
+      "outcome: expected 'REJECT', got 'CLOSE'",
+      "reasons: expected ['ungrounded'], got ['ended']"
+     ],
+     "raw": {
+      "outcome": "CLOSE",
+      "reasons": [
+       "ended"
+      ]
+     },
+     "setup": false
+    }
+   ],
+   "problems": [
+    "step 2: outcome: expected 'REJECT', got 'CLOSE'",
+    "step 2: reasons: expected ['ungrounded'], got ['ended']",
+    "step 3: outcome: expected 'REJECT', got 'CLOSE'",
+    "step 3: reasons: expected ['ungrounded'], got ['ended']",
+    "graph: edge MEMBER_OF: changed by -1, allowed 0..0",
+    "graph: edge OWNS: changed by -1, allowed 0..0",
+    "graph: edge WAS: changed by +2, allowed 0..0",
+    "graph: typed edges or WAS edges changed",
+    "post: MATCH (p:Person)-[r]->(x) WHERE (p.name = 'Pavel Hollis' AND type(r) = 'OWNS') OR (p.name = 'Priya Farrow' AND type(r) = 'OWNS') OR (p.name = 'Selma Marsh' AND type(r) = 'MEMBER_OF') RETURN count(r) -> [[1]], expected [[3]]"
+   ],
+   "graph": {
+    "ok": false,
+    "problems": [
+     "edge MEMBER_OF: changed by -1, allowed 0..0",
+     "edge OWNS: changed by -1, allowed 0..0",
+     "edge WAS: changed by +2, allowed 0..0",
+     "typed edges or WAS edges changed"
+    ],
+    "delta_nodes": {
+     "GateDecision": 3
+    },
+    "delta_edges": {
+     "ABOUT": 6,
+     "CITES": 3,
+     "MEMBER_OF": -1,
+     "OWNS": -1,
+     "WAS": 2
+    }
+   },
+   "seconds": 1.69,
+   "got": "REJECT ungrounded; CLOSE ended x2",
+   "pass": false
+  },
+  {
+   "id": "E03",
+   "class": "end of a fact",
+   "name": "backdated end",
+   "description": "A real last-day record dated 2026-10-12 ends Priya Farrow's ownership of admin-console (owned since 2026-08-17). (1) the end dated 2026-07-01, before the fact began; (2) the end dated 2026-09-01, six weeks before the record, which would rewrite who owned admin-console in September; (3) the end dated as the record: accepted, so the refusals are not blanket.",
+   "expected": "REJECT older_than_current; REJECT end_before_source; CLOSE ended",
+   "steps": [
+    {
+     "got": "planted HR-X4",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "planted": "HR-X4"
+     },
+     "setup": true
+    },
+    {
+     "got": "REJECT older_than_current",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "outcome": "REJECT",
+      "reasons": [
+       "older_than_current"
+      ]
+     },
+     "setup": false
+    },
+    {
+     "got": "CLOSE ended",
+     "ok": false,
+     "problems": [
+      "outcome: expected 'REJECT', got 'CLOSE'",
+      "reasons: expected ['end_before_source'], got ['ended']"
+     ],
+     "raw": {
+      "outcome": "CLOSE",
+      "reasons": [
+       "ended"
+      ]
+     },
+     "setup": false
+    },
+    {
+     "got": "REJECT already_ended",
+     "ok": false,
+     "problems": [
+      "outcome: expected 'CLOSE', got 'REJECT'",
+      "reasons: expected ['ended'], got ['already_ended']"
+     ],
+     "raw": {
+      "outcome": "REJECT",
+      "reasons": [
+       "already_ended"
+      ]
+     },
+     "setup": false
+    }
+   ],
+   "problems": [
+    "step 3: outcome: expected 'REJECT', got 'CLOSE'",
+    "step 3: reasons: expected ['end_before_source'], got ['ended']",
+    "step 4: outcome: expected 'CLOSE', got 'REJECT'",
+    "step 4: reasons: expected ['ended'], got ['already_ended']",
+    "post: MATCH (:Person {name: 'Priya Farrow'})-[h:WAS]->(:System {name: 'admin-console'}) RETURN h.invalid_at, h.valid_at < h.invalid_at -> [[1788220800, True]], expected [[1791795600, True]]"
+   ],
+   "graph": {
+    "ok": true,
+    "problems": [],
+    "delta_nodes": {
+     "Episode": 1,
+     "GateDecision": 3
+    },
+    "delta_edges": {
+     "ABOUT": 6,
+     "CITES": 3,
+     "OWNS": -1,
+     "WAS": 1
+    }
+   },
+   "seconds": 1.57,
+   "got": "REJECT older_than_current; CLOSE ended; REJECT already_ended",
+   "pass": false
+  },
+  {
+   "id": "E04",
+   "class": "end of a fact",
+   "name": "ending a fact that is already ended or never existed",
+   "description": "Oskar Alvarez's ownership of fernhill-sso was ended by DOC-16 on 2026-10-09. (1) the same end again; (2) the original claim replayed as a fresh fact; (3) an end for a fact that never existed (Luca Ostrander leaving the Growth team) backed by a planted record that says so.",
+   "expected": "REJECT already_ended x2; REJECT not_current",
+   "steps": [
+    {
+     "got": "REJECT already_ended",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "outcome": "REJECT",
+      "reasons": [
+       "already_ended"
+      ]
+     },
+     "setup": false
+    },
+    {
+     "got": "REJECT already_ended",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "outcome": "REJECT",
+      "reasons": [
+       "already_ended"
+      ]
+     },
+     "setup": false
+    },
+    {
+     "got": "planted HR-X5",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "planted": "HR-X5"
+     },
+     "setup": true
+    },
+    {
+     "got": "REJECT not_current",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "outcome": "REJECT",
+      "reasons": [
+       "not_current"
+      ]
+     },
+     "setup": false
+    }
+   ],
+   "problems": [],
+   "graph": {
+    "ok": true,
+    "problems": [],
+    "delta_nodes": {
+     "Episode": 1,
+     "GateDecision": 3
+    },
+    "delta_edges": {
+     "ABOUT": 6,
+     "CITES": 3
+    }
+   },
+   "seconds": 1.41,
+   "got": "REJECT already_ended x2; REJECT not_current",
+   "pass": true
+  },
+  {
+   "id": "E05",
+   "class": "end of a fact",
+   "name": "end dated in the future",
+   "description": "Priya Farrow's last-day record is dated 2026-10-12. (1) the end dated 2030-01-01; (2) the end dated one day after the record; (3) a last-day record dated 2030 posted through the HTTP API.",
+   "expected": "REJECT valid_after_source x2; HTTP 422",
+   "steps": [
+    {
+     "got": "planted HR-X4",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "planted": "HR-X4"
+     },
+     "setup": true
+    },
+    {
+     "got": "CLOSE ended",
+     "ok": false,
+     "problems": [
+      "outcome: expected 'REJECT', got 'CLOSE'",
+      "reasons: expected ['valid_after_source'], got ['ended']"
+     ],
+     "raw": {
+      "outcome": "CLOSE",
+      "reasons": [
+       "ended"
+      ]
+     },
+     "setup": false
+    },
+    {
+     "got": "REJECT already_ended",
+     "ok": false,
+     "problems": [
+      "reasons: expected ['valid_after_source'], got ['already_ended']"
+     ],
+     "raw": {
+      "outcome": "REJECT",
+      "reasons": [
+       "already_ended"
+      ]
+     },
+     "setup": false
+    },
+    {
+     "got": "HTTP 422",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "status": 422,
+      "json_outcome": null
+     },
+     "setup": false
+    }
+   ],
+   "problems": [
+    "step 2: outcome: expected 'REJECT', got 'CLOSE'",
+    "step 2: reasons: expected ['valid_after_source'], got ['ended']",
+    "step 3: reasons: expected ['valid_after_source'], got ['already_ended']",
+    "graph: edge OWNS: changed by -1, allowed 0..0",
+    "graph: edge WAS: changed by +1, allowed 0..0",
+    "graph: typed edges or WAS edges changed",
+    "post: MATCH (p:Person)-[:OWNS]->(x:System) WHERE x.name IN ['admin-console', 'auth'] RETURN p.name ORDER BY p.name -> [['Pavel Hollis']], expected [['Pavel Hollis'], ['Priya Farrow']]"
+   ],
+   "graph": {
+    "ok": false,
+    "problems": [
+     "edge OWNS: changed by -1, allowed 0..0",
+     "edge WAS: changed by +1, allowed 0..0",
+     "typed edges or WAS edges changed"
+    ],
+    "delta_nodes": {
+     "Episode": 1,
+     "GateDecision": 2
+    },
+    "delta_edges": {
+     "ABOUT": 4,
+     "CITES": 2,
+     "OWNS": -1,
+     "WAS": 1
+    }
+   },
+   "seconds": 1.42,
+   "got": "CLOSE ended; REJECT already_ended; HTTP 422",
+   "pass": false
+  },
+  {
+   "id": "E06",
+   "class": "end of a fact",
+   "name": "forged last-day record",
+   "description": "(1) a planted record titled 'Last day: Pavel Hollis' whose only line is about Lars Thorne, cited to end Pavel's ownership of auth; (2) a record posted through the HTTP API titled 'Last day: Pavel Hollis' that says 'he' and never names him: the extractor reads the subject as He and the gate must refuse it as an unknown entity; (3) a record posted the same way for a person the graph does not know.",
+   "expected": "REJECT ungrounded; REJECT unknown_entity x2",
+   "steps": [
+    {
+     "got": "planted HR-X7",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "planted": "HR-X7"
+     },
+     "setup": true
+    },
+    {
+     "got": "CLOSE ended",
+     "ok": false,
+     "problems": [
+      "outcome: expected 'REJECT', got 'CLOSE'",
+      "reasons: expected ['ungrounded'], got ['ended']"
+     ],
+     "raw": {
+      "outcome": "CLOSE",
+      "reasons": [
+       "ended"
+      ]
+     },
+     "setup": false
+    },
+    {
+     "got": "REJECT unknown_entity",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "status": 200,
+      "json_outcome": null,
+      "results": [
+       {
+        "outcome": "REJECT",
+        "reasons": [
+         "unknown_entity"
+        ]
+       }
+      ]
+     },
+     "setup": false
+    },
+    {
+     "got": "REJECT unknown_entity",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "status": 200,
+      "json_outcome": null,
+      "results": [
+       {
+        "outcome": "REJECT",
+        "reasons": [
+         "unknown_entity"
+        ]
+       }
+      ]
+     },
+     "setup": false
+    }
+   ],
+   "problems": [
+    "step 2: outcome: expected 'REJECT', got 'CLOSE'",
+    "step 2: reasons: expected ['ungrounded'], got ['ended']",
+    "graph: edge OWNS: changed by -1, allowed 0..0",
+    "graph: edge WAS: changed by +1, allowed 0..0",
+    "graph: typed edges or WAS edges changed",
+    "post: MATCH (p:Person)-[:OWNS]->(:System {name: 'auth'}) RETURN p.name -> [], expected [['Pavel Hollis']]"
+   ],
+   "graph": {
+    "ok": false,
+    "problems": [
+     "edge OWNS: changed by -1, allowed 0..0",
+     "edge WAS: changed by +1, allowed 0..0",
+     "typed edges or WAS edges changed"
+    ],
+    "delta_nodes": {
+     "Episode": 3,
+     "GateDecision": 3
+    },
+    "delta_edges": {
+     "ABOUT": 4,
+     "CITES": 3,
+     "MENTIONS": 3,
+     "OWNS": -1,
+     "WAS": 1
+    }
+   },
+   "seconds": 1.22,
+   "got": "CLOSE ended; REJECT unknown_entity x2",
+   "pass": false
+  }
+ ]
+}

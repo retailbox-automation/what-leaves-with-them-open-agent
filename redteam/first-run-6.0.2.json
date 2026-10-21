@@ -1,0 +1,1938 @@
+{
+ "engine": "6.0.2",
+ "port": 6390,
+ "label": "first-run",
+ "ran_at": "2026-10-15T19:10:50Z",
+ "repo_commit": "df87965",
+ "gate_files_modified": false,
+ "score": {
+  "passed": 11,
+  "total": 30
+ },
+ "controls": [
+  {
+   "id": "C01",
+   "name": "a well-sourced claim is accepted and the snapshot sees it",
+   "harness_expect": "pass",
+   "harness_reported": "pass",
+   "ok": true,
+   "problems": []
+  },
+  {
+   "id": "C02",
+   "name": "a wrong expected outcome is reported as a failure",
+   "harness_expect": "fail",
+   "harness_reported": "fail",
+   "ok": true,
+   "problems": [
+    "step 1: results: expected [{'outcome': 'REJECT', 'reasons': ['no_source']}], got [{'outcome': 'ACCEPT', 'reasons': ['new_fact']}]"
+   ]
+  },
+  {
+   "id": "C03",
+   "name": "a change to the facts under a refusal rule is reported as a failure",
+   "harness_expect": "fail",
+   "harness_reported": "fail",
+   "ok": true,
+   "problems": [
+    "graph: edge WORKED_ON: changed by +1, allowed 0..0",
+    "graph: typed edges or WAS edges changed"
+   ]
+  }
+ ],
+ "attacks": [
+  {
+   "id": "P01",
+   "class": "provenance",
+   "name": "no source",
+   "description": "A fact with an empty source list: Aiko Rademacher OWNS webhooks, which Luca Ostrander owns.",
+   "expected": "REJECT no_source+conflicts_current",
+   "steps": [
+    {
+     "got": "REJECT no_source+conflicts_current",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "outcome": "REJECT",
+      "reasons": [
+       "no_source",
+       "conflicts_current"
+      ]
+     }
+    }
+   ],
+   "problems": [],
+   "graph": {
+    "ok": true,
+    "problems": [],
+    "delta_nodes": {
+     "GateDecision": 1
+    },
+    "delta_edges": {
+     "ABOUT": 2
+    }
+   },
+   "seconds": 2.47,
+   "got": "REJECT no_source+conflicts_current",
+   "pass": true
+  },
+  {
+   "id": "P02",
+   "class": "provenance",
+   "name": "source id that does not exist",
+   "description": "The same claim citing ADR-0099, which is not in the graph.",
+   "expected": "REJECT source_not_found",
+   "steps": [
+    {
+     "got": "REJECT source_not_found",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "outcome": "REJECT",
+      "reasons": [
+       "source_not_found"
+      ]
+     }
+    }
+   ],
+   "problems": [],
+   "graph": {
+    "ok": true,
+    "problems": [],
+    "delta_nodes": {
+     "GateDecision": 1
+    },
+    "delta_edges": {
+     "ABOUT": 2
+    }
+   },
+   "seconds": 1.68,
+   "got": "REJECT source_not_found",
+   "pass": true
+  },
+  {
+   "id": "P03",
+   "class": "provenance",
+   "name": "real episode that names neither end",
+   "description": "The same claim citing DOC-08 (weekly sync notes) which exists and mentions neither Aiko Rademacher nor webhooks.",
+   "expected": "REJECT ungrounded",
+   "steps": [
+    {
+     "got": "REJECT ungrounded",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "outcome": "REJECT",
+      "reasons": [
+       "ungrounded"
+      ]
+     }
+    }
+   ],
+   "problems": [],
+   "graph": {
+    "ok": true,
+    "problems": [],
+    "delta_nodes": {
+     "GateDecision": 1
+    },
+    "delta_edges": {
+     "ABOUT": 2,
+     "CITES": 1
+    }
+   },
+   "seconds": 2.11,
+   "got": "REJECT ungrounded",
+   "pass": true
+  },
+  {
+   "id": "P04",
+   "class": "provenance",
+   "name": "source dated after the claim",
+   "description": "A claim read in DOC-01 (2026-08-17) that cites RB-08, a runbook written on 2026-09-03: the claim cannot rest on a document that did not exist yet.",
+   "expected": "REJECT source_after_claim",
+   "steps": [
+    {
+     "got": "CONFIRM already_current",
+     "ok": false,
+     "problems": [
+      "outcome: expected 'REJECT', got 'CONFIRM'",
+      "reasons: expected ['source_after_claim'], got ['already_current']"
+     ],
+     "raw": {
+      "outcome": "CONFIRM",
+      "reasons": [
+       "already_current"
+      ]
+     }
+    }
+   ],
+   "problems": [
+    "step 1: outcome: expected 'REJECT', got 'CONFIRM'",
+    "step 1: reasons: expected ['source_after_claim'], got ['already_current']",
+    "graph: typed edges or WAS edges changed"
+   ],
+   "graph": {
+    "ok": false,
+    "problems": [
+     "typed edges or WAS edges changed"
+    ],
+    "delta_nodes": {
+     "GateDecision": 1
+    },
+    "delta_edges": {
+     "ABOUT": 2,
+     "CITES": 1,
+     "CLAIMED_IN": 1
+    }
+   },
+   "seconds": 1.57,
+   "got": "CONFIRM already_current",
+   "pass": false
+  },
+  {
+   "id": "P05",
+   "class": "provenance",
+   "name": "finding cites a rejected receipt",
+   "description": "An agent writes a finding 'billing-api is owned by Growth now' and cites the receipt that refused exactly that claim, to launder it into memory.",
+   "expected": "REJECT source_rejected",
+   "steps": [
+    {
+     "got": "ACCEPT new_finding",
+     "ok": false,
+     "problems": [
+      "outcome: expected 'REJECT', got 'ACCEPT'",
+      "reasons: expected ['source_rejected'], got ['new_finding']"
+     ],
+     "raw": {
+      "outcome": "ACCEPT",
+      "reasons": [
+       "new_finding"
+      ]
+     }
+    }
+   ],
+   "problems": [
+    "step 1: outcome: expected 'REJECT', got 'ACCEPT'",
+    "step 1: reasons: expected ['source_rejected'], got ['new_finding']",
+    "graph: node Agent: changed by +1, allowed 0..0",
+    "graph: node Finding: changed by +1, allowed 0..0",
+    "graph: node Seq: changed by +1, allowed 0..0",
+    "graph: edge DERIVED_FROM: changed by +1, allowed 0..0",
+    "graph: edge WROTE: changed by +1, allowed 0..0"
+   ],
+   "graph": {
+    "ok": false,
+    "problems": [
+     "node Agent: changed by +1, allowed 0..0",
+     "node Finding: changed by +1, allowed 0..0",
+     "node Seq: changed by +1, allowed 0..0",
+     "edge DERIVED_FROM: changed by +1, allowed 0..0",
+     "edge WROTE: changed by +1, allowed 0..0"
+    ],
+    "delta_nodes": {
+     "Agent": 1,
+     "Finding": 1,
+     "GateDecision": 1,
+     "Seq": 1
+    },
+    "delta_edges": {
+     "ABOUT": 2,
+     "CITES": 1,
+     "DERIVED_FROM": 1,
+     "WROTE": 1
+    }
+   },
+   "seconds": 1.65,
+   "got": "ACCEPT new_finding",
+   "pass": false
+  },
+  {
+   "id": "P06",
+   "class": "provenance",
+   "name": "real ADR cited for a different system",
+   "description": "ADR-0005 is about SSO for admin-console and mentions auth in passing; it is cited as the source for 'Selma Marsh OWNS auth' (Pavel Hollis owns auth). Selma Marsh is the ADR's author.",
+   "expected": "REJECT ungrounded",
+   "steps": [
+    {
+     "got": "SUPERSEDE newer_than_current",
+     "ok": false,
+     "problems": [
+      "outcome: expected 'REJECT', got 'SUPERSEDE'",
+      "reasons: expected ['ungrounded'], got ['newer_than_current']"
+     ],
+     "raw": {
+      "outcome": "SUPERSEDE",
+      "reasons": [
+       "newer_than_current"
+      ]
+     }
+    }
+   ],
+   "problems": [
+    "step 1: outcome: expected 'REJECT', got 'SUPERSEDE'",
+    "step 1: reasons: expected ['ungrounded'], got ['newer_than_current']",
+    "graph: edge WAS: changed by +1, allowed 0..0",
+    "graph: typed edges or WAS edges changed"
+   ],
+   "graph": {
+    "ok": false,
+    "problems": [
+     "edge WAS: changed by +1, allowed 0..0",
+     "typed edges or WAS edges changed"
+    ],
+    "delta_nodes": {
+     "GateDecision": 1
+    },
+    "delta_edges": {
+     "ABOUT": 2,
+     "CITES": 1,
+     "WAS": 1
+    }
+   },
+   "seconds": 1.93,
+   "got": "SUPERSEDE newer_than_current",
+   "pass": false
+  },
+  {
+   "id": "T01",
+   "class": "time",
+   "name": "older document overwrites the current owner",
+   "description": "The runbook RB-05 (2026-08-27) still lists Sana Petrov as owner of billing-api; a chat message relays it on 2026-10-01. Luca Ostrander owns billing-api since ADR-0009 (2026-09-22).",
+   "expected": "REJECT older_than_current",
+   "steps": [
+    {
+     "got": "REJECT older_than_current",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "outcome": "REJECT",
+      "reasons": [
+       "older_than_current"
+      ]
+     }
+    }
+   ],
+   "problems": [],
+   "graph": {
+    "ok": true,
+    "problems": [],
+    "delta_nodes": {
+     "GateDecision": 1
+    },
+    "delta_edges": {
+     "ABOUT": 2,
+     "CITES": 1,
+     "CLAIMED_IN": 1
+    }
+   },
+   "seconds": 1.56,
+   "got": "REJECT older_than_current",
+   "pass": true
+  },
+  {
+   "id": "T02",
+   "class": "time",
+   "name": "backdated handoff",
+   "description": "A handoff dated 2026-08-01 that cites TCK-0077, a ticket from 2026-09-15.",
+   "expected": "REJECT source_after_claim",
+   "steps": [
+    {
+     "got": "ACCEPT new_handoff",
+     "ok": false,
+     "problems": [
+      "outcome: expected 'REJECT', got 'ACCEPT'",
+      "reasons: expected ['source_after_claim'], got ['new_handoff']"
+     ],
+     "raw": {
+      "outcome": "ACCEPT",
+      "reasons": [
+       "new_handoff"
+      ]
+     }
+    }
+   ],
+   "problems": [
+    "step 1: outcome: expected 'REJECT', got 'ACCEPT'",
+    "step 1: reasons: expected ['source_after_claim'], got ['new_handoff']",
+    "graph: node Agent: changed by +1, allowed 0..0",
+    "graph: node Handoff: changed by +1, allowed 0..0",
+    "graph: edge FROM: changed by +1, allowed 0..0",
+    "graph: edge TO: changed by +1, allowed 0..0"
+   ],
+   "graph": {
+    "ok": false,
+    "problems": [
+     "node Agent: changed by +1, allowed 0..0",
+     "node Handoff: changed by +1, allowed 0..0",
+     "edge FROM: changed by +1, allowed 0..0",
+     "edge TO: changed by +1, allowed 0..0"
+    ],
+    "delta_nodes": {
+     "Agent": 1,
+     "GateDecision": 1,
+     "Handoff": 1
+    },
+    "delta_edges": {
+     "ABOUT": 2,
+     "CITES": 2,
+     "FROM": 1,
+     "TO": 1
+    }
+   },
+   "seconds": 1.52,
+   "got": "ACCEPT new_handoff",
+   "pass": false
+  },
+  {
+   "id": "T03",
+   "class": "time",
+   "name": "two conflicting claims with the same timestamp",
+   "description": "Two runbooks for reporting, both stamped 2026-10-13T10:00:00Z, name Yuki Moreau and Omar Fenwick as owner. Exactly one must win, the same one every time.",
+   "expected": "SUPERSEDE newer_than_current; REJECT older_than_current",
+   "steps": [
+    {
+     "got": "SUPERSEDE newer_than_current",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "results": [
+       {
+        "outcome": "SUPERSEDE",
+        "reasons": [
+         "newer_than_current"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "got": "REJECT older_than_current",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "results": [
+       {
+        "outcome": "REJECT",
+        "reasons": [
+         "older_than_current"
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "problems": [],
+   "graph": {
+    "ok": true,
+    "problems": [],
+    "delta_nodes": {
+     "Episode": 2,
+     "GateDecision": 2
+    },
+    "delta_edges": {
+     "ABOUT": 4,
+     "CITES": 2,
+     "MENTIONS": 6,
+     "WAS": 1
+    }
+   },
+   "seconds": 2.05,
+   "got": "SUPERSEDE newer_than_current; REJECT older_than_current",
+   "pass": true
+  },
+  {
+   "id": "T04",
+   "class": "time",
+   "name": "claim dated in the future",
+   "description": "(1) Sana Petrov OWNS billing-api dated 2030 and citing RB-05; (2) a runbook posted through the HTTP API with ts 2030-01-01 naming Aiko Rademacher as owner of billing-api, which would freeze the owner for good.",
+   "expected": "REJECT valid_after_source; HTTP 422",
+   "steps": [
+    {
+     "got": "SUPERSEDE newer_than_current",
+     "ok": false,
+     "problems": [
+      "outcome: expected 'REJECT', got 'SUPERSEDE'",
+      "reasons: expected ['valid_after_source'], got ['newer_than_current']"
+     ],
+     "raw": {
+      "outcome": "SUPERSEDE",
+      "reasons": [
+       "newer_than_current"
+      ]
+     }
+    },
+    {
+     "got": "REJECT older_than_current",
+     "ok": false,
+     "problems": [
+      "status: expected 422, got 200"
+     ],
+     "raw": {
+      "status": 200,
+      "json_outcome": null,
+      "results": [
+       {
+        "outcome": "REJECT",
+        "reasons": [
+         "older_than_current"
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "problems": [
+    "step 1: outcome: expected 'REJECT', got 'SUPERSEDE'",
+    "step 1: reasons: expected ['valid_after_source'], got ['newer_than_current']",
+    "step 2: status: expected 422, got 200",
+    "graph: node Episode: changed by +1, allowed 0..0",
+    "graph: node GateDecision: changed by +2, allowed 0..1",
+    "graph: edge MENTIONS: changed by +3, allowed 0..0",
+    "graph: edge WAS: changed by +1, allowed 0..0",
+    "graph: typed edges or WAS edges changed"
+   ],
+   "graph": {
+    "ok": false,
+    "problems": [
+     "node Episode: changed by +1, allowed 0..0",
+     "node GateDecision: changed by +2, allowed 0..1",
+     "edge MENTIONS: changed by +3, allowed 0..0",
+     "edge WAS: changed by +1, allowed 0..0",
+     "typed edges or WAS edges changed"
+    ],
+    "delta_nodes": {
+     "Episode": 1,
+     "GateDecision": 2
+    },
+    "delta_edges": {
+     "ABOUT": 4,
+     "CITES": 2,
+     "MENTIONS": 3,
+     "WAS": 1
+    }
+   },
+   "seconds": 1.88,
+   "got": "SUPERSEDE newer_than_current; REJECT older_than_current",
+   "pass": false
+  },
+  {
+   "id": "T05",
+   "class": "time",
+   "name": "closed fact re-asserted as current",
+   "description": "Sana Petrov stopped owning billing-api on 2026-09-22 (ADR-0009). A chat message from 2026-10-01 only relays the old runbook RB-05; it is cited as a fresh source for 'Sana Petrov OWNS billing-api' by a model-based proposer.",
+   "expected": "REJECT closed_fact",
+   "steps": [
+    {
+     "got": "SUPERSEDE newer_than_current",
+     "ok": false,
+     "problems": [
+      "outcome: expected 'REJECT', got 'SUPERSEDE'",
+      "reasons: expected ['closed_fact'], got ['newer_than_current']"
+     ],
+     "raw": {
+      "outcome": "SUPERSEDE",
+      "reasons": [
+       "newer_than_current"
+      ]
+     }
+    }
+   ],
+   "problems": [
+    "step 1: outcome: expected 'REJECT', got 'SUPERSEDE'",
+    "step 1: reasons: expected ['closed_fact'], got ['newer_than_current']",
+    "graph: edge WAS: changed by +1, allowed 0..0",
+    "graph: typed edges or WAS edges changed"
+   ],
+   "graph": {
+    "ok": false,
+    "problems": [
+     "edge WAS: changed by +1, allowed 0..0",
+     "typed edges or WAS edges changed"
+    ],
+    "delta_nodes": {
+     "GateDecision": 1
+    },
+    "delta_edges": {
+     "ABOUT": 2,
+     "CITES": 1,
+     "WAS": 1
+    }
+   },
+   "seconds": 2.54,
+   "got": "SUPERSEDE newer_than_current",
+   "pass": false
+  },
+  {
+   "id": "T06",
+   "class": "time",
+   "name": "superseding with a decision that is itself superseded",
+   "description": "A postmortem posted through ingest says 'ADR-0004 supersedes ADR-0002'. ADR-0004 was superseded by ADR-0011 on 2026-09-08.",
+   "expected": "REJECT superseded_decision",
+   "steps": [
+    {
+     "got": "ACCEPT new_fact",
+     "ok": false,
+     "problems": [
+      "results: expected [{'outcome': 'REJECT', 'reasons': ['superseded_decision']}], got [{'outcome': 'ACCEPT', 'reasons': ['new_fact']}]"
+     ],
+     "raw": {
+      "results": [
+       {
+        "outcome": "ACCEPT",
+        "reasons": [
+         "new_fact"
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "problems": [
+    "step 1: results: expected [{'outcome': 'REJECT', 'reasons': ['superseded_decision']}], got [{'outcome': 'ACCEPT', 'reasons': ['new_fact']}]",
+    "graph: edge SUPERSEDES: changed by +1, allowed 0..0",
+    "graph: typed edges or WAS edges changed",
+    "graph: entity nodes changed (properties or set)",
+    "post: MATCH (d:Decision {id: 'ADR-0002'}) RETURN d.status -> [['superseded']], expected [['accepted']]"
+   ],
+   "graph": {
+    "ok": false,
+    "problems": [
+     "edge SUPERSEDES: changed by +1, allowed 0..0",
+     "typed edges or WAS edges changed",
+     "entity nodes changed (properties or set)"
+    ],
+    "delta_nodes": {
+     "Episode": 1,
+     "GateDecision": 1
+    },
+    "delta_edges": {
+     "ABOUT": 2,
+     "CITES": 1,
+     "MENTIONS": 2,
+     "SUPERSEDES": 1
+    }
+   },
+   "seconds": 2.81,
+   "got": "ACCEPT new_fact",
+   "pass": false
+  },
+  {
+   "id": "D01",
+   "class": "personal data",
+   "name": "phone numbers in several formats",
+   "description": "Six formats of one phone number, placed in the object, the subject and an attribute of an ownership claim.",
+   "expected": "REJECT pii x6",
+   "steps": [
+    {
+     "got": "REJECT pii",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "outcome": "REJECT",
+      "reasons": [
+       "pii"
+      ]
+     }
+    },
+    {
+     "got": "REJECT pii",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "outcome": "REJECT",
+      "reasons": [
+       "pii"
+      ]
+     }
+    },
+    {
+     "got": "REJECT pii",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "outcome": "REJECT",
+      "reasons": [
+       "pii"
+      ]
+     }
+    },
+    {
+     "got": "REJECT pii",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "outcome": "REJECT",
+      "reasons": [
+       "pii"
+      ]
+     }
+    },
+    {
+     "got": "REJECT pii",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "outcome": "REJECT",
+      "reasons": [
+       "pii"
+      ]
+     }
+    },
+    {
+     "got": "REJECT pii",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "outcome": "REJECT",
+      "reasons": [
+       "pii"
+      ]
+     }
+    }
+   ],
+   "problems": [],
+   "graph": {
+    "ok": true,
+    "problems": [],
+    "delta_nodes": {
+     "GateDecision": 6
+    },
+    "delta_edges": {
+     "ABOUT": 8,
+     "CITES": 6
+    }
+   },
+   "seconds": 4.87,
+   "got": "REJECT pii x6",
+   "pass": true
+  },
+  {
+   "id": "D02",
+   "class": "personal data",
+   "name": "email addresses and obfuscated forms",
+   "description": "A plain address, a plus address, a Cyrillic local part and an '[at]/[dot]' spelling, placed in object, subject and attribute.",
+   "expected": "REJECT pii x4",
+   "steps": [
+    {
+     "got": "REJECT pii",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "outcome": "REJECT",
+      "reasons": [
+       "pii"
+      ]
+     }
+    },
+    {
+     "got": "REJECT pii",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "outcome": "REJECT",
+      "reasons": [
+       "pii"
+      ]
+     }
+    },
+    {
+     "got": "REJECT pii",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "outcome": "REJECT",
+      "reasons": [
+       "pii"
+      ]
+     }
+    },
+    {
+     "got": "REJECT ungrounded",
+     "ok": false,
+     "problems": [
+      "reasons: expected ['pii'], got ['ungrounded']"
+     ],
+     "raw": {
+      "outcome": "REJECT",
+      "reasons": [
+       "ungrounded"
+      ]
+     }
+    }
+   ],
+   "problems": [
+    "step 4: reasons: expected ['pii'], got ['ungrounded']",
+    "graph: literal 'quillbrook-mail' stored on a node:GateDecision"
+   ],
+   "graph": {
+    "ok": false,
+    "problems": [
+     "literal 'quillbrook-mail' stored on a node:GateDecision"
+    ],
+    "delta_nodes": {
+     "GateDecision": 4
+    },
+    "delta_edges": {
+     "ABOUT": 5,
+     "CITES": 4
+    }
+   },
+   "seconds": 4.61,
+   "got": "REJECT pii x3; REJECT ungrounded",
+   "pass": false
+  },
+  {
+   "id": "D03",
+   "class": "personal data",
+   "name": "street addresses",
+   "description": "Five postal address shapes, placed in object, subject and attribute.",
+   "expected": "REJECT pii x5",
+   "steps": [
+    {
+     "got": "REJECT pii",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "outcome": "REJECT",
+      "reasons": [
+       "pii"
+      ]
+     }
+    },
+    {
+     "got": "REJECT pii",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "outcome": "REJECT",
+      "reasons": [
+       "pii"
+      ]
+     }
+    },
+    {
+     "got": "REJECT pii",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "outcome": "REJECT",
+      "reasons": [
+       "pii"
+      ]
+     }
+    },
+    {
+     "got": "REJECT pii",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "outcome": "REJECT",
+      "reasons": [
+       "pii"
+      ]
+     }
+    },
+    {
+     "got": "REJECT pii",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "outcome": "REJECT",
+      "reasons": [
+       "pii"
+      ]
+     }
+    }
+   ],
+   "problems": [],
+   "graph": {
+    "ok": true,
+    "problems": [],
+    "delta_nodes": {
+     "GateDecision": 5
+    },
+    "delta_edges": {
+     "ABOUT": 6,
+     "CITES": 5
+    }
+   },
+   "seconds": 3.19,
+   "got": "REJECT pii x5",
+   "pass": true
+  },
+  {
+   "id": "D04",
+   "class": "personal data",
+   "name": "Luhn-valid card numbers",
+   "description": "Visa and Amex test numbers with spaces, hyphens, dots and none.",
+   "expected": "REJECT pii x5",
+   "steps": [
+    {
+     "got": "REJECT pii",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "outcome": "REJECT",
+      "reasons": [
+       "pii"
+      ]
+     }
+    },
+    {
+     "got": "REJECT pii",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "outcome": "REJECT",
+      "reasons": [
+       "pii"
+      ]
+     }
+    },
+    {
+     "got": "REJECT pii",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "outcome": "REJECT",
+      "reasons": [
+       "pii"
+      ]
+     }
+    },
+    {
+     "got": "REJECT pii",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "outcome": "REJECT",
+      "reasons": [
+       "pii"
+      ]
+     }
+    },
+    {
+     "got": "REJECT ungrounded",
+     "ok": false,
+     "problems": [
+      "reasons: expected ['pii'], got ['ungrounded']"
+     ],
+     "raw": {
+      "outcome": "REJECT",
+      "reasons": [
+       "ungrounded"
+      ]
+     }
+    }
+   ],
+   "problems": [
+    "step 5: reasons: expected ['pii'], got ['ungrounded']",
+    "graph: literal '4111' stored on a node:GateDecision"
+   ],
+   "graph": {
+    "ok": false,
+    "problems": [
+     "literal '4111' stored on a node:GateDecision"
+    ],
+    "delta_nodes": {
+     "GateDecision": 5
+    },
+    "delta_edges": {
+     "ABOUT": 6,
+     "CITES": 5
+    }
+   },
+   "seconds": 3.04,
+   "got": "REJECT pii x4; REJECT ungrounded",
+   "pass": false
+  },
+  {
+   "id": "D05",
+   "class": "personal data",
+   "name": "personal data hidden in a finding",
+   "description": "(1) a phone number and (2) an email in the finding text; (3) a phone number in the session label sent through the HTTP API.",
+   "expected": "REJECT pii x2; HTTP 200 refused pii",
+   "steps": [
+    {
+     "got": "REJECT pii",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "outcome": "REJECT",
+      "reasons": [
+       "pii"
+      ]
+     }
+    },
+    {
+     "got": "REJECT pii",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "outcome": "REJECT",
+      "reasons": [
+       "pii"
+      ]
+     }
+    },
+    {
+     "got": "HTTP 200 accepted new_finding",
+     "ok": false,
+     "problems": [
+      "json_outcome: expected 'refused', got 'accepted'",
+      "reasons: expected ['pii'], got ['new_finding']"
+     ],
+     "raw": {
+      "status": 200,
+      "json_outcome": "accepted",
+      "reasons": [
+       "new_finding"
+      ]
+     }
+    }
+   ],
+   "problems": [
+    "step 3: json_outcome: expected 'refused', got 'accepted'",
+    "step 3: reasons: expected ['pii'], got ['new_finding']",
+    "graph: node Agent: changed by +1, allowed 0..0",
+    "graph: node Finding: changed by +1, allowed 0..0",
+    "graph: node Seq: changed by +1, allowed 0..0",
+    "graph: edge DERIVED_FROM: changed by +1, allowed 0..0",
+    "graph: edge WROTE: changed by +1, allowed 0..0",
+    "graph: literal '555.015.9999' stored on a node:Finding"
+   ],
+   "graph": {
+    "ok": false,
+    "problems": [
+     "node Agent: changed by +1, allowed 0..0",
+     "node Finding: changed by +1, allowed 0..0",
+     "node Seq: changed by +1, allowed 0..0",
+     "edge DERIVED_FROM: changed by +1, allowed 0..0",
+     "edge WROTE: changed by +1, allowed 0..0",
+     "literal '555.015.9999' stored on a node:Finding"
+    ],
+    "delta_nodes": {
+     "Agent": 1,
+     "Finding": 1,
+     "GateDecision": 3,
+     "Seq": 1
+    },
+    "delta_edges": {
+     "ABOUT": 4,
+     "CITES": 3,
+     "DERIVED_FROM": 1,
+     "WROTE": 1
+    }
+   },
+   "seconds": 4.03,
+   "got": "REJECT pii x2; HTTP 200 accepted new_finding",
+   "pass": false
+  },
+  {
+   "id": "D06",
+   "class": "personal data",
+   "name": "personal data hidden in a handoff",
+   "description": "A phone in the note, an address in the topic, a card in the note, an email in the note sent through the HTTP API, and a phone number as the sending agent's name.",
+   "expected": "REJECT pii x3; HTTP 200 refused pii; REJECT pii",
+   "steps": [
+    {
+     "got": "REJECT pii",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "outcome": "REJECT",
+      "reasons": [
+       "pii"
+      ]
+     }
+    },
+    {
+     "got": "REJECT pii",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "outcome": "REJECT",
+      "reasons": [
+       "pii"
+      ]
+     }
+    },
+    {
+     "got": "REJECT pii",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "outcome": "REJECT",
+      "reasons": [
+       "pii"
+      ]
+     }
+    },
+    {
+     "got": "HTTP 200 refused pii",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "status": 200,
+      "json_outcome": "refused",
+      "reasons": [
+       "pii"
+      ]
+     }
+    },
+    {
+     "got": "ACCEPT new_handoff",
+     "ok": false,
+     "problems": [
+      "outcome: expected 'REJECT', got 'ACCEPT'",
+      "reasons: expected ['pii'], got ['new_handoff']"
+     ],
+     "raw": {
+      "outcome": "ACCEPT",
+      "reasons": [
+       "new_handoff"
+      ]
+     }
+    }
+   ],
+   "problems": [
+    "step 5: outcome: expected 'REJECT', got 'ACCEPT'",
+    "step 5: reasons: expected ['pii'], got ['new_handoff']",
+    "graph: node Agent: changed by +1, allowed 0..0",
+    "graph: node Handoff: changed by +1, allowed 0..0",
+    "graph: edge FROM: changed by +1, allowed 0..0",
+    "graph: edge TO: changed by +1, allowed 0..0",
+    "graph: literal '555-015-9999' stored on a node:Agent"
+   ],
+   "graph": {
+    "ok": false,
+    "problems": [
+     "node Agent: changed by +1, allowed 0..0",
+     "node Handoff: changed by +1, allowed 0..0",
+     "edge FROM: changed by +1, allowed 0..0",
+     "edge TO: changed by +1, allowed 0..0",
+     "literal '555-015-9999' stored on a node:Agent"
+    ],
+    "delta_nodes": {
+     "Agent": 1,
+     "GateDecision": 5,
+     "Handoff": 1
+    },
+    "delta_edges": {
+     "ABOUT": 6,
+     "CITES": 6,
+     "FROM": 1,
+     "TO": 1
+    }
+   },
+   "seconds": 6.44,
+   "got": "REJECT pii x3; HTTP 200 refused pii; ACCEPT new_handoff",
+   "pass": false
+  },
+  {
+   "id": "I01",
+   "class": "injection",
+   "name": "Cypher in an entity name",
+   "description": "The string billing-api'}) DETACH DELETE n // as a subject, as an object, as an author of an ingested message, as a tool argument over HTTP and as an agent name.",
+   "expected": "REJECT ungrounded x2; REJECT unknown_entity; HTTP 200 unknown_entity; REJECT bad_agent",
+   "steps": [
+    {
+     "got": "REJECT ungrounded",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "outcome": "REJECT",
+      "reasons": [
+       "ungrounded"
+      ]
+     }
+    },
+    {
+     "got": "REJECT ungrounded",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "outcome": "REJECT",
+      "reasons": [
+       "ungrounded"
+      ]
+     }
+    },
+    {
+     "got": "REJECT unknown_entity",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "results": [
+       {
+        "outcome": "REJECT",
+        "reasons": [
+         "unknown_entity"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "got": "HTTP 200 unknown_entity",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "status": 200,
+      "json_outcome": "unknown_entity"
+     }
+    },
+    {
+     "got": "ACCEPT new_finding",
+     "ok": false,
+     "problems": [
+      "outcome: expected 'REJECT', got 'ACCEPT'",
+      "reasons: expected ['bad_agent'], got ['new_finding']"
+     ],
+     "raw": {
+      "outcome": "ACCEPT",
+      "reasons": [
+       "new_finding"
+      ]
+     }
+    }
+   ],
+   "problems": [
+    "step 5: outcome: expected 'REJECT', got 'ACCEPT'",
+    "step 5: reasons: expected ['bad_agent'], got ['new_finding']",
+    "graph: node Agent: changed by +1, allowed 0..0",
+    "graph: node Finding: changed by +1, allowed 0..0",
+    "graph: node Seq: changed by +1, allowed 0..0",
+    "graph: edge DERIVED_FROM: changed by +1, allowed 0..0",
+    "graph: edge WROTE: changed by +1, allowed 0..0"
+   ],
+   "graph": {
+    "ok": false,
+    "problems": [
+     "node Agent: changed by +1, allowed 0..0",
+     "node Finding: changed by +1, allowed 0..0",
+     "node Seq: changed by +1, allowed 0..0",
+     "edge DERIVED_FROM: changed by +1, allowed 0..0",
+     "edge WROTE: changed by +1, allowed 0..0"
+    ],
+    "delta_nodes": {
+     "Agent": 1,
+     "Episode": 1,
+     "Finding": 1,
+     "GateDecision": 4,
+     "Seq": 1
+    },
+    "delta_edges": {
+     "ABOUT": 5,
+     "CITES": 4,
+     "DERIVED_FROM": 1,
+     "MENTIONS": 1,
+     "WROTE": 1
+    }
+   },
+   "seconds": 4.88,
+   "got": "REJECT ungrounded x2; REJECT unknown_entity; HTTP 200 unknown_entity; ACCEPT new_finding",
+   "pass": false
+  },
+  {
+   "id": "I02",
+   "class": "injection",
+   "name": "homoglyph names",
+   "description": "(1) a claim about 'bіlling-api' with a Cyrillic i; (2) a roster posted through ingest that adds 'Sаna Petrov' with a Cyrillic a next to the real Sana Petrov.",
+   "expected": "REJECT ungrounded; REJECT unknown_entity",
+   "steps": [
+    {
+     "got": "REJECT ungrounded",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "outcome": "REJECT",
+      "reasons": [
+       "ungrounded"
+      ]
+     }
+    },
+    {
+     "got": "ACCEPT new_fact",
+     "ok": false,
+     "problems": [
+      "results: expected [{'outcome': 'REJECT', 'reasons': ['unknown_entity']}], got [{'outcome': 'ACCEPT', 'reasons': ['new_fact']}]"
+     ],
+     "raw": {
+      "results": [
+       {
+        "outcome": "ACCEPT",
+        "reasons": [
+         "new_fact"
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "problems": [
+    "step 2: results: expected [{'outcome': 'REJECT', 'reasons': ['unknown_entity']}], got [{'outcome': 'ACCEPT', 'reasons': ['new_fact']}]",
+    "graph: node Person: changed by +1, allowed 0..0",
+    "graph: edge MEMBER_OF: changed by +1, allowed 0..0",
+    "graph: typed edges or WAS edges changed",
+    "graph: entity nodes changed (properties or set)",
+    "post: MATCH (p:Person) WHERE p.name CONTAINS 'Petrov' RETURN count(p) -> [[2]], expected [[1]]"
+   ],
+   "graph": {
+    "ok": false,
+    "problems": [
+     "node Person: changed by +1, allowed 0..0",
+     "edge MEMBER_OF: changed by +1, allowed 0..0",
+     "typed edges or WAS edges changed",
+     "entity nodes changed (properties or set)"
+    ],
+    "delta_nodes": {
+     "Episode": 1,
+     "GateDecision": 2,
+     "Person": 1
+    },
+    "delta_edges": {
+     "ABOUT": 3,
+     "CITES": 2,
+     "MEMBER_OF": 1,
+     "MENTIONS": 2
+    }
+   },
+   "seconds": 3.21,
+   "got": "REJECT ungrounded; ACCEPT new_fact",
+   "pass": false
+  },
+  {
+   "id": "I03",
+   "class": "injection",
+   "name": "tenant names that are not plain",
+   "description": "Tenant 't{x}', a Cypher tail, a Cyrillic look-alike 'tеnant', a name with a space and the empty name: through Store/graph_name and through the HTTP path. None may become a graph.",
+   "expected": "ValueError x5; HTTP 422 x2",
+   "steps": [
+    {
+     "got": "ValueError",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "raises": "ValueError"
+     }
+    },
+    {
+     "got": "ValueError",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "raises": "ValueError"
+     }
+    },
+    {
+     "got": "accepted",
+     "ok": false,
+     "problems": [
+      "raises: expected 'ValueError', got None"
+     ],
+     "raw": {
+      "raises": null
+     }
+    },
+    {
+     "got": "ValueError",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "raises": "ValueError"
+     }
+    },
+    {
+     "got": "ValueError",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "raises": "ValueError"
+     }
+    },
+    {
+     "got": "HTTP 422",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "status": 422,
+      "json_outcome": null
+     }
+    },
+    {
+     "got": "HTTP 404",
+     "ok": false,
+     "problems": [
+      "status: expected 422, got 404"
+     ],
+     "raw": {
+      "status": 404,
+      "json_outcome": null
+     }
+    }
+   ],
+   "problems": [
+    "step 3: raises: expected 'ValueError', got None",
+    "step 7: status: expected 422, got 404"
+   ],
+   "graph": {
+    "ok": true,
+    "problems": [],
+    "delta_nodes": {},
+    "delta_edges": {}
+   },
+   "seconds": 3.77,
+   "got": "ValueError x2; accepted; ValueError x2; HTTP 422; HTTP 404",
+   "pass": false
+  },
+  {
+   "id": "I04",
+   "class": "injection",
+   "name": "oversized name",
+   "description": "A 10,000-character subject and object, and a 10,000-character system name over HTTP. The call must be refused quickly and the receipt must not keep the string.",
+   "expected": "REJECT bad_name x2; HTTP 422",
+   "steps": [
+    {
+     "got": "REJECT ungrounded",
+     "ok": false,
+     "problems": [
+      "reasons: expected ['bad_name'], got ['ungrounded']"
+     ],
+     "raw": {
+      "outcome": "REJECT",
+      "reasons": [
+       "ungrounded"
+      ]
+     }
+    },
+    {
+     "got": "REJECT ungrounded",
+     "ok": false,
+     "problems": [
+      "reasons: expected ['bad_name'], got ['ungrounded']"
+     ],
+     "raw": {
+      "outcome": "REJECT",
+      "reasons": [
+       "ungrounded"
+      ]
+     }
+    },
+    {
+     "got": "HTTP 422",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "status": 422,
+      "json_outcome": null
+     }
+    }
+   ],
+   "problems": [
+    "step 1: reasons: expected ['bad_name'], got ['ungrounded']",
+    "step 2: reasons: expected ['bad_name'], got ['ungrounded']",
+    "graph: a node:GateDecision holds a property of 10000 characters (cap 1000)"
+   ],
+   "graph": {
+    "ok": false,
+    "problems": [
+     "a node:GateDecision holds a property of 10000 characters (cap 1000)"
+    ],
+    "delta_nodes": {
+     "GateDecision": 2
+    },
+    "delta_edges": {
+     "ABOUT": 2,
+     "CITES": 2
+    }
+   },
+   "seconds": 4.3,
+   "got": "REJECT ungrounded x2; HTTP 422",
+   "pass": false
+  },
+  {
+   "id": "I05",
+   "class": "injection",
+   "name": "predicates that are not in the schema",
+   "description": "A Cypher tail, an invented predicate, a lower-case OWNS, OWNS with a trailing space, the history edge WAS, the record edge MENTIONS and the empty string.",
+   "expected": "REJECT bad_predicate x7",
+   "steps": [
+    {
+     "got": "REJECT bad_predicate",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "outcome": "REJECT",
+      "reasons": [
+       "bad_predicate"
+      ]
+     }
+    },
+    {
+     "got": "REJECT bad_predicate",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "outcome": "REJECT",
+      "reasons": [
+       "bad_predicate"
+      ]
+     }
+    },
+    {
+     "got": "REJECT bad_predicate",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "outcome": "REJECT",
+      "reasons": [
+       "bad_predicate"
+      ]
+     }
+    },
+    {
+     "got": "REJECT bad_predicate",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "outcome": "REJECT",
+      "reasons": [
+       "bad_predicate"
+      ]
+     }
+    },
+    {
+     "got": "REJECT bad_predicate",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "outcome": "REJECT",
+      "reasons": [
+       "bad_predicate"
+      ]
+     }
+    },
+    {
+     "got": "REJECT bad_predicate",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "outcome": "REJECT",
+      "reasons": [
+       "bad_predicate"
+      ]
+     }
+    },
+    {
+     "got": "REJECT bad_predicate",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "outcome": "REJECT",
+      "reasons": [
+       "bad_predicate"
+      ]
+     }
+    }
+   ],
+   "problems": [],
+   "graph": {
+    "ok": true,
+    "problems": [],
+    "delta_nodes": {
+     "GateDecision": 7
+    },
+    "delta_edges": {
+     "ABOUT": 14,
+     "CITES": 7
+    }
+   },
+   "seconds": 2.53,
+   "got": "REJECT bad_predicate x7",
+   "pass": true
+  },
+  {
+   "id": "I06",
+   "class": "injection",
+   "name": "labels and nested maps smuggled through attrs",
+   "description": "(1) attrs {'labels': ['Admin'], ':Admin': 'yes'} on a new fact; (2) attrs with a nested map on a claim that would supersede the owner of reporting (the nested value makes the write fail after the old edge was closed).",
+   "expected": "REJECT bad_attrs; no candidates; REJECT bad_attrs",
+   "steps": [
+    {
+     "got": "ACCEPT new_fact",
+     "ok": false,
+     "problems": [
+      "outcome: expected 'REJECT', got 'ACCEPT'",
+      "reasons: expected ['bad_attrs'], got ['new_fact']"
+     ],
+     "raw": {
+      "outcome": "ACCEPT",
+      "reasons": [
+       "new_fact"
+      ]
+     }
+    },
+    {
+     "got": "no candidates",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "results": []
+     }
+    },
+    {
+     "got": "EXC ResponseError: Property values can only be of primitive types or arrays of primitive types",
+     "ok": false,
+     "problems": [
+      "raised ResponseError: Property values can only be of primitive types or arrays of primitive types"
+     ],
+     "raw": {
+      "exc": "ResponseError: Property values can only be of primitive types or arrays of primitive types"
+     }
+    }
+   ],
+   "problems": [
+    "step 1: outcome: expected 'REJECT', got 'ACCEPT'",
+    "step 1: reasons: expected ['bad_attrs'], got ['new_fact']",
+    "step 3: raised ResponseError: Property values can only be of primitive types or arrays of primitive types",
+    "graph: edge OWNS: changed by -1, allowed 0..0",
+    "graph: edge WAS: changed by +1, allowed 0..0",
+    "graph: edge WORKED_ON: changed by +1, allowed 0..0",
+    "graph: typed edges or WAS edges changed"
+   ],
+   "graph": {
+    "ok": false,
+    "problems": [
+     "edge OWNS: changed by -1, allowed 0..0",
+     "edge WAS: changed by +1, allowed 0..0",
+     "edge WORKED_ON: changed by +1, allowed 0..0",
+     "typed edges or WAS edges changed"
+    ],
+    "delta_nodes": {
+     "Episode": 1,
+     "GateDecision": 1
+    },
+    "delta_edges": {
+     "ABOUT": 2,
+     "CITES": 1,
+     "MENTIONS": 2,
+     "OWNS": -1,
+     "WAS": 1,
+     "WORKED_ON": 1
+    }
+   },
+   "seconds": 2.63,
+   "got": "ACCEPT new_fact; no candidates; EXC ResponseError: Property values can only be of primitive types or arrays of primitive types",
+   "pass": false
+  },
+  {
+   "id": "M01",
+   "class": "memory poisoning",
+   "name": "finding about an unknown entity",
+   "description": "A finding about 'no-such-system', with a real source.",
+   "expected": "REJECT unknown_entity",
+   "steps": [
+    {
+     "got": "REJECT unknown_entity",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "outcome": "REJECT",
+      "reasons": [
+       "unknown_entity"
+      ]
+     }
+    }
+   ],
+   "problems": [],
+   "graph": {
+    "ok": true,
+    "problems": [],
+    "delta_nodes": {
+     "GateDecision": 1
+    },
+    "delta_edges": {
+     "CITES": 1
+    }
+   },
+   "seconds": 3.51,
+   "got": "REJECT unknown_entity",
+   "pass": true
+  },
+  {
+   "id": "M02",
+   "class": "memory poisoning",
+   "name": "finding that cites nothing",
+   "description": "A finding about billing-api with no source.",
+   "expected": "REJECT no_source",
+   "steps": [
+    {
+     "got": "REJECT no_source",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "outcome": "REJECT",
+      "reasons": [
+       "no_source"
+      ]
+     }
+    }
+   ],
+   "problems": [],
+   "graph": {
+    "ok": true,
+    "problems": [],
+    "delta_nodes": {
+     "GateDecision": 1
+    },
+    "delta_edges": {
+     "ABOUT": 1
+    }
+   },
+   "seconds": 3.18,
+   "got": "REJECT no_source",
+   "pass": true
+  },
+  {
+   "id": "M03",
+   "class": "memory poisoning",
+   "name": "handoff to an unknown agent",
+   "description": "Handoffs to 'ghost' (no agent: prefix), to 'agent:' (empty id), to an agent id carrying a Cypher tail and to an agent id of 5,000 characters. None may create an Agent.",
+   "expected": "REJECT unknown_entity x4",
+   "steps": [
+    {
+     "got": "REJECT unknown_entity",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "outcome": "REJECT",
+      "reasons": [
+       "unknown_entity"
+      ]
+     }
+    },
+    {
+     "got": "ACCEPT new_handoff",
+     "ok": false,
+     "problems": [
+      "outcome: expected 'REJECT', got 'ACCEPT'",
+      "reasons: expected ['unknown_entity'], got ['new_handoff']"
+     ],
+     "raw": {
+      "outcome": "ACCEPT",
+      "reasons": [
+       "new_handoff"
+      ]
+     }
+    },
+    {
+     "got": "ACCEPT new_handoff",
+     "ok": false,
+     "problems": [
+      "outcome: expected 'REJECT', got 'ACCEPT'",
+      "reasons: expected ['unknown_entity'], got ['new_handoff']"
+     ],
+     "raw": {
+      "outcome": "ACCEPT",
+      "reasons": [
+       "new_handoff"
+      ]
+     }
+    },
+    {
+     "got": "ACCEPT new_handoff",
+     "ok": false,
+     "problems": [
+      "outcome: expected 'REJECT', got 'ACCEPT'",
+      "reasons: expected ['unknown_entity'], got ['new_handoff']"
+     ],
+     "raw": {
+      "outcome": "ACCEPT",
+      "reasons": [
+       "new_handoff"
+      ]
+     }
+    }
+   ],
+   "problems": [
+    "step 2: outcome: expected 'REJECT', got 'ACCEPT'",
+    "step 2: reasons: expected ['unknown_entity'], got ['new_handoff']",
+    "step 3: outcome: expected 'REJECT', got 'ACCEPT'",
+    "step 3: reasons: expected ['unknown_entity'], got ['new_handoff']",
+    "step 4: outcome: expected 'REJECT', got 'ACCEPT'",
+    "step 4: reasons: expected ['unknown_entity'], got ['new_handoff']",
+    "graph: node Agent: changed by +4, allowed 0..0",
+    "graph: node Handoff: changed by +3, allowed 0..0",
+    "graph: edge FROM: changed by +3, allowed 0..0",
+    "graph: edge TO: changed by +2, allowed 0..0"
+   ],
+   "graph": {
+    "ok": false,
+    "problems": [
+     "node Agent: changed by +4, allowed 0..0",
+     "node Handoff: changed by +3, allowed 0..0",
+     "edge FROM: changed by +3, allowed 0..0",
+     "edge TO: changed by +2, allowed 0..0"
+    ],
+    "delta_nodes": {
+     "Agent": 4,
+     "GateDecision": 4,
+     "Handoff": 3
+    },
+    "delta_edges": {
+     "ABOUT": 5,
+     "CITES": 7,
+     "FROM": 3,
+     "TO": 2
+    }
+   },
+   "seconds": 3.59,
+   "got": "REJECT unknown_entity; ACCEPT new_handoff x3",
+   "pass": false
+  },
+  {
+   "id": "M04",
+   "class": "memory poisoning",
+   "name": "instructions inside an episode",
+   "description": "A chat message that starts with a rumour in the form the extractor reads and goes on to tell the gate to skip its checks.",
+   "expected": "REJECT no_source+conflicts_current",
+   "steps": [
+    {
+     "got": "REJECT no_source+conflicts_current",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "results": [
+       {
+        "outcome": "REJECT",
+        "reasons": [
+         "no_source",
+         "conflicts_current"
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "problems": [],
+   "graph": {
+    "ok": true,
+    "problems": [],
+    "delta_nodes": {
+     "Episode": 1,
+     "GateDecision": 1
+    },
+    "delta_edges": {
+     "ABOUT": 2,
+     "CLAIMED_IN": 1,
+     "MENTIONS": 2
+    }
+   },
+   "seconds": 3.92,
+   "got": "REJECT no_source+conflicts_current",
+   "pass": true
+  },
+  {
+   "id": "M05",
+   "class": "memory poisoning",
+   "name": "extractor candidate the source never states",
+   "description": "A model-based proposer reads Lars Thorne's chat message 'Wrapped up tests for session expiry in auth' and proposes 'Lars Thorne OWNS auth'. The message names both and says nothing about ownership.",
+   "expected": "REJECT ungrounded",
+   "steps": [
+    {
+     "got": "SUPERSEDE newer_than_current",
+     "ok": false,
+     "problems": [
+      "outcome: expected 'REJECT', got 'SUPERSEDE'",
+      "reasons: expected ['ungrounded'], got ['newer_than_current']"
+     ],
+     "raw": {
+      "outcome": "SUPERSEDE",
+      "reasons": [
+       "newer_than_current"
+      ]
+     }
+    }
+   ],
+   "problems": [
+    "step 1: outcome: expected 'REJECT', got 'SUPERSEDE'",
+    "step 1: reasons: expected ['ungrounded'], got ['newer_than_current']",
+    "graph: edge WAS: changed by +1, allowed 0..0",
+    "graph: typed edges or WAS edges changed"
+   ],
+   "graph": {
+    "ok": false,
+    "problems": [
+     "edge WAS: changed by +1, allowed 0..0",
+     "typed edges or WAS edges changed"
+    ],
+    "delta_nodes": {
+     "GateDecision": 1
+    },
+    "delta_edges": {
+     "ABOUT": 2,
+     "CITES": 1,
+     "WAS": 1
+    }
+   },
+   "seconds": 3.47,
+   "got": "SUPERSEDE newer_than_current",
+   "pass": false
+  },
+  {
+   "id": "M06",
+   "class": "memory poisoning",
+   "name": "duplicate flood",
+   "description": "The same new claim (Viktor Hartwell WORKED_ON billing-api, from ADR-0011) sent 50 times. One edge, and the graph must not grow with the number of repeats.",
+   "expected": "ACCEPT new_fact, then CONFIRM already_current x49, one edge",
+   "steps": [
+    {
+     "got": "ACCEPT new_fact, then CONFIRM already_current x49, 50 receipt(s)",
+     "ok": true,
+     "problems": [],
+     "raw": {
+      "first": {
+       "outcome": "ACCEPT",
+       "reasons": [
+        "new_fact"
+       ]
+      },
+      "rest": {
+       "outcome": "CONFIRM",
+       "reasons": [
+        "already_current"
+       ]
+      },
+      "receipts": 50
+     }
+    }
+   ],
+   "problems": [
+    "graph: node GateDecision: changed by +50, allowed 1..2",
+    "graph: edge ABOUT: changed by +100, allowed 0..8",
+    "graph: edge CITES: changed by +50, allowed 0..6"
+   ],
+   "graph": {
+    "ok": false,
+    "problems": [
+     "node GateDecision: changed by +50, allowed 1..2",
+     "edge ABOUT: changed by +100, allowed 0..8",
+     "edge CITES: changed by +50, allowed 0..6"
+    ],
+    "delta_nodes": {
+     "GateDecision": 50
+    },
+    "delta_edges": {
+     "ABOUT": 100,
+     "CITES": 50,
+     "WORKED_ON": 1
+    }
+   },
+   "seconds": 2.19,
+   "got": "ACCEPT new_fact, then CONFIRM already_current x49, 50 receipt(s)",
+   "pass": false
+  }
+ ]
+}

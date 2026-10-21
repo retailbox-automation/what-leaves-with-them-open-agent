@@ -1,0 +1,49 @@
+# yaml-language-server: $schema=https://schema.zeabur.app/template.json
+# FalkorDB for the public demo (see docs/DEPLOY.md). The API service is deployed separately from GitHub main.
+# - Version 4.22.0, the version FalkorDB Cloud free runs; image pinned by digest (amd64 + arm64 index).
+# - Internal network only: no domain, port forwarding off.
+# - Password: the Zeabur-generated ${PASSWORD} of this service, exposed to the project as FALKORDB_PASSWORD;
+#   no literal anywhere. The API reads FALKORDB_HOST / FALKORDB_PORT / FALKORDB_PASSWORD.
+# - Persistence: volume on the data dir, AOF every second; noeviction so a full memory refuses writes
+#   instead of dropping graph keys. The bundled browser UI is off; two query threads for a 500m CPU limit
+#   (the other FALKORDB_ARGS are the image defaults).
+apiVersion: zeabur.com/v1
+kind: Template
+metadata:
+    name: what-leaves-falkordb
+spec:
+    description: FalkorDB 4.22.0, internal only, persistent, password from a generated variable
+    services:
+        - name: falkordb
+          template: PREBUILT
+          spec:
+            id: falkordb
+            source:
+                image: falkordb/falkordb:v4.22.0@sha256:4ac83f55062d364dcf151692635138b0bd2e12578019a56eb86ef53d067b116b
+                command:
+                    - /bin/sh
+                    - -c
+                    - export REDIS_ARGS="--requirepass $FALKORDB_PASSWORD --appendonly yes --appendfsync everysec --maxmemory 512mb --maxmemory-policy noeviction"; exec /var/lib/falkordb/bin/run.sh
+            ports:
+                - id: redis
+                  port: 6379
+                  type: TCP
+            portForwarding:
+                enabled: false
+            volumes:
+                - id: data
+                  dir: /var/lib/falkordb/data
+            env:
+                BROWSER:
+                    default: "0"
+                FALKORDB_ARGS:
+                    default: THREAD_COUNT 2 OMP_THREAD_COUNT 1 MAX_QUEUED_QUERIES 25 TIMEOUT 1000 RESULTSET_SIZE 10000
+                FALKORDB_PASSWORD:
+                    default: ${PASSWORD}
+                    expose: true
+                FALKORDB_HOST:
+                    default: ${CONTAINER_HOSTNAME}
+                    expose: true
+                FALKORDB_PORT:
+                    default: "6379"
+                    expose: true

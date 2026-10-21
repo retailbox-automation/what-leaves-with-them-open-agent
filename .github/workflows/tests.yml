@@ -1,0 +1,29 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    services:
+      # FalkorDB Cloud free runs 4.22 (C engine); docker latest is 6.0.x (Rust engine). Every test runs on both.
+      falkordb-6:
+        image: falkordb/falkordb:6.0.2
+        ports: ["6390:6379"]
+      falkordb-422:
+        image: falkordb/falkordb:v4.22.0
+        ports: ["6393:6379"]
+    env:
+      HM_TEST_PORTS: "6390,6393"
+      HM_SKIP_LLM: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e '.[api,mcp,agent,dev]' jsonschema anyio
+      - run: python -m pytest -q

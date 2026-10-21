@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>what-leaves-with-them</title>
+<style>
+  :root { --bg: #ffffff; --fg: #1d1d1f; --muted: #5f6368; --link: #0b57d0; --code: #f1f3f4; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #121212; --fg: #e8eaed; --muted: #9aa0a6; --link: #8ab4f8; --code: #202124; }
+  }
+  body { background: var(--bg); color: var(--fg); font: 16px/1.5 system-ui, sans-serif; margin: 0; padding: 32px 16px; }
+  main { max-width: 760px; margin: 0 auto; }
+  a { color: var(--link); }
+  p.muted { color: var(--muted); }
+  pre { background: var(--code); padding: 12px; overflow-x: auto; border-radius: 6px; font-size: 14px; }
+</style>
+</head>
+<body>
+<main>
+<h1>what-leaves-with-them</h1>
+<p>Agent memory on FalkorDB that checks every write before it becomes a fact. Every answer carries the graph path back to its source.</p>
+<p class="muted">This server holds the synthetic corpus of Quillfield Billing, a fictional company (seed 42), in tenant <code>quillfield</code>. No real or personal data. Writes are switched off on this public demo.</p>
+<h2>Try it</h2>
+<ul>
+  <li><a href="docs">Interactive API docs</a></li>
+  <li><a href="health">Health: FalkorDB ping and version</a></li>
+  <li><a href="v1/quillfield/tools">Tool catalogue with JSON schemas</a></li>
+  <li><a href="v1/quillfield/receipts?limit=10">Latest write-gate receipts</a></li>
+  <li><a href="v1/quillfield/receipts?outcome=reject&amp;limit=10">Writes the gate refused</a></li>
+  <li><a href="https://github.com/retailbox-automation/what-leaves-with-them">Source code (MIT)</a></li>
+</ul>
+<pre>curl -s -X POST https://what-leaves.retailbox-automation.com/v1/quillfield/ask \
+  -H 'content-type: application/json' \
+  -d '{"question": "Who owns billing-api?"}'</pre>
+</main>
+</body>
+</html>

@@ -1,0 +1,12 @@
+# Allow-list: only what the demo image needs. The Dockerfile itself must stay in the upload.
+*
+!Dockerfile
+!.dockerignore
+!pyproject.toml
+!README.md
+!LICENSE
+!honest_memory/
+!deploy/
+!web/
+**/__pycache__
+**/*.pyc

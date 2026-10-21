@@ -1,0 +1,112 @@
+[
+ {
+  "n": 1,
+  "hole": "Personal data slipped through in forms the detector did not know: a card number written with dots, an email spelled 'name [at] host [dot] tld'; and the agent name, the session label and the handoff party names were never scanned (a phone number as an agent name was stored, a phone in the session label reached the Finding).",
+  "change": "Card pattern accepts dotted groups, email pattern accepts [at]/(at)/{at} and [dot]; findings and handoffs now scan agent, session and party names too, and refusal receipts store them redacted.",
+  "attacks": [
+   "D02",
+   "D04",
+   "D05",
+   "D06"
+  ],
+  "commit": "466b237"
+ },
+ {
+  "n": 2,
+  "hole": "A 10,000-character name went through every check and into the receipt; an agent id such as agent:x'}) DETACH DELETE n // (or 5,000 characters long) was accepted by submit_finding and, with only the prefix test, created an Agent node in submit_handoff.",
+  "change": "Subjects and objects over 200 characters are refused (bad_name) and receipts keep 200 characters at most; agent ids must match agent:[a-z0-9][a-z0-9_-]{0,63} (bad_agent for findings, unknown_entity for handoff parties).",
+  "attacks": [
+   "I01",
+   "I04",
+   "M03"
+  ],
+  "commit": "c22f96e"
+ },
+ {
+  "n": 3,
+  "hole": "attrs were copied onto the edge as they came. A nested map made the write fail after the old owner's edge had been closed (OWNS edge lost, no new one, ResponseError), and arbitrary keys such as 'labels' became edge properties.",
+  "change": "Only role, title and note are allowed, as strings up to 300 characters; anything else is refused (bad_attrs) before any edge is touched.",
+  "attacks": [
+   "I06"
+  ],
+  "commit": "5c0f88a"
+ },
+ {
+  "n": 4,
+  "hole": "A Finding could cite the receipt that had refused the same claim and so launder it into memory; a Handoff or Finding could be dated before the documents it cites.",
+  "change": "A cited GateDecision with outcome REJECT is not a source (source_rejected); a record older than a cited source is refused (source_after_claim).",
+  "attacks": [
+   "P05",
+   "T02"
+  ],
+  "commit": "92e10ba"
+ },
+ {
+  "n": 5,
+  "hole": "A superseded decision could supersede another one (ADR-0004 over ADR-0002, after ADR-0011 had replaced ADR-0004), reviving a dead decision's authority.",
+  "change": "SUPERSEDES with a subject whose status is superseded is refused (superseded_decision).",
+  "attacks": [
+   "T06"
+  ],
+  "commit": "74c633a"
+ },
+ {
+  "n": 6,
+  "hole": "Grounding only asked whether one episode contained both names anywhere. Any message naming a person and a system could back 'OWNS' (a tests-merged chat line made Lars Thorne owner of auth), a document's author counted as party to every line of it, a later source could back an earlier claim, a claim could be dated after all the evidence for it, and a relay of an old runbook could re-open an ownership that an ADR had closed.",
+  "change": "A source counts only if one line of it names both ends and, for OWNS, MEMBER_OF, LEADS, DECIDED, SUPERSEDES and DEPENDS_ON, carries the relation's word (the author counts as a party only on a first-person line, or for WORKED_ON); the edge keeps only the sources that state the fact; a cited source newer than the episode the claim was read in is refused (source_after_claim); a claim dated after all its stating sources is refused (valid_after_source); a fact that was closed returns only on evidence newer than the closing that does not just point at the document that held it (closed_fact).",
+  "attacks": [
+   "M05",
+   "P04",
+   "P06",
+   "T05"
+  ],
+  "commit": "83192ca"
+ },
+ {
+  "n": 7,
+  "hole": "An episode posted through the API (or ingest_episode) with a date in 2030 was stored and its facts accepted; being 'newer than everything', it would have won every later supersede test and frozen the owner of a system.",
+  "change": "ingest_episode raises before writing anything when the episode is more than an hour ahead of the clock; the API answers 422.",
+  "attacks": [
+   "T04"
+  ],
+  "commit": "41b3f9d"
+ },
+ {
+  "n": 8,
+  "hole": "A document could declare 'Sаna Petrov' (Cyrillic a) or 'sana petrov' as a second person next to the real one; a tenant name with a Cyrillic letter was accepted by graph_name because str.isalnum() is true for it.",
+  "change": "The extractor does not declare an entity whose name mixes scripts in one word or is another known name once accents, case and look-alike letters are ignored (the gate then refuses facts about it as unknown_entity); tenant names must be ASCII.",
+  "attacks": [
+   "I02",
+   "I03"
+  ],
+  "commit": "dfa9a94"
+ },
+ {
+  "n": 9,
+  "hole": "50 identical claims wrote 50 receipts, 50 CITES and 100 ABOUT edges: a flood grew the graph linearly although it taught the memory nothing.",
+  "change": "An exact repeat of a current fact (same triple, proposer and sources the edge already has) returns the first receipt and increments its `repeats` counter; nothing else is written. A repeat with a new proposer or a new source is still recorded.",
+  "attacks": [
+   "M06"
+  ],
+  "commit": "2c0e0a8"
+ },
+ {
+  "n": 10,
+  "hole": "Found while fixing 1: the email pattern backtracked quadratically, 0.8 s for a 10,000-character name on every call (a cheap way to slow the gate down).",
+  "change": "The pattern starts only at the head of a word run; 20,000 characters now take about 1 ms. A timing test guards it.",
+  "attacks": [],
+  "commit": "3faaee7"
+ },
+ {
+  "n": 11,
+  "hole": "The CLOSE path (submit_end) reused the checks of an assertion. The catalog, the roster or the charter that says a person owns, belongs to or leads something ended it just as well as a last-day record; a record titled 'Last day: Pavel Hollis' whose only line was about Lars Thorne ended Pavel's ownership (the title was counted as naming him); an end could be dated years ahead (the person 'leaves' in 2030) or weeks before its record (rewriting who owned a system in between).",
+  "change": "An end must come from a line that names both ends and says 'no longer' (or 'steps down'), with the title kept out; its date may not be after the newest record that states it (valid_after_source) nor more than a day before it (end_before_source). Checks on already-ended and never-existing facts were already right and are untouched.",
+  "attacks": [
+   "E02",
+   "E03",
+   "E05",
+   "E06"
+  ],
+  "commit": "f65b708"
+ }
+]
