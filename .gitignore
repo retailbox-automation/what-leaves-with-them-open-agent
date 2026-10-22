@@ -11,3 +11,4 @@ data/corpus/
 .claude/
 deploy/COMMIT
 bench/.cache/
+zetaris_spike/.work/

@@ -1,0 +1,525 @@
+{
+  "utc": "20261022T153154Z",
+  "pass": true,
+  "checks": {
+    "server_version": "2.4.3.1",
+    "counts": {
+      "zetaris": {
+        "chat": 225,
+        "ticket": 127,
+        "doc": 51
+      },
+      "corpus_file": {
+        "chat": 225,
+        "ticket": 127,
+        "doc": 51
+      },
+      "ok": true
+    },
+    "federated_answer": {
+      "topic": "fernhill-sso",
+      "seconds": 1.993,
+      "ids": [
+        "DOC-14",
+        "TCK-0121",
+        "TCK-0123",
+        "msg-0224",
+        "TCK-0125",
+        "msg-0225",
+        "DOC-17",
+        "DOC-16"
+      ],
+      "by_source": {
+        "chat": 2,
+        "ticket": 3,
+        "doc": 3
+      },
+      "ok": true
+    },
+    "federated_join": {
+      "rows": 45,
+      "expected": 45,
+      "seconds": 1.89,
+      "sample": [
+        {
+          "chat_id": "msg-0008",
+          "ref": "ADR-0001",
+          "ticket_id": null,
+          "doc_id": "ADR-0001"
+        },
+        {
+          "chat_id": "msg-0009",
+          "ref": "ADR-0002",
+          "ticket_id": null,
+          "doc_id": "ADR-0002"
+        },
+        {
+          "chat_id": "msg-0011",
+          "ref": "TCK-0007",
+          "ticket_id": "TCK-0007",
+          "doc_id": null
+        }
+      ],
+      "ok": true
+    },
+    "verifier": {
+      "cited": 8,
+      "verified": 8,
+      "items": [
+        {
+          "source": "doc",
+          "id": "DOC-14",
+          "quote": "Integration: fernhill-sso (single sign-on for the customer Fernhill Outfitters)",
+          "seconds": 0.449,
+          "found": true
+        },
+        {
+          "source": "ticket",
+          "id": "TCK-0121",
+          "quote": "Area: SAML assertion mapping in fernhill-sso",
+          "seconds": 0.284,
+          "found": true
+        },
+        {
+          "source": "ticket",
+          "id": "TCK-0123",
+          "quote": "Area: login redirect in fernhill-sso",
+          "seconds": 0.685,
+          "found": true
+        },
+        {
+          "source": "chat",
+          "id": "msg-0224",
+          "quote": "Deployed the certificate rollover change in fernhill-sso to staging, looks good.",
+          "seconds": 0.713,
+          "found": true
+        },
+        {
+          "source": "ticket",
+          "id": "TCK-0125",
+          "quote": "Area: user provisioning in fernhill-sso",
+          "seconds": 0.243,
+          "found": true
+        },
+        {
+          "source": "chat",
+          "id": "msg-0225",
+          "quote": "Writing handover notes for fernhill-sso and oncall-runbook this week.",
+          "seconds": 0.168,
+          "found": true
+        },
+        {
+          "source": "doc",
+          "id": "DOC-17",
+          "quote": "- fernhill-sso depends on auth: the SAML certificate for the customer rolls over once a year, two weeks before it expires, following the steps in DOC-14",
+          "seconds": 0.306,
+          "found": true
+        },
+        {
+          "source": "doc",
+          "id": "DOC-16",
+          "quote": "- Oskar Alvarez no longer owns fernhill-sso",
+          "seconds": 0.684,
+          "found": true
+        }
+      ],
+      "control_tampered_rejected": 8,
+      "control_unknown_id_rows": 0,
+      "ok": true
+    },
+    "point_read_latency_s": {
+      "chat": {
+        "n": 20,
+        "p50": 0.16,
+        "max": 0.509
+      },
+      "ticket": {
+        "n": 20,
+        "p50": 0.138,
+        "max": 0.576
+      },
+      "doc": {
+        "n": 20,
+        "p50": 0.214,
+        "max": 0.89
+      }
+    }
+  },
+  "sql_log": [
+    {
+      "sql": "SHOW SERVER VERSION",
+      "seconds": 0.095,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT count(*) AS n FROM (SELECT id, author, ts, text, refs FROM WLWT_CHAT.chat) s",
+      "seconds": 0.243,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT count(*) AS n FROM (SELECT id, author, ts, text, refs FROM wlwt_tickets.tickets) s",
+      "seconds": 0.196,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT count(*) AS n FROM (SELECT d.id AS id, d.author AS author, d.ts AS ts, d.text AS text, d.refs AS refs FROM wlwt_docs.docs_raw LATERAL VIEW explode(docs) x AS d) s",
+      "seconds": 0.486,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT 'chat' AS source, s.id, s.author, s.ts, s.text FROM (SELECT id, author, ts, text, refs FROM WLWT_CHAT.chat) s WHERE s.text LIKE '%fernhill-sso%' UNION ALL SELECT 'ticket' AS source, s.id, s.author, s.ts, s.text FROM (SELECT id, author, ts, text, refs FROM wlwt_tickets.tickets) s WHERE s.text LIKE '%fernhill-sso%' UNION ALL SELECT 'doc' AS source, s.id, s.author, s.ts, s.text FROM (SELECT d.id AS id, d.author AS author, d.ts AS ts, d.text AS text, d.refs AS refs FROM wlwt_docs.docs_raw LATERAL VIEW explode(docs) x AS d) s WHERE s.text LIKE '%fernhill-sso%') u ORDER BY u.ts",
+      "seconds": 1.993,
+      "rows": 8
+    },
+    {
+      "sql": "SELECT c.id AS chat_id, c.refs AS ref, t.id AS ticket_id, d.id AS doc_id FROM (SELECT id, author, ts, text, refs FROM WLWT_CHAT.chat) c LEFT JOIN (SELECT id, author, ts, text, refs FROM wlwt_tickets.tickets) t ON c.refs = t.id LEFT JOIN (SELECT d.id AS id, d.author AS author, d.ts AS ts, d.text AS text, d.refs AS refs FROM wlwt_docs.docs_raw LATERAL VIEW explode(docs) x AS d) d ON c.refs = d.id WHERE c.refs <> '' AND (t.id IS NOT NULL OR d.id IS NOT NULL)",
+      "seconds": 1.89,
+      "rows": 45
+    },
+    {
+      "sql": "SELECT * FROM (SELECT d.id AS id, d.author AS author, d.ts AS ts, d.text AS text, d.refs AS refs FROM wlwt_docs.docs_raw LATERAL VIEW explode(docs) x AS d) s WHERE s.id = 'DOC-14'",
+      "seconds": 0.449,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT id, author, ts, text, refs FROM wlwt_tickets.tickets) s WHERE s.id = 'TCK-0121'",
+      "seconds": 0.284,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT id, author, ts, text, refs FROM wlwt_tickets.tickets) s WHERE s.id = 'TCK-0123'",
+      "seconds": 0.685,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT id, author, ts, text, refs FROM WLWT_CHAT.chat) s WHERE s.id = 'msg-0224'",
+      "seconds": 0.713,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT id, author, ts, text, refs FROM wlwt_tickets.tickets) s WHERE s.id = 'TCK-0125'",
+      "seconds": 0.243,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT id, author, ts, text, refs FROM WLWT_CHAT.chat) s WHERE s.id = 'msg-0225'",
+      "seconds": 0.168,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT d.id AS id, d.author AS author, d.ts AS ts, d.text AS text, d.refs AS refs FROM wlwt_docs.docs_raw LATERAL VIEW explode(docs) x AS d) s WHERE s.id = 'DOC-17'",
+      "seconds": 0.306,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT d.id AS id, d.author AS author, d.ts AS ts, d.text AS text, d.refs AS refs FROM wlwt_docs.docs_raw LATERAL VIEW explode(docs) x AS d) s WHERE s.id = 'DOC-16'",
+      "seconds": 0.684,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT d.id AS id, d.author AS author, d.ts AS ts, d.text AS text, d.refs AS refs FROM wlwt_docs.docs_raw LATERAL VIEW explode(docs) x AS d) s WHERE s.id = 'ADR-9999'",
+      "seconds": 0.388,
+      "rows": 0
+    },
+    {
+      "sql": "SELECT * FROM (SELECT id, author, ts, text, refs FROM WLWT_CHAT.chat) s WHERE s.id = 'msg-0001'",
+      "seconds": 0.168,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT id, author, ts, text, refs FROM WLWT_CHAT.chat) s WHERE s.id = 'msg-0002'",
+      "seconds": 0.138,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT id, author, ts, text, refs FROM WLWT_CHAT.chat) s WHERE s.id = 'msg-0003'",
+      "seconds": 0.128,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT id, author, ts, text, refs FROM WLWT_CHAT.chat) s WHERE s.id = 'msg-0004'",
+      "seconds": 0.144,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT id, author, ts, text, refs FROM WLWT_CHAT.chat) s WHERE s.id = 'msg-0005'",
+      "seconds": 0.147,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT id, author, ts, text, refs FROM WLWT_CHAT.chat) s WHERE s.id = 'msg-0006'",
+      "seconds": 0.162,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT id, author, ts, text, refs FROM WLWT_CHAT.chat) s WHERE s.id = 'msg-0007'",
+      "seconds": 0.157,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT id, author, ts, text, refs FROM WLWT_CHAT.chat) s WHERE s.id = 'msg-0008'",
+      "seconds": 0.225,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT id, author, ts, text, refs FROM WLWT_CHAT.chat) s WHERE s.id = 'msg-0009'",
+      "seconds": 0.165,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT id, author, ts, text, refs FROM WLWT_CHAT.chat) s WHERE s.id = 'msg-0010'",
+      "seconds": 0.204,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT id, author, ts, text, refs FROM WLWT_CHAT.chat) s WHERE s.id = 'msg-0011'",
+      "seconds": 0.176,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT id, author, ts, text, refs FROM WLWT_CHAT.chat) s WHERE s.id = 'msg-0012'",
+      "seconds": 0.26,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT id, author, ts, text, refs FROM WLWT_CHAT.chat) s WHERE s.id = 'msg-0013'",
+      "seconds": 0.15,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT id, author, ts, text, refs FROM WLWT_CHAT.chat) s WHERE s.id = 'msg-0014'",
+      "seconds": 0.509,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT id, author, ts, text, refs FROM WLWT_CHAT.chat) s WHERE s.id = 'msg-0015'",
+      "seconds": 0.334,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT id, author, ts, text, refs FROM WLWT_CHAT.chat) s WHERE s.id = 'msg-0016'",
+      "seconds": 0.144,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT id, author, ts, text, refs FROM WLWT_CHAT.chat) s WHERE s.id = 'msg-0017'",
+      "seconds": 0.129,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT id, author, ts, text, refs FROM WLWT_CHAT.chat) s WHERE s.id = 'msg-0018'",
+      "seconds": 0.145,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT id, author, ts, text, refs FROM WLWT_CHAT.chat) s WHERE s.id = 'msg-0019'",
+      "seconds": 0.171,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT id, author, ts, text, refs FROM WLWT_CHAT.chat) s WHERE s.id = 'msg-0020'",
+      "seconds": 0.134,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT id, author, ts, text, refs FROM wlwt_tickets.tickets) s WHERE s.id = 'TCK-0001'",
+      "seconds": 0.207,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT id, author, ts, text, refs FROM wlwt_tickets.tickets) s WHERE s.id = 'TCK-0002'",
+      "seconds": 0.141,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT id, author, ts, text, refs FROM wlwt_tickets.tickets) s WHERE s.id = 'TCK-0003'",
+      "seconds": 0.134,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT id, author, ts, text, refs FROM wlwt_tickets.tickets) s WHERE s.id = 'TCK-0004'",
+      "seconds": 0.151,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT id, author, ts, text, refs FROM wlwt_tickets.tickets) s WHERE s.id = 'TCK-0005'",
+      "seconds": 0.503,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT id, author, ts, text, refs FROM wlwt_tickets.tickets) s WHERE s.id = 'TCK-0006'",
+      "seconds": 0.161,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT id, author, ts, text, refs FROM wlwt_tickets.tickets) s WHERE s.id = 'TCK-0007'",
+      "seconds": 0.121,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT id, author, ts, text, refs FROM wlwt_tickets.tickets) s WHERE s.id = 'TCK-0008'",
+      "seconds": 0.576,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT id, author, ts, text, refs FROM wlwt_tickets.tickets) s WHERE s.id = 'TCK-0009'",
+      "seconds": 0.311,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT id, author, ts, text, refs FROM wlwt_tickets.tickets) s WHERE s.id = 'TCK-0010'",
+      "seconds": 0.128,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT id, author, ts, text, refs FROM wlwt_tickets.tickets) s WHERE s.id = 'TCK-0011'",
+      "seconds": 0.111,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT id, author, ts, text, refs FROM wlwt_tickets.tickets) s WHERE s.id = 'TCK-0012'",
+      "seconds": 0.128,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT id, author, ts, text, refs FROM wlwt_tickets.tickets) s WHERE s.id = 'TCK-0013'",
+      "seconds": 0.148,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT id, author, ts, text, refs FROM wlwt_tickets.tickets) s WHERE s.id = 'TCK-0014'",
+      "seconds": 0.129,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT id, author, ts, text, refs FROM wlwt_tickets.tickets) s WHERE s.id = 'TCK-0015'",
+      "seconds": 0.126,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT id, author, ts, text, refs FROM wlwt_tickets.tickets) s WHERE s.id = 'TCK-0016'",
+      "seconds": 0.106,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT id, author, ts, text, refs FROM wlwt_tickets.tickets) s WHERE s.id = 'TCK-0017'",
+      "seconds": 0.118,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT id, author, ts, text, refs FROM wlwt_tickets.tickets) s WHERE s.id = 'TCK-0018'",
+      "seconds": 0.122,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT id, author, ts, text, refs FROM wlwt_tickets.tickets) s WHERE s.id = 'TCK-0019'",
+      "seconds": 0.157,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT id, author, ts, text, refs FROM wlwt_tickets.tickets) s WHERE s.id = 'TCK-0020'",
+      "seconds": 0.153,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT d.id AS id, d.author AS author, d.ts AS ts, d.text AS text, d.refs AS refs FROM wlwt_docs.docs_raw LATERAL VIEW explode(docs) x AS d) s WHERE s.id = 'DOC-01'",
+      "seconds": 0.324,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT d.id AS id, d.author AS author, d.ts AS ts, d.text AS text, d.refs AS refs FROM wlwt_docs.docs_raw LATERAL VIEW explode(docs) x AS d) s WHERE s.id = 'DOC-02'",
+      "seconds": 0.759,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT d.id AS id, d.author AS author, d.ts AS ts, d.text AS text, d.refs AS refs FROM wlwt_docs.docs_raw LATERAL VIEW explode(docs) x AS d) s WHERE s.id = 'ARCH-01'",
+      "seconds": 0.257,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT d.id AS id, d.author AS author, d.ts AS ts, d.text AS text, d.refs AS refs FROM wlwt_docs.docs_raw LATERAL VIEW explode(docs) x AS d) s WHERE s.id = 'RB-01'",
+      "seconds": 0.189,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT d.id AS id, d.author AS author, d.ts AS ts, d.text AS text, d.refs AS refs FROM wlwt_docs.docs_raw LATERAL VIEW explode(docs) x AS d) s WHERE s.id = 'DOC-03'",
+      "seconds": 0.171,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT d.id AS id, d.author AS author, d.ts AS ts, d.text AS text, d.refs AS refs FROM wlwt_docs.docs_raw LATERAL VIEW explode(docs) x AS d) s WHERE s.id = 'DOC-04'",
+      "seconds": 0.217,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT d.id AS id, d.author AS author, d.ts AS ts, d.text AS text, d.refs AS refs FROM wlwt_docs.docs_raw LATERAL VIEW explode(docs) x AS d) s WHERE s.id = 'DOC-05'",
+      "seconds": 0.205,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT d.id AS id, d.author AS author, d.ts AS ts, d.text AS text, d.refs AS refs FROM wlwt_docs.docs_raw LATERAL VIEW explode(docs) x AS d) s WHERE s.id = 'DOC-06'",
+      "seconds": 0.198,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT d.id AS id, d.author AS author, d.ts AS ts, d.text AS text, d.refs AS refs FROM wlwt_docs.docs_raw LATERAL VIEW explode(docs) x AS d) s WHERE s.id = 'DOC-07'",
+      "seconds": 0.21,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT d.id AS id, d.author AS author, d.ts AS ts, d.text AS text, d.refs AS refs FROM wlwt_docs.docs_raw LATERAL VIEW explode(docs) x AS d) s WHERE s.id = 'ADR-0001'",
+      "seconds": 0.168,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT d.id AS id, d.author AS author, d.ts AS ts, d.text AS text, d.refs AS refs FROM wlwt_docs.docs_raw LATERAL VIEW explode(docs) x AS d) s WHERE s.id = 'ADR-0002'",
+      "seconds": 0.183,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT d.id AS id, d.author AS author, d.ts AS ts, d.text AS text, d.refs AS refs FROM wlwt_docs.docs_raw LATERAL VIEW explode(docs) x AS d) s WHERE s.id = 'RB-02'",
+      "seconds": 0.89,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT d.id AS id, d.author AS author, d.ts AS ts, d.text AS text, d.refs AS refs FROM wlwt_docs.docs_raw LATERAL VIEW explode(docs) x AS d) s WHERE s.id = 'RB-03'",
+      "seconds": 0.301,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT d.id AS id, d.author AS author, d.ts AS ts, d.text AS text, d.refs AS refs FROM wlwt_docs.docs_raw LATERAL VIEW explode(docs) x AS d) s WHERE s.id = 'DOC-14'",
+      "seconds": 0.146,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT d.id AS id, d.author AS author, d.ts AS ts, d.text AS text, d.refs AS refs FROM wlwt_docs.docs_raw LATERAL VIEW explode(docs) x AS d) s WHERE s.id = 'ADR-0004'",
+      "seconds": 0.145,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT d.id AS id, d.author AS author, d.ts AS ts, d.text AS text, d.refs AS refs FROM wlwt_docs.docs_raw LATERAL VIEW explode(docs) x AS d) s WHERE s.id = 'ADR-0003'",
+      "seconds": 0.488,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT d.id AS id, d.author AS author, d.ts AS ts, d.text AS text, d.refs AS refs FROM wlwt_docs.docs_raw LATERAL VIEW explode(docs) x AS d) s WHERE s.id = 'RB-04'",
+      "seconds": 0.324,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT d.id AS id, d.author AS author, d.ts AS ts, d.text AS text, d.refs AS refs FROM wlwt_docs.docs_raw LATERAL VIEW explode(docs) x AS d) s WHERE s.id = 'PM-01'",
+      "seconds": 0.56,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT d.id AS id, d.author AS author, d.ts AS ts, d.text AS text, d.refs AS refs FROM wlwt_docs.docs_raw LATERAL VIEW explode(docs) x AS d) s WHERE s.id = 'RB-05'",
+      "seconds": 0.585,
+      "rows": 1
+    },
+    {
+      "sql": "SELECT * FROM (SELECT d.id AS id, d.author AS author, d.ts AS ts, d.text AS text, d.refs AS refs FROM wlwt_docs.docs_raw LATERAL VIEW explode(docs) x AS d) s WHERE s.id = 'RB-06'",
+      "seconds": 0.193,
+      "rows": 1
+    }
+  ]
+}
