@@ -11,6 +11,7 @@
 !zetaris_spike/*.py
 !sample_data/
 !input_examples/
+!scripts/cross_session_proof.py
 !vendor/hmem/dist/
 !vendor/hmem/LICENSE
 !deploy/
