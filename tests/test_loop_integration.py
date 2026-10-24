@@ -294,6 +294,8 @@ def test_an_empty_reply_is_visible_and_not_a_down_provider(graph, ns, trace):
     assert out["status"] == "verified" and out["answer_author"] == "template"
     warn = [e for e in trace.events if e["step"] == "llm_call" and e["status"] == "warning"]
     assert warn and "empty reply" in warn[0]["error"]
+    cites = [r for r in ns.requests if r.get("app") == "wlwt-investigator" and not r["body"].get("tools")]
+    assert len(cites) == 1                       # an empty reply is not asked again
     assert any(e["step"] == "cite" and e["status"] == "fallback" for e in trace.events)
 
 
@@ -413,3 +415,17 @@ def test_an_unchanged_uncited_record_is_reread_and_not_flagged(graph, ns, trace)
     out = R.investigate(QUESTION, graph, LocalSample(), trace, nightshift_cfg(), sample=False)
     assert out["status"] == "verified" and out["rounds"] == 1 and out["conflicts"] == []
     assert [(e["record_id"], e["changed"]) for e in trace.events if e["step"] == "evidence_reread"] == [("msg-0148", False)]
+
+
+def test_adding_the_citation_marker_is_not_reported_as_a_removal(graph, ns, trace):
+    ns.revise = lambda u: {"answer": "Luca Ostrander owns billing-api since 2026-09-22.",
+                           "citations": [{"id": "ADR-0009", "quote": ADR_LINE}]}
+    src = LocalSample()
+    original = R.tamper(src, "msg-0148", EDITED, trace)
+    try:
+        R.investigate(QUESTION, graph, src, trace, nightshift_cfg(), sample=False)
+    finally:
+        R.restore(src, "msg-0148", original, trace)
+    [flag] = [e for e in trace.events if e["step"] == "conflict_flagged"]
+    assert flag["removed_from_answer"] is None
+    assert flag["answer_before"] == "Luca Ostrander owns billing-api since 2026-09-22."

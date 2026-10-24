@@ -221,6 +221,8 @@ def chat(messages: list[dict], *, agent: str, scope: str, tools: list | None = N
             warming = any(code in detail for code in WARMING_CODES)
             if not warming and exc.code < 500 and exc.code != 429:   # a refusal is final
                 raise last from exc
+            if "empty_response" in detail:   # the model answered with nothing; asking again costs the same again
+                raise last from exc
         except (urllib.error.URLError, TimeoutError, ConnectionError) as exc:
             last = NightshiftUnavailable(f"Nightshift unreachable at {base_url()}: {exc}")
         else:

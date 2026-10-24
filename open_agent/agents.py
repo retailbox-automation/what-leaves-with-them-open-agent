@@ -412,14 +412,16 @@ class Investigator:
         support = " ".join(new.records[c.id]["text"] for c in new.citations if c.id in new.records)
         support += " " + " ".join(c.current_text or "" for c in review.checks if c.id in cited)
         before = new.claim_text
-        main = strip_restatements(before, flagged, support) or before
+        stripped = strip_restatements(before, flagged, support) or before
+        main = stripped
         if cited and not any(_mentions(main, i) for i in cited):
             main = main.rstrip().rstrip(".") + f" [{', '.join(c.id for c in new.citations)}]."
         new.main, new.conflicts = main, flagged
         new.answer = " ".join([main] + [cf["line"] for cf in flagged])
         self.trace.event("Investigator", "conflict_flagged", status="warning", round=review.round + 1,
                          records=[cf["id"] for cf in flagged], kinds=[cf["kind"] for cf in flagged],
-                         removed_from_answer=before if main != before else None, flagged_for="human",
+                         removed_from_answer=before if stripped != before else None, answer_before=before,
+                         flagged_for="human",
                          reason="records that changed at their source or contradict the answer are reported on their "
                                 "own line, not blended into it")
 
