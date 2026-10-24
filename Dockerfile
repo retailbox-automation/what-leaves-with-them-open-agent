@@ -30,11 +30,12 @@ print('\n'.join(p['dependencies'] + p['optional-dependencies']['api'] + p['optio
 
 COPY . .
 # The synthetic company is generated at build time (deterministic, no network) for the panel's tenant.
+# output_examples/ starts empty in the image (never read by a run); scripts/cross_session_proof.py writes its result there.
 RUN python -m honest_memory.corpus --seed 42 --out data/corpus \
  && groupadd --gid 10001 hm \
  && useradd --uid 10001 --gid 10001 --no-create-home --home-dir /app --shell /usr/sbin/nologin hm \
- && mkdir -p /app/logs /app/.state/hmem \
- && chown -R hm:hm /app/logs /app/.state
+ && mkdir -p /app/logs /app/.state/hmem /app/output_examples \
+ && chown -R hm:hm /app/logs /app/.state /app/output_examples
 
 USER hm
 EXPOSE 8000
