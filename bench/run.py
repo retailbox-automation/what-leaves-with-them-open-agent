@@ -132,6 +132,9 @@ def main(argv=None) -> int:
     ap.add_argument("--resume", action="store_true", help="keep answers already saved in --out and only run the rest")
     ap.add_argument("--rescore", action="store_true", help="score the saved answers again; run no model")
     ap.add_argument("--keep-tenant", action="store_true", help="do not drop the tenant graph at the end")
+    ap.add_argument("--provider", default="ollama", choices=("ollama", "nightshift"),
+                    help="model provider for honest-agent: ollama (default, as the published numbers) or nightshift "
+                         "(Meterless Nightshift, the Investigator's Nemotron lane; --model defaults to its model id)")
     args = ap.parse_args(argv)
 
     systems = [s for s in args.systems.split(",") if s]
@@ -171,13 +174,28 @@ def main(argv=None) -> int:
         log(f"rescored {sum(len(r) for r in results.values())} answers; wrote {report_path}")
         return 0
 
-    preflight(args.model, args.embed_model, args.host, args.port)
-    started, t0 = now_utc(), time.perf_counter()
-    ollama = Ollama()
-    log("warming up the models")
     reasoning = None if args.reasoning == "default" else args.reasoning
-    ollama.chat(args.model, [{"role": "user", "content": "Reply with the word ok."}], reasoning)
-    ollama.embed(args.embed_model, ["warm up"])
+    nightshift = args.provider == "nightshift"
+    if nightshift:
+        from open_agent import nightshift as N
+
+        if "plain-rag" in systems:
+            raise SystemExit("--provider nightshift runs the honest paths only (plain RAG embeds through Ollama)")
+        if args.model == DEFAULT_MODEL:
+            args.model = N.route_for("investigator").model
+        if args.model != N.route_for("investigator").model:
+            raise SystemExit(f"Nightshift serves {N.route_for('investigator').model} on the Investigator's lane, "
+                             f"not {args.model}")
+        if args.reasoning != "default":
+            log("note: Nightshift 1.2.1 cannot switch the lane's thinking off; --reasoning is recorded as 'default'")
+            args.reasoning, reasoning = "default", None
+    started, t0 = now_utc(), time.perf_counter()
+    if not nightshift:
+        preflight(args.model, args.embed_model, args.host, args.port)
+        ollama = Ollama()
+        log("warming up the models")
+        ollama.chat(args.model, [{"role": "user", "content": "Reply with the word ok."}], reasoning)
+        ollama.embed(args.embed_model, ["warm up"])
 
     results: dict[str, list[dict]] = {}
     ingest: dict = {}
@@ -188,7 +206,8 @@ def main(argv=None) -> int:
     if any(s.startswith("honest") for s in systems):
         from .honest import Honest
 
-        with Honest(corpus, args.host, args.port, args.model, keep=args.keep_tenant, reasoning=reasoning) as honest:
+        with Honest(corpus, args.host, args.port, args.model, keep=args.keep_tenant, reasoning=reasoning,
+                    provider=args.provider, trace_dir=out_dir) as honest:
             ingest, falkordb = honest.ingest_summary, honest.version
             log(f"tenant {honest.tenant} on FalkorDB {falkordb}: {ingest['gate_calls']} gate decisions in {ingest['seconds']} s")
             if "honest-router" in systems:
@@ -198,10 +217,20 @@ def main(argv=None) -> int:
                 results["honest-agent"] = run_system("honest-agent", honest.ask_agent, questions, paths["honest-agent"],
                                                      truth, by_id, args.resume)
 
-    models = ollama_models([args.model, args.embed_model])
+    if nightshift:
+        r = N.route_for("investigator")
+        receipts = list(getattr(honest.agent.client, "receipts", []))
+        models = {args.model: {"provider": "meterless-nightshift", "app": r.app, "lane": r.lane,
+                               "receipts": len(receipts), "cost_usd": sum(x.cost_usd or 0 for x in receipts),
+                               "routed_models": sorted({x.routed_model or "" for x in receipts}),
+                               "trace": str(honest.trace.path)},
+                  args.embed_model: {"note": "not used (no plain RAG in this run)"}}
+    else:
+        models = ollama_models([args.model, args.embed_model])
     meta = {"started": started, "finished": now_utc(), "wall_seconds": round(time.perf_counter() - t0, 1),
             "seed": corpus.seed, "generator_version": corpus.generator_version, "corpus_sha256": corpus.sha256,
-            "questions": len(questions), "k": args.k, "chunk": args.chunk, "reasoning": args.reasoning, "commit": git_head(), "ollama_version": ollama_version(),
+            "questions": len(questions), "k": args.k, "chunk": args.chunk, "reasoning": args.reasoning, "commit": git_head(), "ollama_version": "not used" if nightshift else ollama_version(),
+            "provider": args.provider,
             "models": {"chat": {"name": args.model, **models[args.model]},
                        "embedding": {"name": args.embed_model, **models[args.embed_model]}},
             "falkordb_version": falkordb, "falkordb_port": args.port, "systems": systems,
