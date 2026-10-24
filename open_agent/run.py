@@ -32,7 +32,7 @@ from honest_memory.extract import RuleExtractor
 from honest_memory.ingest import ingest_episodes
 from honest_memory.store import Store, connect
 
-from .agents import Investigator, Verifier
+from .agents import REASON_TEXT, Investigator, Verifier
 from .llm import LLMConfig
 from .sources import SYSTEM_OF, LocalSample, SourceUnavailable, ZetarisSource, read_all
 from .trace import Trace, new_run_id
@@ -154,12 +154,16 @@ def investigate(question: str, store: Store, source, trace: Trace, llm: LLMConfi
     gate = write_finding(inv, draft, last, trace)
     status = status_of(draft, reviews)
     checks = [c for r in reviews for c in r.checks]
+    gone = dropped(reviews)
     return {
         "status": status, "answer": draft.answer, "answer_author": draft.author,
         "citations": [{"id": c.id, "source": SYSTEM_OF.get(c.channel, c.channel), "quote": c.quote,
                        "quote_found": c.quote_found, "verdict": c.verdict, "note": c.note, "accepted": c.accepted,
                        "reason": c.reason} for c in last.checks],
-        "dropped_citations": dropped(reviews),
+        "dropped_citations": gone,
+        "notices": [f"{d['id']} is not cited: {REASON_TEXT.get(d['reason'], d['reason'])}."
+                    + (f" At its source it now reads: \"{d['text_at_source_now'][:240]}\"" if d["text_at_source_now"]
+                       and d["reason"] == "quote_not_in_record" else "") for d in gone],
         "absence_checks": last.absence,
         "rounds": len(reviews), "revisions": len(reviews) - 1,
         "rounds_detail": [{"round": r.round, "accepted": r.accepted, "notes": r.notes,

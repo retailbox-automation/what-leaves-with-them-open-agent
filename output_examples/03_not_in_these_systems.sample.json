@@ -1,0 +1,57 @@
+{
+  "run_id": "20261024T113512Z-5325",
+  "mode": "sample",
+  "endpoint": "local-sample",
+  "question": "Who owns payroll-export?",
+  "llm": null,
+  "sample_mode_note": "SAMPLE_MODE: the three sources are read from sample_data/sources/ by an in-process SQLite (endpoint local-sample) with the same SQL text, not through Zetaris; no model is called: the Investigator uses the deterministic router and the Verifier's model judgement is skipped. The agent loop, the quote re-reads and the write gate are the real code on this cached data.",
+  "status": "absence_confirmed",
+  "answer": "There is no system named 'payroll-export' in this memory, so no query was run.",
+  "answer_author": "template",
+  "citations": [],
+  "dropped_citations": [],
+  "notices": [],
+  "absence_checks": [
+    {
+      "term": "payroll-export",
+      "ids": [],
+      "accepted": true,
+      "states_absence": true,
+      "reason": "absent from all three systems"
+    }
+  ],
+  "rounds": 1,
+  "revisions": 0,
+  "rounds_detail": [
+    {
+      "round": 1,
+      "accepted": true,
+      "notes": [],
+      "checks": []
+    }
+  ],
+  "verdict_counts": {},
+  "quote_checks": {
+    "total": 0,
+    "found": 0
+  },
+  "write_gate": {
+    "written": false,
+    "reason": "the write gate keeps a finding only with a verified source; nothing written"
+  },
+  "investigator_path": "router",
+  "agents": [
+    {
+      "name": "Investigator",
+      "id": "agent:investigator",
+      "role": "answers from the memory graph with cited records; revises on the Verifier's notes"
+    },
+    {
+      "name": "Verifier",
+      "id": "agent:verifier",
+      "role": "re-reads each cited record by id at its source; quote check, then a model judgement"
+    }
+  ],
+  "execution_time_seconds": 0.01,
+  "trace_file": "logs/trace-20261024T113512Z-5325.jsonl"
+}

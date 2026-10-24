@@ -153,6 +153,8 @@ def test_router_tamper_is_caught_revised_and_restored(graph, trace):
     assert [c["id"] for c in out["citations"]] == ["ADR-0009"]
     assert out["dropped_citations"][0]["id"] == "msg-0148"
     assert out["dropped_citations"][0]["text_at_source_now"] == EDITED
+    assert out["notices"] == ["msg-0148 is not cited: the quoted sentence is not in the record as its source system "
+                              f"holds it now. At its source it now reads: \"{EDITED}\""]
     assert "msg-0148 is no longer cited" in out["answer"] and "Sources: ADR-0009." in out["answer"]
     assert out["write_gate"]["source_ids"] == ["ADR-0009"]
     steps = [(e["agent"], e["step"]) for e in trace.events]
