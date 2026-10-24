@@ -299,6 +299,15 @@ class NightshiftClient(TracedClient):
                          tool_calls=[(c.get("function") or {}).get("name") for c in (msg.get("tool_calls") or [])],
                          provider_receipt=r.receipt_id)
         msg.setdefault("content", None)
+        if msg["content"] and _TYPOGRAPHIC.search(msg["content"]):
+            msg["content"] = plain_text(msg["content"])
+            self.trace.event(self.agent, "reply_normalised", receipt_id=r.receipt_id,
+                             note="non-breaking hyphens / no-break spaces in the model's text made ASCII, so ids "
+                                  "such as ADR-0004 and dates match the records")
+        for call in msg.get("tool_calls") or []:
+            fn = call.get("function") or {}
+            if isinstance(fn.get("arguments"), str) and _TYPOGRAPHIC.search(fn["arguments"]):
+                fn["arguments"] = plain_text(fn["arguments"])
         msg["tool_calls"] = msg.get("tool_calls") or None
         return SimpleNamespace(choices=[SimpleNamespace(message=N._ns(msg), finish_reason=reply.finish_reason)],
                                model=r.routed_model, id=r.receipt_id)
@@ -322,6 +331,15 @@ class NightshiftClient(TracedClient):
         content = completion.choices[0].message.content if completion.choices else ""
         obj = parse_json_object(content or "")
         return (obj, "") if obj is not None else (None, f"model reply was not a JSON object: {(content or '')[:120]!r}")
+
+
+# Nemotron 3.5 Lightning writes ids and dates with U+2011 (non-breaking hyphen): "ADR\u20110004", "2026\u201108\u201125".
+# The records use "-", so a quote or a name check against them would fail on a character no reader can see.
+_TYPOGRAPHIC = re.compile("[\u2010\u2011\u00a0\u202f]")
+
+
+def plain_text(text: str) -> str:
+    return text.replace("\u2010", "-").replace("\u2011", "-").replace("\u00a0", " ").replace("\u202f", " ")
 
 
 def make_client(cfg: LLMConfig | None, trace, agent: str, client=None) -> TracedClient | None:
