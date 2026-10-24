@@ -6,6 +6,7 @@
   OA_LLM_API_KEY        or OA_LLM_API_KEY_FILE (a file holding the key); default "local"
   OA_LLM_TIMEOUT        seconds per call, default 120
   OA_LLM_REASONING      optional reasoning_effort to send (e.g. "none")
+  OA_VERIFIER_MODEL     optional: another model for the Verifier at the same endpoint (default: OA_LLM_MODEL)
 
 Every call goes into the trace with the endpoint, the model asked for and the model that answered, latency,
 token usage, the response headers and any fields outside the OpenAI schema (where a provider puts its receipt).

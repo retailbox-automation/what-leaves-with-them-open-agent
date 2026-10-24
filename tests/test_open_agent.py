@@ -466,6 +466,14 @@ def test_json_reply_parsing_and_receipt_lookup():
     assert provider_receipt({"content-type": "json"}, {"usage": 1}) is None
 
 
+def test_verifier_model_can_differ(monkeypatch):
+    cfg = model_cfg()
+    assert R.verifier_llm(cfg) is cfg and R.verifier_llm(None) is None
+    monkeypatch.setenv("OA_VERIFIER_MODEL", "bigger-nemotron")
+    v = R.verifier_llm(cfg)
+    assert (v.model, v.base_url, cfg.model) == ("bigger-nemotron", cfg.base_url, "fake-nemotron")
+
+
 def test_api_key_from_file(tmp_path, monkeypatch):
     key = tmp_path / "key"
     key.write_text("abc\n")

@@ -22,6 +22,7 @@ import os
 import sys
 import time
 from collections import Counter
+from dataclasses import replace
 from pathlib import Path
 
 from redis.exceptions import RedisError
@@ -145,12 +146,18 @@ def dropped(reviews) -> list[dict]:
     return list(out.values())
 
 
+def verifier_llm(llm: LLMConfig | None) -> LLMConfig | None:
+    """The Verifier may run on another model at the same endpoint (OA_VERIFIER_MODEL); default: the same model."""
+    model = os.environ.get("OA_VERIFIER_MODEL")
+    return replace(llm, model=model) if llm and model else llm
+
+
 def investigate(question: str, store: Store, source, trace: Trace, llm: LLMConfig | None, sample: bool,
                 max_revisions: int = MAX_REVISIONS, investigator_client=None, verifier_client=None) -> dict:
     """The loop: Investigator drafts, Verifier checks; a rejection goes back with notes, at most max_revisions
     times; then the write gate. Returns the result without timing or run metadata."""
     inv = Investigator(store, trace, llm, client=investigator_client)
-    ver = Verifier(source, trace, llm, client=verifier_client, sample=sample)
+    ver = Verifier(source, trace, verifier_llm(llm), client=verifier_client, sample=sample)
     draft = inv.investigate(question)
     reviews = []
     while True:
@@ -226,7 +233,8 @@ def main(argv=None) -> int:
                 note=SAMPLE_NOTE if sample else ("no model configured (OA_LLM_MODEL unset): deterministic paths"
                                                  if not llm else "live"))
     result = {"run_id": run_id, "mode": "sample" if sample else "live", "endpoint": source.endpoint,
-              "question": question, "llm": {"endpoint": llm.base_url, "model": llm.model} if llm else None}
+              "question": question, "llm": {"endpoint": llm.base_url, "investigator_model": llm.model,
+                                            "verifier_model": verifier_llm(llm).model} if llm else None}
     if sample:
         result["sample_mode_note"] = SAMPLE_NOTE
     original = None
