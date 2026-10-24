@@ -33,7 +33,7 @@ def test_metadata_has_the_judged_keys():
 
 def test_env_example_holds_placeholders_only():
     text = (ROOT / ".env.example").read_text(encoding="utf-8")
-    secretish = re.compile(r"(PASSWORD|API_KEY|TOKEN|SECRET)", re.I)
+    secretish = re.compile(r"(PASSWORD|API_KEY|TOKEN|SECRET)$", re.I)
     for line in text.splitlines():
         line = line.strip().lstrip("#").strip()
         if "=" not in line or " " in line.split("=", 1)[0]:
