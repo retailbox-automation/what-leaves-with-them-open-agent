@@ -1,4 +1,4 @@
-/* RetailBox W1 brand stylesheet, copied from the RetailBox brand kit (30.09.2026). */
+/* RetailBox W1 brand stylesheet, copied from the RetailBox brand kit (30.09.2026).
    Профиль движения — класс на корне (html) или на блоке: .rb-motion-full (по умолчанию) | .rb-motion-calm | .rb-motion-static.
    Печать, PDF (@media print и html.print) и prefers-reduced-motion — всегда статичный последний кадр. */
 :root {

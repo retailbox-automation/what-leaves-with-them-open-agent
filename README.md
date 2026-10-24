@@ -20,7 +20,7 @@ In a 2022 survey of 1,000 IT managers at large organizations in the UK and US, 6
 | Nothing is stored unless every citation was accepted | [open_agent/run.py](open_agent/run.py) `write_finding`; [tests/test_open_agent.py](tests/test_open_agent.py) | `write_gate.written: false` with the reason, for example on [output_examples/03_not_in_these_systems.live.json](output_examples/03_not_in_these_systems.live.json) |
 | Every model call goes through Meterless Nightshift with a signed receipt | [logs/receipts-20261024T133813Z-5253.jsonl](logs/receipts-20261024T133813Z-5253.jsonl) (the tamper run: 6 receipts), one receipt file per run in [logs/](logs/) and [docs/open-agent-runs-2026-10-24-nightshift/](docs/open-agent-runs-2026-10-24-nightshift/), [open_agent/nightshift.py](open_agent/nightshift.py) `check_routing`, [tests/test_nightshift.py](tests/test_nightshift.py) | 20 live runs: 95 model calls, 95 receipts signed Ed25519 by the Nightshift daemon, cost 0 USD on every one, Investigator routed to Lightning 59 of 59, Verifier to Nano 36 of 36, 0 routing mismatches |
 | H-MEM is the agents' memory across sessions | [output_examples/05_cross_session_recall.live.json](output_examples/05_cross_session_recall.live.json), ledger [logs/hmem-ledger-oa_xs_live_20261024T140313Z.jsonl](logs/hmem-ledger-oa_xs_live_20261024T140313Z.jsonl), [tests/test_hmem.py](tests/test_hmem.py) | process A answers 01 and the verified answer is stored as `mem-1`; process B, a new process, asks a paraphrase, H-MEM puts `mem-1` in front of the Investigator's model, B is verified through Zetaris and the verdict raises `mem-1` from 0.70 to 0.75 (ledger: create, read, feedback) |
-| A judge can run it with no credentials | [SUBMISSION/FRESH-CLONE-TEST.md](SUBMISSION/FRESH-CLONE-TEST.md) | fresh clone, empty `.env`: build, up, four examples and one new question through `POST /run`, all `success` |
+| A judge can run it with no credentials | [SUBMISSION/FRESH-CLONE-TEST.md](SUBMISSION/FRESH-CLONE-TEST.md) | fresh clone, empty `.env`: build, up, the five input examples and one new question through `POST /run`, all `success`; the cross-session script in the container |
 
 ## Contents
 
@@ -166,6 +166,7 @@ curl -s -X POST localhost:8000/run -H 'content-type: application/json' -d @input
 curl -s -X POST localhost:8000/run -H 'content-type: application/json' \
   -d '{"run_id":"demo-001","input":{"query":"Who owns oncall-runbook now?"},"options":{"sample_mode":true}}'
 curl -s localhost:8000/run/<trace_id>/trace      # the run's JSONL trace
+docker compose exec app python scripts/cross_session_proof.py --sample   # example 05: H-MEM across two processes
 docker compose logs app                            # the readable trace lines
 ```
 

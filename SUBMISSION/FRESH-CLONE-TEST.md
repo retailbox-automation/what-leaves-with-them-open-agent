@@ -2,7 +2,7 @@
 
 Run on 2026-10-24 (times UTC from `date -u`) on a Mac Studio (Apple M5 Max, Docker Desktop, Compose v5.6.1),
 load average about 7 at the start. Commit tested: `be8a71b` on branch `oa/lane-d` (cloned into a new empty folder;
-no `.env` in the clone, nothing copied in by hand). Result: **PASS**. Repeated on the final commit of this lane, `8fb046a`, after the bind-host change: **PASS** (section at the end).
+no `.env` in the clone, nothing copied in by hand). Result: **PASS**. Repeated on `8fb046a` after the bind-host change: **PASS**. Repeated on the merged code (lane C's loop on Nightshift and H-MEM, five input examples), commit `d3f4550`: **PASS** (last run section).
 
 Ports 8000 and 18000 were already taken by other programs on this Mac, so the host port was moved with the
 documented variable `APP_HOST_PORT` (default 8000). Nothing else was set.
@@ -89,7 +89,40 @@ source: Who owns oncall-runbook now?" with RB-10 and DOC-16, docs REST API, roun
 container `python -m open_agent.run --sample --input input_examples/03_not_in_these_systems.json` ->
 absence_confirmed, 0.01 s.
 
+## Third run: merged code, commit d3f4550 (lane C merged; five input examples)
+
+Fresh clone into another empty folder, no `.env`, `APP_HOST_PORT=28000 FALKORDB_HOST_PORT=16379`, project
+`laned-fresh5`, `docker compose build --no-cache`. Two earlier attempts on this code (`61e47cc`, `e6174d2`) showed
+that the image lacked `scripts/cross_session_proof.py` and a writable `output_examples/`; both were added to the
+image and the test was run again from a new clone.
+
+- Build 14:35:04Z to 14:35:12Z (8.1 s, `--no-cache`; base images in the local cache). `node --version` in the build: v22.23.3.
+- `up -d` 14:35:21Z; `/health` ok by 14:35:27Z (`"tools": 21`, `"llm": {"configured": false}`).
+- Host listeners: `127.0.0.1:28000` and `127.0.0.1:16379` only; `lsof -nP -iTCP -sTCP:LISTEN | grep -v -E '127.0.0.1|\[::1\]'` shows nothing of Docker or of ours.
+
+| Input | Status | Trace id | Result | Rounds | Wall time | Kept | Dropped | Stored |
+|---|---|---|---|---|---|---|---|---|
+| 01_current_owner | success | 20261024T143528Z-2b4b | verified | 1 | 1.19 s (builds the graph) | ADR-0009, msg-0148 | none | yes |
+| 02_tampered_source | success | 20261024T143529Z-6ef4 | verified | 2 | 0.58 s | ADR-0009 | msg-0148 (1 conflict flagged; tamper restored) | yes |
+| 03_not_in_these_systems | success | 20261024T143530Z-3696 | absence_confirmed | 1 | 0.53 s | none | none | no |
+| 04_decision_superseded | success | 20261024T143530Z-002e | no_claim | 1 | 0.54 s | none | none | no (router has no rule for this wording) |
+| 05_cross_session_recall | success | 20261024T143531Z-91f5 | no_claim | 1 | 0.54 s | none | none | no; H-MEM recall `ok`, ids mem-2 and mem-1 (stored by the 01 and 02 runs, each its own process) |
+| organizer shape, "Who decided ADR-0014?" | success | 20261024T143531Z-ea97 | verified | 1 | 0.55 s | ADR-0014 | none | yes |
+
+In the container:
+
+- `python -m open_agent.run --sample --input input_examples/02_tampered_source.json` -> verified, 2 rounds,
+  `logs/trace-20261024T143532Z-d998.jsonl`, 0.04 s.
+- `python scripts/cross_session_proof.py --sample` -> exit 0, tenant `oa_xs_sample_20261024T143532Z`: process A
+  (pid 83) verified, stored `mem-1`, finding FND-00001; process B (pid 92) recalled `mem-1` (`recall_status: ok`),
+  answered `no_claim` on the router, so no feedback (`status no_claim is not a verdict on an answer`). The H-MEM
+  ledger shows `create` then `read` for `mem-1`.
+- Panel `GET /`: 200.
+
+Full test suite on this branch at `61e47cc` (the later commits change only `.dockerignore` and the `Dockerfile`):
+`HM_TEST_PORTS=6395 FALKORDB_PORT=6395 python -m pytest -q` -> 525 passed, 1 skipped, 121 s.
+
 ## Clean-up
 
-The containers, networks and the image these tests created (`laned-fresh-*`, `laned-fresh2-*`,
-`what-leaves-open-agent:local`) were removed at the end of the session; the base images were left in the cache.
+The containers, networks and the image these tests created (`laned-fresh-*`, `laned-fresh2-*`, `laned-fresh3-*`
+to `laned-fresh5-*`, `what-leaves-open-agent:local`) were removed at the end of the session; the base images were left in the cache.
