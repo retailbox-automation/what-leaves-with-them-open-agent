@@ -2,7 +2,7 @@
 
 Run on 2026-10-24 (times UTC from `date -u`) on a Mac Studio (Apple M5 Max, Docker Desktop, Compose v5.6.1),
 load average about 7 at the start. Commit tested: `be8a71b` on branch `oa/lane-d` (cloned into a new empty folder;
-no `.env` in the clone, nothing copied in by hand). Result: **PASS**.
+no `.env` in the clone, nothing copied in by hand). Result: **PASS**. Repeated on the final commit of this lane, `8fb046a`, after the bind-host change: **PASS** (section at the end).
 
 Ports 8000 and 18000 were already taken by other programs on this Mac, so the host port was moved with the
 documented variable `APP_HOST_PORT` (default 8000). Nothing else was set.
@@ -68,7 +68,28 @@ Other checks in the same session:
   `SourceUnavailable: set ZETARIS_USERNAME/ZETARIS_PASSWORD or ZETARIS_BUNDLE_ENV`, with the hint to use sample
   mode, in 1.04 s. No crash, no hang.
 
+## Second run: commit 8fb046a (serve.py binds 127.0.0.1 unless HOST is set; compose sets HOST=0.0.0.0 inside the container)
+
+Fresh clone into another empty folder, no `.env`, same two port variables, project name `laned-fresh2`.
+
+- Build 13:05:50Z to 13:05:52Z (base layers and dependency layers cached); `serve.py` in the image has `bind_host`.
+- `up -d` 13:06:02Z; `/health` ok by 13:06:08Z. App log: `serve: SAMPLE_MODE=true; POST /run and the panel on 0.0.0.0:8000` (inside the container).
+- Host listeners: `127.0.0.1:28000` and `127.0.0.1:16379` only (`lsof -nP -iTCP -sTCP:LISTEN`).
+
+| Input | Status | Trace id | Result | Rounds | Wall time | Kept | Dropped | Stored |
+|---|---|---|---|---|---|---|---|---|
+| 01_current_owner | success | 20261024T130608Z-3e79 | verified | 1 | 1.11 s | ADR-0009, msg-0148 | none | yes |
+| 02_tampered_source | success | 20261024T130610Z-9538 | verified | 2 | 0.41 s | ADR-0009 | msg-0148 (tamper restored) | yes |
+| 03_not_in_these_systems | success | 20261024T130610Z-7d0b | absence_confirmed | 1 | 0.37 s | none | none | no |
+| 04_decision_superseded | success | 20261024T130610Z-0bc3 | no_claim | 1 | 0.37 s | none | none | no |
+| organizer shape, "Who decided ADR-0014?" | success | 20261024T130611Z-890c | verified | 1 | 0.45 s | ADR-0014 | none | yes |
+
+Also: panel `GET /` 200; in the panel (headless browser) the oncall-runbook answer card showed "Verified at the
+source: Who owns oncall-runbook now?" with RB-10 and DOC-16, docs REST API, round 1, quote found; CLI in the
+container `python -m open_agent.run --sample --input input_examples/03_not_in_these_systems.json` ->
+absence_confirmed, 0.01 s.
+
 ## Clean-up
 
-The containers, network and the image this test created (`laned-fresh-*`, `what-leaves-open-agent:local`) were
-removed at the end of the session; the base images were left in the cache.
+The containers, networks and the image these tests created (`laned-fresh-*`, `laned-fresh2-*`,
+`what-leaves-open-agent:local`) were removed at the end of the session; the base images were left in the cache.
