@@ -13,7 +13,8 @@ GET /run/{run_id}/trace returns the JSONL trace of a run made by this server (lo
 Everything else (GET /health, /v1/..., the panel at /) is honest_memory.api, unchanged.
 
 Env: SAMPLE_MODE (default true here: no Zetaris, no model, no credentials), OA_RUN_TIMEOUT (seconds, default 240),
-PORT (default 8000), FALKORDB_HOST/FALKORDB_PORT, HM_DEMO_TENANT (the panel's tenant, default quillfield),
+HOST (default 127.0.0.1: loopback only; docker-compose.yml sets 0.0.0.0 inside the container, published only on
+127.0.0.1 of the host), PORT (default 8000), FALKORDB_HOST/FALKORDB_PORT, HM_DEMO_TENANT (the panel's tenant, default quillfield),
 and everything open_agent.run reads (OA_LLM_*, ZETARIS_*, NIGHTSHIFT_*) for a live run.
 """
 
@@ -36,6 +37,7 @@ from pydantic import BaseModel, Field
 
 ROOT = Path(__file__).resolve().parent
 LOG_DIR = Path(os.environ.get("OA_LOG_DIR") or ROOT / "logs")
+DEFAULT_HOST = "127.0.0.1"
 RUN_ID = re.compile(r"^[A-Za-z0-9_.:-]{1,64}$")
 TRACE_ID = re.compile(r"^\d{8}T\d{6}Z-[0-9a-f]{4}$")
 AGENTS = [
@@ -48,6 +50,11 @@ AGENTS = [
 ]
 
 _one_run = threading.Semaphore(1)  # runs share one graph tenant and a tamper restores at the end: one at a time
+
+
+def bind_host() -> str:
+    """Loopback unless HOST says otherwise (the container sets it; its port is published on 127.0.0.1 only)."""
+    return os.environ.get("HOST") or DEFAULT_HOST
 
 
 def env_sample() -> bool:
@@ -182,9 +189,10 @@ def main() -> int:
         print("serve: API writes are locked (HM_PUBLIC_WRITES is not 1); POST /run is not affected", flush=True)
     LOG_DIR.mkdir(parents=True, exist_ok=True)
     port = int(os.environ.get("PORT", "8000"))
-    print(f"serve: SAMPLE_MODE={'true' if env_sample() else 'false'}; POST /run and the panel on port {port}",
+    host = bind_host()
+    print(f"serve: SAMPLE_MODE={'true' if env_sample() else 'false'}; POST /run and the panel on {host}:{port}",
           flush=True)
-    uvicorn.run(create_app(), host="0.0.0.0", port=port)
+    uvicorn.run(create_app(), host=host, port=port)
     return 0
 
 

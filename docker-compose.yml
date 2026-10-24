@@ -21,6 +21,7 @@ services:
       FALKORDB_HOST: falkordb
       FALKORDB_PORT: "6379"
       SAMPLE_MODE: ${SAMPLE_MODE:-true}
+      HOST: 0.0.0.0        # inside the container only; published on the host's 127.0.0.1 (ports below)
       PORT: "8000"
     env_file:
       - path: .env
