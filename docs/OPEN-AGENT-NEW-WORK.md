@@ -243,7 +243,7 @@ Tests: 519 passed, 1 skipped (`HM_TEST_PORTS=<falkordb port> python -m pytest -q
 checks on the new guards: Nightshift-down turned into an OpenAIError fails 1 test, the conflict lines removed fail 6,
 no H-MEM feedback fails 2.
 
-Commits after `9b6f7a7` change only an error path (an empty reply is not asked again) and a trace field
+Code commits after `9b6f7a7` touch the loop only in an error path (an empty reply is not asked again) and a trace field
 (`removed_from_answer` is set only when a clause was taken out; in the 20 runs above it also shows the answer before
 the `[ADR-0009]` marker was added in 3 runs, where nothing was removed).
 
@@ -256,7 +256,15 @@ integrated runs verify 02 and 04 in every run but are 4 to 13 times slower. The 
 (on, not switchable through Nightshift), the conflict line and the evidence rules all changed together, so the
 difference is not attributable to any one of them.
 
-<<BENCH>>
+### The pre-existing 82-question benchmark through Nightshift
+
+One run (`bench/results/nightshift-nemotron-3.5-lightning-30b-a3b/`, 14:06:49Z to 14:24:56Z): the honest-memory LLM
+agent with NVIDIA Nemotron 3.5 Lightning through Meterless Nightshift, thinking on, memory settings as in the
+published run: **97.6% correct (80 of 82), 0.0% stale, 0.0% unsupported, 0 personal-data leaks, 0 errors, 0 router
+fallbacks, median 10.4 s**; 171 model calls, all routed to Lightning, `cost_usd` 0 (receipt ids in the run's trace).
+The published numbers (`bench/RESULTS.md`, 15 Oct) were measured on another model: gemma4:26b-a4b-it-qat on Ollama,
+thinking off, 95.1% correct, 0.0% stale, 0.0% unsupported, median 0.78 s. Different models, one run each, so the
+2-question difference is not a finding; the guarantees (nothing stale, nothing unsupported) held on the new provider.
 
 ## Not done here, and limits
 
