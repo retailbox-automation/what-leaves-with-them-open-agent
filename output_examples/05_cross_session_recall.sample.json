@@ -1,0 +1,131 @@
+{
+  "run_id": "20261024T133948Z-6b17",
+  "mode": "sample",
+  "endpoint": "local-sample",
+  "question": "Which person is in charge of the billing-api system at the moment?",
+  "tenant": "oa_xs_sample_20261024T133946Z",
+  "llm": null,
+  "sample_mode_note": "SAMPLE_MODE: the three sources are read from sample_data/sources/ by an in-process SQLite (endpoint local-sample) with the same SQL text, not through Zetaris; no model is called: the Investigator uses the deterministic router and the Verifier's model judgement is skipped. The agent loop, the quote re-reads, the write gate and the H-MEM memory (recall, store, feedback; no model needed) are the real code on this cached data.",
+  "status": "no_claim",
+  "answer": "I have no tool for that question. I can answer who owns a system now or on a date, its ownership history, whom to call, what depends on it, who worked on it, how a decision evolved, why the memory holds or refused a fact, what changed since a date, how two things connect, what agents remembered, and what leaves with a person who goes: what they hold, what rests only on them, who links teams, who could take over, a handoff plan, and what they promised in writing.",
+  "answer_author": "template",
+  "citations": [],
+  "dropped_citations": [],
+  "conflicts": [],
+  "notices": [],
+  "absence_checks": [],
+  "contradictions_unaddressed": [],
+  "rounds": 1,
+  "revisions": 0,
+  "rounds_detail": [
+    {
+      "round": 1,
+      "accepted": true,
+      "notes": [],
+      "ignored": [],
+      "checks": []
+    }
+  ],
+  "verdict_counts": {},
+  "quote_checks": {
+    "total": 0,
+    "found": 0
+  },
+  "write_gate": {
+    "written": false,
+    "reason": "the write gate keeps a finding only with a verified source; nothing written"
+  },
+  "memory": {
+    "engine": "Meterless H-MEM (vendor/hmem)",
+    "recall": {
+      "status": "ok",
+      "ids": [
+        "mem-1"
+      ],
+      "memories": [
+        {
+          "memory_id": "mem-1",
+          "relevance": 0.2351,
+          "confidence": 0.7,
+          "layer": "long_term",
+          "finding": "FND-00001",
+          "session": "s-e7dd06d7",
+          "content": "Luca Ostrander (Platform) owns billing-api, since 2026-09-22; before that Sana Petrov (Payments) until 2026-09-22. Sources: ADR-0009, msg-0148."
+        }
+      ]
+    },
+    "stored": null,
+    "feedback": {
+      "given": false,
+      "reason": "status no_claim is not a verdict on an answer",
+      "memory_ids": [
+        "mem-1"
+      ]
+    }
+  },
+  "investigator_path": "router",
+  "agents": [
+    {
+      "name": "Investigator",
+      "id": "agent:investigator",
+      "role": "answers from the memory graph with cited records; revises on the Verifier's notes"
+    },
+    {
+      "name": "Verifier",
+      "id": "agent:verifier",
+      "role": "re-reads each cited record by id at its source; quote check, then a model judgement"
+    }
+  ],
+  "execution_time_seconds": 0.09,
+  "trace_file": "logs/trace-20261024T133948Z-6b17.jsonl",
+  "cross_session_proof": {
+    "tenant": "oa_xs_sample_20261024T133946Z",
+    "mode": "sample",
+    "A": {
+      "pid": 67331,
+      "run_id": "20261024T133946Z-62a2",
+      "question": "Who owns billing-api now?",
+      "status": "verified",
+      "stored_memory": {
+        "memory_id": "mem-1",
+        "backend": "hmem"
+      },
+      "finding": "FND-00001",
+      "trace_file": "logs/trace-20261024T133946Z-62a2.jsonl",
+      "receipts": null
+    },
+    "B": {
+      "pid": 67349,
+      "run_id": "20261024T133948Z-6b17",
+      "question": "Which person is in charge of the billing-api system at the moment?",
+      "status": "no_claim",
+      "recalled_memory_ids": [
+        "mem-1"
+      ],
+      "recall_status": "ok",
+      "feedback": {
+        "given": false,
+        "reason": "status no_claim is not a verdict on an answer",
+        "memory_ids": [
+          "mem-1"
+        ]
+      },
+      "trace_file": "logs/trace-20261024T133948Z-6b17.jsonl",
+      "receipts": null
+    },
+    "a_memory_recalled_by_b": true,
+    "ledger_file": "logs/hmem-ledger-oa_xs_sample_20261024T133946Z.jsonl",
+    "ledger_for_that_memory": [
+      {
+        "action": "create",
+        "actor": "wlwt",
+        "timestamp": 1792849188207
+      },
+      {
+        "action": "read",
+        "actor": "wlwt",
+        "timestamp": 1792849188562
+      }
+    ]
+  }
+}

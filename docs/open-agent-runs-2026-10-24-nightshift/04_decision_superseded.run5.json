@@ -1,0 +1,147 @@
+{
+  "run_id": "20261024T140211Z-33d6",
+  "mode": "live",
+  "endpoint": "zetaris",
+  "question": "What did the team decide about invoice rendering?",
+  "tenant": "openagent_c2",
+  "llm": {
+    "provider": "nightshift",
+    "endpoint": "http://127.0.0.1:8088/v1",
+    "scope": "wlwt-20261024T140211Z-33d6",
+    "investigator": {
+      "app": "wlwt-investigator",
+      "lane": "nemotron-lightning",
+      "model": "local-runtime/nemotron-3.5-lightning-30b-a3b"
+    },
+    "verifier": {
+      "app": "wlwt-verifier",
+      "lane": "nemotron-nano",
+      "model": "local-runtime/nemotron-3-nano-30b-a3b"
+    }
+  },
+  "status": "verified",
+  "answer": "On 2026-08-25 Mateo Sandoval decided ADR-0004 to render invoices synchronously; on 2026-09-08 Viktor Hartwell decided ADR-0011 to render invoices asynchronously through the invoice-renderer.",
+  "answer_author": "model",
+  "citations": [
+    {
+      "id": "ADR-0004",
+      "source": "docs REST API (wlwt_docs.docs_raw)",
+      "quote": "Decision: billing-api renders the invoice PDF inside the request that creates the invoice.",
+      "quote_found": true,
+      "verdict": "supports",
+      "note": "The record confirms the decision was to render invoices synchronously via billing-api inside the request that creates the invoice.",
+      "accepted": true,
+      "reason": "ok"
+    },
+    {
+      "id": "ADR-0011",
+      "source": "docs REST API (wlwt_docs.docs_raw)",
+      "quote": "Decision: billing-api enqueues a render job and invoice-renderer produces the PDF; the API returns the invoice at once with a pending PDF link.",
+      "quote_found": true,
+      "verdict": "supports",
+      "note": "The record states the decision was to enqueue a render job and have invoice-renderer produce the PDF, i.e., async rendering.",
+      "accepted": true,
+      "reason": "ok"
+    }
+  ],
+  "dropped_citations": [],
+  "conflicts": [],
+  "notices": [],
+  "absence_checks": [],
+  "contradictions_unaddressed": [],
+  "rounds": 1,
+  "revisions": 0,
+  "rounds_detail": [
+    {
+      "round": 1,
+      "accepted": true,
+      "notes": [],
+      "ignored": [],
+      "checks": [
+        {
+          "id": "ADR-0004",
+          "accepted": true,
+          "reason": "ok",
+          "verdict": "supports"
+        },
+        {
+          "id": "ADR-0011",
+          "accepted": true,
+          "reason": "ok",
+          "verdict": "supports"
+        }
+      ]
+    }
+  ],
+  "verdict_counts": {
+    "supports": 2
+  },
+  "quote_checks": {
+    "total": 2,
+    "found": 2
+  },
+  "write_gate": {
+    "written": true,
+    "outcome": "accepted",
+    "receipt": "GD-00241-f7de9cbbd6",
+    "reasons": [
+      "new_finding"
+    ],
+    "finding": "FND-00015",
+    "source_ids": [
+      "ADR-0004",
+      "ADR-0011"
+    ],
+    "about": [
+      "invoice-renderer",
+      "Viktor Hartwell",
+      "Mateo Sandoval",
+      "ADR-0004",
+      "ADR-0011"
+    ],
+    "memory": {
+      "memory_id": "mem-15",
+      "backend": "hmem"
+    },
+    "conflicts_not_written": []
+  },
+  "memory": {
+    "engine": "Meterless H-MEM (vendor/hmem)",
+    "recall": {
+      "status": "ok",
+      "ids": [],
+      "memories": []
+    },
+    "stored": {
+      "memory_id": "mem-15",
+      "backend": "hmem"
+    },
+    "feedback": {
+      "given": false,
+      "reason": "no memory was recalled for this question"
+    }
+  },
+  "investigator_path": "llm",
+  "agents": [
+    {
+      "name": "Investigator",
+      "id": "agent:investigator",
+      "role": "answers from the memory graph with cited records; revises on the Verifier's notes"
+    },
+    {
+      "name": "Verifier",
+      "id": "agent:verifier",
+      "role": "re-reads each cited record by id at its source; quote check, then a model judgement"
+    }
+  ],
+  "execution_time_seconds": 61.87,
+  "trace_file": "docs/open-agent-runs-2026-10-24-nightshift/trace-20261024T140211Z-33d6.jsonl",
+  "receipts": {
+    "file": "docs/open-agent-runs-2026-10-24-nightshift/receipts-20261024T140211Z-33d6.jsonl",
+    "calls": 5,
+    "signed_receipts": 5,
+    "redacted": 0,
+    "missing": [],
+    "scan": "secrets and personal data (open_agent.nightshift.scan_text)"
+  }
+}

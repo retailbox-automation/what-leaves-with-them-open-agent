@@ -1,12 +1,23 @@
 {
-  "run_id": "20261024T123154Z-720b",
+  "run_id": "20261024T133813Z-5253",
   "mode": "live",
   "endpoint": "zetaris",
   "question": "Who currently owns billing-api?",
+  "tenant": "openagent_c2",
   "llm": {
-    "endpoint": "http://localhost:11434/v1",
-    "investigator_model": "nemotron-3-nano:30b-a3b-q4_K_M",
-    "verifier_model": "nemotron-3-nano:30b-a3b-q4_K_M"
+    "provider": "nightshift",
+    "endpoint": "http://127.0.0.1:8088/v1",
+    "scope": "wlwt-20261024T133813Z-5253",
+    "investigator": {
+      "app": "wlwt-investigator",
+      "lane": "nemotron-lightning",
+      "model": "local-runtime/nemotron-3.5-lightning-30b-a3b"
+    },
+    "verifier": {
+      "app": "wlwt-verifier",
+      "lane": "nemotron-nano",
+      "model": "local-runtime/nemotron-3-nano-30b-a3b"
+    }
   },
   "tamper": {
     "record_id": "msg-0148",
@@ -15,26 +26,16 @@
     "restored": true
   },
   "status": "verified",
-  "answer": "Luca Ostrander currently owns billing-api, having taken over from Sana Petrov on 2026-09-22, but Sana Petrov remains the owner of billing-api until further notice. msg-0148 says otherwise now: \"Per ADR-0009, the billing-api transfer is on hold. Sana Petrov remains the owner of billing-api until further notice.\"",
-  "answer_author": "model",
+  "answer": "Luca Ostrander currently owns billing-api, having taken ownership on 2026-09-22 [ADR-0009]. Conflict: msg-0148 (chat message) was edited after the memory read it and now says \"Per ADR-0009, the billing-api transfer is on hold. Sana Petrov remains the owner of billing-api until further notice.\"; the earlier quote \"Per ADR-0009, I am now the owner of billing-api.\" is no longer in the record. Flagged for a human.",
+  "answer_author": "template",
   "citations": [
     {
       "id": "ADR-0009",
       "source": "docs REST API (wlwt_docs.docs_raw)",
-      "quote": "ADR-0009: Transfer billing-api ownership from Sana Petrov to Luca Ostrander",
+      "quote": "Decision: Ownership of billing-api transfers from Sana Petrov (Payments) to Luca Ostrander (Platform) effective 2026-09-22.",
       "quote_found": true,
       "verdict": "supports",
-      "note": "The record states that ownership of billing-api transfers from Sana Petrov to Luca Ostrander effective 2026-09-22, which directly supports the claim of transferring ownership.",
-      "accepted": true,
-      "reason": "ok"
-    },
-    {
-      "id": "ADR-0009",
-      "source": "docs REST API (wlwt_docs.docs_raw)",
-      "quote": "Status: accepted on 2026-09-22.",
-      "quote_found": true,
-      "verdict": "supports",
-      "note": "The record states the transfer is effective 2026-09-22, confirming Luca Ostrander's ownership effective that date.",
+      "note": "The record explicitly states the decision that ownership transfers effective 2026-09-22.",
       "accepted": true,
       "reason": "ok"
     }
@@ -45,9 +46,21 @@
       "round": 1,
       "reason": "quote_not_in_record",
       "verdict": "contradicts",
-      "note": "The record states that Sana Petrov remains the owner of billing-api until further notice, directly contradicting the claim that Luca Ostrander is now the owner.",
+      "note": "The record states Sana Petrov remains the owner of billing-api, indicating Luca Ostrander does not currently own it.",
       "quote": "Per ADR-0009, I am now the owner of billing-api.",
       "text_at_source_now": "Per ADR-0009, the billing-api transfer is on hold. Sana Petrov remains the owner of billing-api until further notice."
+    }
+  ],
+  "conflicts": [
+    {
+      "id": "msg-0148",
+      "source": "Postgres chat (WLWT_CHAT.chat)",
+      "kind": "changed_at_source",
+      "now_says": "Per ADR-0009, the billing-api transfer is on hold. Sana Petrov remains the owner of billing-api until further notice.",
+      "earlier_quote": "Per ADR-0009, I am now the owner of billing-api.",
+      "verifier_note": "The record states Sana Petrov remains the owner of billing-api, indicating Luca Ostrander does not currently own it.",
+      "flagged_for": "human",
+      "line": "Conflict: msg-0148 (chat message) was edited after the memory read it and now says \"Per ADR-0009, the billing-api transfer is on hold. Sana Petrov remains the owner of billing-api until further notice.\"; the earlier quote \"Per ADR-0009, I am now the owner of billing-api.\" is no longer in the record. Flagged for a human."
     }
   ],
   "notices": [
@@ -62,16 +75,10 @@
       "round": 1,
       "accepted": false,
       "notes": [
-        "msg-0148: the quoted sentence is not in the record as its source system holds it now; The record states that Sana Petrov remains the owner of billing-api until further notice, directly contradicting the claim that Luca Ostrander is now the owner."
+        "msg-0148: the quoted sentence is not in the record as its source system holds it now; The record states Sana Petrov remains the owner of billing-api, indicating Luca Ostrander does not currently own it."
       ],
       "ignored": [],
       "checks": [
-        {
-          "id": "ADR-0009",
-          "accepted": true,
-          "reason": "ok",
-          "verdict": "supports"
-        },
         {
           "id": "ADR-0009",
           "accepted": true,
@@ -97,42 +104,57 @@
           "accepted": true,
           "reason": "ok",
           "verdict": "supports"
-        },
-        {
-          "id": "ADR-0009",
-          "accepted": true,
-          "reason": "ok",
-          "verdict": "supports"
         }
       ]
     }
   ],
   "verdict_counts": {
-    "supports": 4,
+    "supports": 2,
     "contradicts": 1
   },
   "quote_checks": {
-    "total": 5,
-    "found": 4
+    "total": 3,
+    "found": 2
   },
   "write_gate": {
     "written": true,
     "outcome": "accepted",
-    "receipt": "GD-00228-e2a338e4ac",
+    "receipt": "GD-00227-5d083e3aa8",
     "reasons": [
       "new_finding"
     ],
-    "finding": "FND-00002",
+    "finding": "FND-00001",
     "source_ids": [
-      "ADR-0009",
       "ADR-0009"
     ],
     "about": [
       "Luca Ostrander",
-      "Sana Petrov",
       "billing-api",
       "ADR-0009"
+    ],
+    "memory": {
+      "memory_id": "mem-1",
+      "backend": "hmem"
+    },
+    "conflicts_not_written": [
+      "msg-0148"
     ]
+  },
+  "memory": {
+    "engine": "Meterless H-MEM (vendor/hmem)",
+    "recall": {
+      "status": "ok",
+      "ids": [],
+      "memories": []
+    },
+    "stored": {
+      "memory_id": "mem-1",
+      "backend": "hmem"
+    },
+    "feedback": {
+      "given": false,
+      "reason": "no memory was recalled for this question"
+    }
   },
   "investigator_path": "llm",
   "agents": [
@@ -147,6 +169,14 @@
       "role": "re-reads each cited record by id at its source; quote check, then a model judgement"
     }
   ],
-  "execution_time_seconds": 12.28,
-  "trace_file": "logs/trace-20261024T123154Z-720b.jsonl"
+  "execution_time_seconds": 326.16,
+  "trace_file": "logs/trace-20261024T133813Z-5253.jsonl",
+  "receipts": {
+    "file": "logs/receipts-20261024T133813Z-5253.jsonl",
+    "calls": 6,
+    "signed_receipts": 6,
+    "redacted": 0,
+    "missing": [],
+    "scan": "secrets and personal data (open_agent.nightshift.scan_text)"
+  }
 }
