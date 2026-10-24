@@ -13,7 +13,7 @@ data (Quillfield Billing). The files each shot shows are committed here.
 | 10 | H-MEM across processes: a new process asks a paraphrase and recalls the answer the earlier run stored | `20261024T144200Z-b108` | `logs/trace-20261024T144200Z-b108.jsonl`, `logs/receipts-20261024T144200Z-b108.jsonl`, `logs/video-take-05.json` |
 | 11 | a name that is in none of the three systems: one UNION ALL through Zetaris, `absence_confirmed` | `20261024T144248Z-e71d` | `logs/trace-20261024T144248Z-e71d.jsonl`, `logs/receipts-20261024T144248Z-e71d.jsonl`, `logs/video-take-03.json` |
 
-`20261024T143316Z-b06d` is a warm-up run of example 01 made before the takes (trace and receipts committed, not shown).
+`20261024T143316Z-b06d` is a run of the example 01 question ("Who owns billing-api now?") at 14:33:16Z on the same tenant, before the recorded takes; it is not shown in the video (trace and receipts committed).
 
 ## What was shortened
 
