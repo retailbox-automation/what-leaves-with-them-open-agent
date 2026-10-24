@@ -1,0 +1,138 @@
+{
+  "run_id": "20261024T113652Z-6f1d",
+  "mode": "live",
+  "endpoint": "zetaris",
+  "question": "Who currently owns billing-api?",
+  "llm": {
+    "endpoint": "http://localhost:11434/v1",
+    "model": "nemotron-3-nano:30b-a3b-q4_K_M"
+  },
+  "tamper": {
+    "record_id": "msg-0148",
+    "new_text": "Per ADR-0009, the billing-api transfer is on hold. Sana Petrov remains the owner of billing-api until further notice.",
+    "original_text": "Per ADR-0009, I am now the owner of billing-api. Sana Petrov stays on as backup for 30 days. Send billing-api escalations to me.",
+    "restored": true
+  },
+  "status": "verified",
+  "answer": "Luca Ostrander currently owns billing-api.",
+  "answer_author": "model",
+  "citations": [
+    {
+      "id": "ADR-0009",
+      "source": "docs REST API (wlwt_docs.docs_raw)",
+      "quote": "ADR-0009: Transfer billing-api ownership from Sana Petrov to Luca Ostrander",
+      "quote_found": true,
+      "verdict": "supports",
+      "note": "The record explicitly states that ownership of billing-api transfers from Sana Petrov to Luca Ostrander, confirming Luca Ostrander currently owns billing-api.",
+      "accepted": true,
+      "reason": "ok"
+    }
+  ],
+  "dropped_citations": [
+    {
+      "id": "msg-0148",
+      "round": 1,
+      "reason": "quote_not_in_record",
+      "verdict": "contradicts",
+      "note": "The record states that Sana Petrov remains the owner of billing-api until further notice, which directly conflicts with the claim that Luca Ostrander is now the owner.",
+      "quote": "Per ADR-0009, I am now the owner of billing-api. Sana Petrov stays on as backup for 30 days. Send billing-api escalations to me.",
+      "text_at_source_now": "Per ADR-0009, the billing-api transfer is on hold. Sana Petrov remains the owner of billing-api until further notice."
+    }
+  ],
+  "notices": [
+    "msg-0148 is not cited: the quoted sentence is not in the record as its source system holds it now. At its source it now reads: \"Per ADR-0009, the billing-api transfer is on hold. Sana Petrov remains the owner of billing-api until further notice.\""
+  ],
+  "absence_checks": [],
+  "rounds": 3,
+  "revisions": 2,
+  "rounds_detail": [
+    {
+      "round": 1,
+      "accepted": false,
+      "notes": [
+        "msg-0148: the quoted sentence is not in the record as its source system holds it now; The record states that Sana Petrov remains the owner of billing-api until further notice, which directly conflicts with the claim that Luca Ostrander is now the owner."
+      ],
+      "checks": [
+        {
+          "id": "ADR-0009",
+          "accepted": true,
+          "reason": "ok",
+          "verdict": "supports"
+        },
+        {
+          "id": "msg-0148",
+          "accepted": false,
+          "reason": "quote_not_in_record",
+          "verdict": "contradicts"
+        }
+      ]
+    },
+    {
+      "round": 2,
+      "accepted": false,
+      "notes": [
+        "ADR-0009: the quote must be one sentence or one line (at most 300 characters), not a whole record; The record explicitly states that ownership of billing-api transfers from Sana Petrov to Luca Ostrander effective 2026-09-22."
+      ],
+      "checks": [
+        {
+          "id": "ADR-0009",
+          "accepted": false,
+          "reason": "quote_not_a_sentence",
+          "verdict": "supports"
+        }
+      ]
+    },
+    {
+      "round": 3,
+      "accepted": true,
+      "notes": [],
+      "checks": [
+        {
+          "id": "ADR-0009",
+          "accepted": true,
+          "reason": "ok",
+          "verdict": "supports"
+        }
+      ]
+    }
+  ],
+  "verdict_counts": {
+    "supports": 3,
+    "contradicts": 1
+  },
+  "quote_checks": {
+    "total": 4,
+    "found": 3
+  },
+  "write_gate": {
+    "written": true,
+    "outcome": "accepted",
+    "receipt": "GD-00232-91de914ddf",
+    "reasons": [
+      "new_finding"
+    ],
+    "finding": "FND-00006",
+    "source_ids": [
+      "ADR-0009"
+    ],
+    "about": [
+      "Luca Ostrander",
+      "billing-api"
+    ]
+  },
+  "investigator_path": "llm",
+  "agents": [
+    {
+      "name": "Investigator",
+      "id": "agent:investigator",
+      "role": "answers from the memory graph with cited records; revises on the Verifier's notes"
+    },
+    {
+      "name": "Verifier",
+      "id": "agent:verifier",
+      "role": "re-reads each cited record by id at its source; quote check, then a model judgement"
+    }
+  ],
+  "execution_time_seconds": 26.09,
+  "trace_file": "docs/open-agent-runs-2026-10-24/trace-20261024T113652Z-6f1d.jsonl"
+}
