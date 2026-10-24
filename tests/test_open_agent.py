@@ -314,7 +314,8 @@ def test_model_revision_is_capped(graph, trace):
         R.restore(src, "msg-0148", original, trace)
     assert out["rounds"] == 3 and out["revisions"] == 2 and stubborn.calls.count("revise") == 2
     assert out["status"] == "partially_verified"
-    assert out["write_gate"]["source_ids"] == ["ADR-0009"]      # only what was verified reaches the gate
+    assert out["write_gate"] == {"written": False, "reason": "the Verifier did not accept every citation of this "
+                                                             "answer; nothing written"}
 
 
 def test_investigator_names_a_contradicting_record_its_model_dropped(graph, trace):
@@ -364,6 +365,8 @@ def test_a_contradicting_record_cannot_be_dropped_silently(graph, trace):
         R.restore(src, "msg-0148", original, trace)
     assert out["rounds"] == 2 and out["status"] == "verified" and "msg-0148 says otherwise now" in out["answer"]
     assert seen[0]["must_address"] == ["msg-0148"]
+    shown = {r["id"]: r for r in seen[0]["records"]}
+    assert shown["msg-0148"]["lines"] == AG.quotable(EDITED) and shown["msg-0148"]["as_of"] == "source now"
     note = [n for n in seen[0]["verifier_notes"] if n["id"] == "msg-0148"]
     assert note and note[0]["current_lines"] == AG.quotable(EDITED) and note[0]["verdict"] == "contradicts"
 

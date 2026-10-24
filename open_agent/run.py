@@ -98,6 +98,10 @@ def write_finding(inv: Investigator, draft, review, trace: Trace) -> dict:
         reason = f"records contradict the answer and it does not say so ({', '.join(review.ignored)}); nothing written"
         trace.event("Investigator", "write_gate", status="skipped", reason=reason)
         return {"written": False, "reason": reason}
+    if ids and not review.accepted:  # the answer text may still carry the claims the rejected citations backed
+        reason = "the Verifier did not accept every citation of this answer; nothing written"
+        trace.event("Investigator", "write_gate", status="skipped", reason=reason)
+        return {"written": False, "reason": reason}
     if not ids:
         reason = "the write gate keeps a finding only with a verified source; nothing written"
         trace.event("Investigator", "write_gate", status="skipped", reason=reason)

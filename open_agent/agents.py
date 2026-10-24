@@ -198,9 +198,13 @@ class Investigator:
 
     def _context(self, draft: Draft, review: Review | None = None) -> dict:
         useful = [a for a in draft.run.answers if a.outcome not in (A.UNKNOWN_ENTITY,)] or draft.run.answers
+        # A record the Verifier re-read is shown as its source holds it now; the memory's older copy is not offered.
+        now = {c.id: c.current_text for c in (review.checks + review.ignored_checks if review else [])
+               if c.current_text is not None}
         ctx = {"question": draft.question, "draft_answer": draft.answer, "tool_rows": model_view(combined(useful)),
                "records": [{"id": r["id"], "source": SYSTEM_OF.get(r["channel"], r["channel"]), "title": r["title"],
-                            "lines": quotable(r["text"])} for r in draft.records.values()]}
+                            "lines": quotable(now.get(r["id"], r["text"])),
+                            "as_of": "source now" if r["id"] in now else "memory"} for r in draft.records.values()]}
         if review:
             ctx["previous_citations"] = [asdict(c) for c in draft.citations]
             ctx["verifier_notes"] = [{"id": c.id, "quote": c.quote, "accepted": c.accepted,

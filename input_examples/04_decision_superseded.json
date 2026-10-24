@@ -1,0 +1,4 @@
+{
+  "question": "What did the team decide about invoice rendering?",
+  "what_it_shows": "No tampering: two decision records disagree (ADR-0004 render synchronously; ADR-0011 asynchronously, which superseded it). The Verifier's model judges each cited record against the answer, and a record that contradicts the answer cannot be dropped without a word. Without a model (SAMPLE_MODE) the router has no rule for this wording and says so."
+}
