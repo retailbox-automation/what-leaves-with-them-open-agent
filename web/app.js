@@ -1339,6 +1339,44 @@
     return { receipts, episodes, after: row || null, asOf };
   }
 
+  // The Investigator <-> Verifier loop (POST /run, serve.py) on a question about the card's item: the evidence the
+  // Verifier re-read at each record's source system goes into the same card. Servers without /run show nothing extra.
+  function runQuestion(c) {
+    if (c.item_kind === 'decision') return `Who decided ${c.item}?`;
+    if (c.item_kind === 'system') return `Who owns ${c.item} now?`;
+    return null;
+  }
+
+  async function verifiedEvidence(c, card, g) {
+    const question = runQuestion(c);
+    if (!question || api.source !== 'live' || api.noRun) return;
+    let res;
+    try {
+      res = await api.http('run', { method: 'POST', headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ input: { query: question } }) });
+    } catch (_) { api.noRun = true; return; }
+    if (state.game !== g) return;
+    const o = res.body.output || {};
+    if (!o.status || o.status === 'error') return;
+    const round = o.rounds || 1;
+    const short = (t, n = 110) => (String(t).length > n ? String(t).slice(0, n - 3).replace(/\s+\S*$/, '') + '…' : String(t));
+    const system = (s) => String(s || '').replace(/\s*\(.*\)$/, '');
+    const verdict = (v) => (String(v || '').startsWith('skipped') ? 'quote found' : String(v || ''));
+    const kept = (o.citations || []).filter((x) => x.accepted).map((x) => `<span class="cite ok">`
+      + `<b>${esc(x.id)}</b> <span class="by">${esc(system(x.source))} · round ${round}</span> <q>${esc(short(x.quote))}</q> `
+      + `<span class="verdict">${esc(verdict(x.verdict))}</span></span>`);
+    const gone = (o.dropped_citations || []).map((x) => `<span class="cite bad">`
+      + `<b>${esc(x.id)}</b> <span class="by">round ${esc(x.round)}</span> <span class="verdict">${esc(String(x.reason || '').replace(/_/g, ' '))}</span></span>`);
+    const head = { verified: 'Verified at the source', absence_confirmed: 'Checked at the source: no record names it' }[o.status]
+      || `Checked at the source: ${String(o.status).replace(/_/g, ' ')}`;
+    card.insertAdjacentHTML('beforeend', `<span class="answer evidence"><span class="by">${esc(head)}: `
+      + `<q>${esc(question)}</q> (${esc(o.endpoint === 'local-sample' ? 'sample copy of the three systems' : o.endpoint)},`
+      + ` Verifier, ${round} ${plural(round, 'round', 'rounds')})</span>`
+      + kept.join('') + gone.join('') + `</span>`);
+    htmlTip(card.querySelector('.answer.evidence'), () => `<div><b>${esc(question)}</b></div><div class="k">${esc(short(o.answer, 240))}</div>`
+      + `<div class="ids">trace ${esc(res.body.trace_id || '')}</div>`);
+  }
+
   async function answer(i, card) {
     const g = state.game;
     if (!g || g.answered.has(i) || g.days < DAYS_PER_ANSWER) return;
@@ -1384,6 +1422,7 @@
       card.insertAdjacentHTML('beforeend', `<span class="answer">Not in the graph: no written answer from ${esc(first(g.person))} about ${esc(c.item)}${g.notice ? ` since ${esc(day(g.notice))}` : ''}.</span>`);
       links.card = null;
     }
+    await verifiedEvidence(c, card, g);
     renderGame();
     card.scrollIntoView({ block: 'nearest', behavior: REDUCED ? 'auto' : 'smooth' });
     $('cards').addEventListener('scroll', scheduleSync, { once: true });

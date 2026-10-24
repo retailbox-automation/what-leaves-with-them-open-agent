@@ -157,6 +157,12 @@ button { font: inherit; color: inherit; cursor: pointer; }
   border-radius: 999px; padding: 2px 10px; font-family: var(--mono); }
 .card .by { color: var(--muted); font-style: normal; }
 .card .answer.by { margin-top: 4px; }
+.card .evidence { border-top: 1px solid rgba(120, 140, 180, 0.25); padding-top: 6px; }
+.card .cite { display: block; margin-top: 4px; }
+.card .cite b { font-family: var(--mono); font-weight: 600; color: var(--ink); }
+.card .cite .verdict { display: inline-block; margin-left: 4px; font-size: 0.9em; font-family: var(--mono); color: #8fe3b6;
+  border: 1px solid rgba(48, 164, 108, 0.6); border-radius: 999px; padding: 0 8px; }
+.card .cite.bad .verdict { color: #f2a5a8; border-color: rgba(229, 72, 77, 0.55); }
 .card.saved { border-color: var(--green); background: rgba(19, 64, 46, 0.55); }
 .card.half { border-color: rgba(229, 72, 77, 0.55); }
 .card.half::after { content: ""; }
