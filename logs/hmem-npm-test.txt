@@ -1,0 +1,14 @@
+2026-10-24T11:29:30Z
+v26.10.0
+npm notice run @meterless/hmem-reference@0.1.0 test
+npm notice run vitest run
+
+ RUN  v2.1.9 <repo>/vendor/hmem/reference
+
+ ✓ test/smoke.test.ts (10 tests) 4ms
+
+ Test Files  1 passed (1)
+      Tests  10 passed (10)
+   Start at  07:29:31
+   Duration  609ms (transform 248ms, setup 0ms, collect 255ms, tests 4ms, environment 0ms, prepare 76ms)
+
