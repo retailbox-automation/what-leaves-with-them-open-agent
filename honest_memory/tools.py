@@ -16,7 +16,9 @@ into the pattern, never a string from the model.
 from __future__ import annotations
 
 import difflib
+import hashlib
 import json
+import os
 import re
 from dataclasses import dataclass
 from datetime import datetime, timezone
@@ -697,18 +699,120 @@ _HANDOFFS_VIA_EPISODE = (
     "RETURN h.id, h.topic, h.note, h.ts, sender, receiver, team, cites ORDER BY h.ts DESC LIMIT $limit")
 
 
+# --- agent memory: the Meterless H-MEM engine, or the graph --------------------------------------
+# HM_MEMORY_BACKEND=auto (default) | hmem | graph. auto and hmem use H-MEM (open_agent/hmem_bridge.py, the pinned
+# reference engine in vendor/hmem) when Node and the engine are present, else the graph path below. The write gate
+# still decides what is kept and still writes its Finding node; H-MEM holds the memory itself (text, layer,
+# confidence, feedback, read/create ledger), and recall serves an H-MEM memory only while the gate's record of it
+# exists in the graph, so a dropped or rebuilt graph never resurrects old memories.
+
+def memory_backend() -> tuple[str, str]:
+    """("hmem" | "graph", why)."""
+    want = os.environ.get("HM_MEMORY_BACKEND", "auto").strip().lower()
+    if want == "graph":
+        return "graph", "HM_MEMORY_BACKEND=graph"
+    try:
+        from open_agent import hmem_bridge
+    except ImportError:
+        return "graph", "open_agent.hmem_bridge is not installed"
+    if not hmem_bridge.available():
+        return "graph", "H-MEM engine or node binary not found"
+    return "hmem", f"HM_MEMORY_BACKEND={want}"
+
+
+def _finding_ref(fid: str, text: str) -> str:
+    """The key of a finding in H-MEM: the gate's id plus a hash of the text (ids restart when a graph is rebuilt)."""
+    return f"{fid}#{hashlib.sha1((text or '').encode()).hexdigest()[:10]}"
+
+
+def _finding_record(fid: str, text: str, ts, session, agent, about: list[str], source_ids: list[str],
+                    receipt_id: str | None, imported: bool) -> dict:
+    learned = _epoch_of(ts) * 1000
+    label = (f"finding {fid} accepted by the write gate" + (f", receipt {receipt_id}" if receipt_id else "")
+             + (" (written before H-MEM held it; imported from the graph)" if imported else ""))
+    rec = {"content": text, "source": agent or "agent:unknown", "layer": "long_term", "type": "factual",
+           "tags": ["finding"] + [f"about:{n}" for n in about] + [f"src:{i}" for i in source_ids or []],
+           "confidence": 0.7, "provenance": {"origin": "manual" if imported else "model_response",
+                                             "learnedAt": learned, "label": label,
+                                             "refs": [_finding_ref(fid, text), fid] + list(source_ids or [])}}
+    if session:
+        rec["chatId"] = session
+    return rec
+
+
+def _hmem_keep_finding(store: Store, ctx: "Context", result, text: str, about: list[str],
+                       source_ids: list[str]) -> dict | None:
+    """After the gate accepted a finding: keep it in H-MEM, long-term. Returns {memory_id} or {error}."""
+    fid = getattr(result, "record_id", None)
+    if not fid:
+        return None
+    from open_agent import hmem_bridge
+
+    try:
+        row = store.ro("MATCH (f:Finding {id: $id}) RETURN f.text, f.ts, f.session", {"id": fid})
+        ftext, ts, session = row[0] if row else (text, ctx.at or _now_iso(), ctx.session)
+        h = hmem_bridge.for_tenant(store.tenant)
+        rec = _finding_record(fid, ftext, ts, session, ctx.agent, about, source_ids, result.receipt_id, False)
+        h.import_records([rec])
+        mem = h.get(ref=_finding_ref(fid, ftext))
+        return {"memory_id": mem["id"] if mem else None, "backend": "hmem"}
+    except Exception as exc:  # the finding is in the graph either way; say that H-MEM did not take it
+        return {"error": f"H-MEM did not keep {fid}: {type(exc).__name__}: {str(exc)[:200]}"}
+
+
+def _recall_hmem(store: Store, ent: Entity, limit: int, findings: list[list]) -> list[dict]:
+    """The findings about `ent`, served from H-MEM. Graph findings H-MEM has not seen yet are imported first."""
+    from open_agent import hmem_bridge
+
+    h = hmem_bridge.for_tenant(store.tenant)
+    current = {_finding_ref(fid, text): (fid, text, ts, session, agent, src)
+               for fid, text, ts, session, agent, src in findings}
+    if current:
+        h.import_records([_finding_record(fid, text, ts, session, agent, [ent.name], src, None, True)
+                          for fid, text, ts, session, agent, src in current.values()])
+    # Only memories whose gate record is in the graph now; a dropped or rebuilt graph's old ones are not served.
+    res = h.call("recall", text=ent.name, topN=max(limit, 1), threshold=0.0, tag=f"about:{ent.name}",
+                 allowRefs=sorted(current))
+    out = []
+    for hit in res["memories"]:
+        m = hit["memory"]
+        fid, text, ts, session, agent, src = current[m["provenance"]["refs"][0]]
+        out.append({"fid": fid, "text": m["content"], "ts": ts, "session": m.get("chatId") or session,
+                    "agent": m.get("source") or agent, "src": src, "memory_id": m["id"],
+                    "confidence": round(m["confidence"], 4), "relevance": round(hit["relevance"], 4),
+                    "needs_review": "review" in m.get("tags", [])})
+    return out
+
+
 def recall(store: Store, a: dict, ctx: Context) -> Answer:
     ent, limit = a["entity"], a["limit"]
     args = {"entity": ent.name, "limit": limit}
     params = {"k": ent.name, "limit": limit}
     rows: list[dict] = []
     paths: list[list[str]] = []
-    findings = store.ro(_FINDINGS.format(label=ent.label, key=ent.key), params)
+    findings = store.ro(_FINDINGS.format(label=ent.label, key=ent.key), {"k": ent.name, "limit": 200})
     closed_at = [_epoch_of(r[0]) for r in store.ro(_CLOSED.format(label=ent.label, key=ent.key), params)] if findings else []
-    for fid, text, ts, session, agent, src in findings:
-        rows.append({"kind": "finding", "id": fid, "text": text, "at": iso_ts(ts), "agent": agent,
-                     "session": session, "source_ids": src,
-                     "closed_since": sum(1 for c in closed_at if c > _epoch_of(ts))})
+    backend, _ = memory_backend()
+    memory_note = ""
+    served: list[dict] | None = None
+    if backend == "hmem":
+        try:
+            served = _recall_hmem(store, ent, limit, findings)
+        except Exception as exc:  # the old path answers, and the answer says so
+            backend = "graph"
+            memory_note = f"H-MEM unavailable ({type(exc).__name__}: {str(exc)[:120]}); recalled from the graph."
+    if served is None:
+        served = [{"fid": fid, "text": text, "ts": ts, "session": session, "agent": agent, "src": src}
+                  for fid, text, ts, session, agent, src in findings[:limit]]
+    for f in served:
+        fid, text, ts, session, agent, src = f["fid"], f["text"], f["ts"], f["session"], f["agent"], f["src"]
+        row = {"kind": "finding", "id": fid, "text": text, "at": iso_ts(ts), "agent": agent,
+               "session": session, "source_ids": src,
+               "closed_since": sum(1 for c in closed_at if c > _epoch_of(ts)), "memory": backend}
+        if "memory_id" in f:
+            row.update(memory_id=f["memory_id"], confidence=f["confidence"], relevance=f["relevance"],
+                       needs_review=f["needs_review"])
+        rows.append(row)
         head = [agent, "WROTE", fid] if agent else [fid]
         paths += [head + ["ABOUT", ent.name] + (["DERIVED_FROM", s] if s else []) for s in (src or [None])]
     seen: set[str] = set()
@@ -724,7 +828,8 @@ def recall(store: Store, a: dict, ctx: Context) -> Answer:
         return _not_in_graph("recall", args, f"No agent has recorded a finding or a handoff about {ent.name}.")
     rows.sort(key=lambda r: r["at"], reverse=True)
     ids = [i for r in rows for i in r["source_ids"]]
-    return _finish(Answer(A.ANSWERED_FROM_MEMORY, "recall", args, rows[:limit], paths, _sources(store, ids)))
+    return _finish(Answer(A.ANSWERED_FROM_MEMORY, "recall", args, rows[:limit], paths, _sources(store, ids),
+                          note=memory_note))
 
 
 def facts_about(store: Store, a: dict, ctx: Context) -> Answer:
@@ -787,7 +892,12 @@ def remember(store: Store, a: dict, ctx: Context) -> Answer:
     args = {"text": a["text"], "about": about, "source_ids": a["source_ids"]}
     result = _gate().submit_finding(store, ctx.agent, ctx.session, a["text"], about, a["source_ids"],
                                     ctx.at or _now_iso())
-    return _write_answer(store, "remember", args, result, a["source_ids"])
+    ans = _write_answer(store, "remember", args, result, a["source_ids"])
+    if ans.outcome in (A.ACCEPTED, A.SUPERSEDED, A.CONFIRMED) and memory_backend()[0] == "hmem":
+        kept = _hmem_keep_finding(store, ctx, result, a["text"], about, a["source_ids"])
+        if kept and ans.rows:
+            ans.rows[0]["memory"] = kept
+    return ans
 
 
 def handoff(store: Store, a: dict, ctx: Context) -> Answer:

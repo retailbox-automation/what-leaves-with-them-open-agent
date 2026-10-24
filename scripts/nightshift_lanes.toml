@@ -1,0 +1,20 @@
+# Nightshift lanes for What Leaves With Them (copied to $NIGHTSHIFT_HOME/state/lanes.toml by nightshift_headless.sh).
+# Syntax checked against meterlessd 1.2.1: an array of [[lane]] tables with an id; `tools` is a list, not a flag.
+# Model files are bare names inside the models folder ($NIGHTSHIFT_MODELS).
+# 16384 tokens x 1 slot: the daemon refused 32768 x 2 for Lightning on a shared 128 GB Mac (it asked for 47 GB).
+
+[[lane]]
+id = "nemotron-lightning"            # investigator: native tool calls
+model = "NVIDIA-Nemotron-3.5-Lightning-30B-A3B-Q4_0.gguf"
+port = 11446
+ctx_per_slot = 16384
+parallel = 1
+autostart = false
+
+[[lane]]
+id = "nemotron-nano"                 # verifier: JSON verdict in text (the registry row has tools:false)
+model = "nvidia_Nemotron-3-Nano-30B-A3B-Q4_K_M.gguf"
+port = 11447
+ctx_per_slot = 16384
+parallel = 1
+autostart = false

@@ -6,6 +6,10 @@ writes go through the gate, and the sentence it writes is checked against the ro
 reads it. When the check fails, or no model is configured, a sentence built from the rows is used.
 
 Env: HM_LLM_BASE_URL (default http://localhost:11434/v1), HM_LLM_MODEL, HM_LLM_API_KEY (default "ollama").
+HM_LLM_PROVIDER=nightshift sends the calls to Meterless Nightshift instead (open_agent/nightshift.py: the agent's
+pinned Nemotron model, a per-request token, a receipt per call); HM_NIGHTSHIFT_AGENT picks the route (investigator).
+Before the model answers, findings kept in the H-MEM engine that match the question are put in front of it
+(open_agent/hmem_bridge.memory_context); HM_MEMORY_CONTEXT=off turns that off.
 """
 
 from __future__ import annotations
@@ -76,13 +80,22 @@ class AgentConfig:
     max_calls: int = MAX_CALLS
     timeout: float = 180.0
     reasoning_effort: str | None = None     # e.g. "none" turns thinking off on models that think
+    provider: str = "openai"                # "nightshift": open_agent.nightshift, receipts and pinned Nemotron
+    nightshift_agent: str = "investigator"
 
     @classmethod
     def from_env(cls, default_model: str | None = None) -> "AgentConfig":
+        provider = os.environ.get("HM_LLM_PROVIDER", "openai").strip().lower()
+        ns_agent = os.environ.get("HM_NIGHTSHIFT_AGENT", "investigator")
+        if provider == "nightshift" and not (os.environ.get("HM_LLM_MODEL") or default_model):
+            from open_agent.nightshift import route_for
+
+            default_model = route_for(ns_agent).model
         return cls(base_url=os.environ.get("HM_LLM_BASE_URL", DEFAULT_BASE_URL),
                    model=os.environ.get("HM_LLM_MODEL") or default_model,
                    api_key=os.environ.get("HM_LLM_API_KEY", "ollama"),
-                   reasoning_effort=os.environ.get("HM_LLM_REASONING") or None)
+                   reasoning_effort=os.environ.get("HM_LLM_REASONING") or None,
+                   provider=provider, nightshift_agent=ns_agent)
 
 
 @dataclass
@@ -99,6 +112,7 @@ class AgentRun:
     rule: str = ""                              # router rule that fired
     errors: list[str] = field(default_factory=list)
     ms: float = 0.0
+    memory_ids: list[str] = field(default_factory=list)   # H-MEM memories put in front of the model
 
     @property
     def primary(self) -> Answer | None:
@@ -117,7 +131,7 @@ class AgentRun:
         return {"question": self.question, "agent": self.agent, "session": self.session, "mode": self.mode,
                 "outcome": self.outcome, "sentence": self.sentence, "sentence_source": self.sentence_source,
                 "check": self.check, "rejected": self.rejected, "rule": self.rule, "errors": self.errors,
-                "ms": self.ms, "answers": [a.to_dict() for a in self.answers]}
+                "ms": self.ms, "memory_ids": self.memory_ids, "answers": [a.to_dict() for a in self.answers]}
 
 
 def combined(answers: list[Answer]) -> Answer:
@@ -172,6 +186,10 @@ class Agent:
 
     @property
     def client(self):
+        if self._client is None and self.config.provider == "nightshift":
+            from open_agent.nightshift import openai_client
+
+            self._client = openai_client(self.config.nightshift_agent, timeout=self.config.timeout)
         if self._client is None:
             from openai import OpenAI
 
@@ -227,6 +245,7 @@ class Agent:
         run = AgentRun(question, self.name, self.session, "llm")
         cfg = self.config
         messages = [{"role": "system", "content": SYSTEM_PROMPT.format(name=self.name, role=self.role, max_calls=cfg.max_calls)},
+                    *self._memory_messages(run, question),
                     {"role": "user", "content": question}]
         tools = T.openai_tools()
         text, spent = "", 0
@@ -246,6 +265,23 @@ class Agent:
                 spent += 1
                 messages.append({"role": "tool", "tool_call_id": cid, "content": self._run_call(run, c, spent)})
         return self._finish_model_run(run, text)
+
+    def _memory_messages(self, run: AgentRun, question: str) -> list[dict]:
+        """Findings the write gate accepted and H-MEM holds that match the question, as one system message."""
+        if os.environ.get("HM_MEMORY_CONTEXT", "on").strip().lower() == "off" or T.memory_backend()[0] != "hmem":
+            return []
+        try:
+            from open_agent.hmem_bridge import memory_context
+
+            context, hits = memory_context(self.store, question)
+        except Exception as exc:  # no memory is not a reason to refuse the question
+            run.errors.append(f"H-MEM context unavailable: {type(exc).__name__}: {str(exc)[:160]}")
+            return []
+        if not context:
+            return []
+        run.memory_ids = [h["memory"]["id"] for h in hits]
+        return [{"role": "system", "content": "Earlier findings kept in memory (they may be out of date; confirm with "
+                                              "a tool before you rely on one):\n" + context}]
 
     def _complete(self, messages: list, tools: list | None, force_text: bool):
         kwargs = {"model": self.config.model, "messages": messages, "temperature": 0}

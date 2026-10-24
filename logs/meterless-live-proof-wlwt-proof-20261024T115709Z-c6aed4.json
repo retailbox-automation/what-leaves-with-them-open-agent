@@ -1,0 +1,197 @@
+{
+  "scope": "wlwt-proof-20261024T115709Z-c6aed4",
+  "tenant": "laneb_quillfield",
+  "started": "2026-10-24T11:57:09Z",
+  "steps": [
+    {
+      "step": "A remember",
+      "at": "2026-10-24T11:57:09Z",
+      "outcome": "accepted",
+      "record_id": "FND-00002",
+      "memory": {
+        "memory_id": "mem-2",
+        "backend": "hmem"
+      },
+      "receipt": "GD-00228-810632333f",
+      "pid": 82287,
+      "hmem_dir": "<repo>/.state/hmem/laneb_quillfield"
+    },
+    {
+      "step": "B ask through Nightshift",
+      "at": "2026-10-24T11:57:53Z",
+      "pid": 83156,
+      "mode": "llm",
+      "memory_ids": [
+        "mem-2",
+        "mem-1"
+      ],
+      "sentence": "Luca Ostrander (Platform) is the current owner of billing‑api, effective 2026‑09‑22.",
+      "sentence_source": "model",
+      "check": "ok",
+      "errors": [],
+      "ms": 29504.0,
+      "tools": [
+        "current_owner"
+      ],
+      "sources": [
+        "ADR-0009",
+        "msg-0148"
+      ],
+      "receipts": [
+        {
+          "agent": "investigator",
+          "app": "wlwt-investigator",
+          "scope": "wlwt-proof-20261024T115709Z-c6aed4",
+          "receipt_id": "rcpt_req_yxcg9rjc",
+          "decision_id": "req_yxcg9rjc",
+          "requested_model": "local-runtime/nemotron-3.5-lightning-30b-a3b",
+          "routed_model": "local-runtime/nemotron-3.5-lightning-30b-a3b",
+          "provider_model": "meterless/local",
+          "source_policy": "local-only",
+          "lanes": [
+            "nemotron-lightning"
+          ],
+          "mode": "local",
+          "from_cache": false,
+          "cache_status": "miss",
+          "cost_usd": 0,
+          "naive_usd": 0.024015,
+          "privacy": "local-only",
+          "tool_degraded": null,
+          "usage": {
+            "input_tokens": 5725,
+            "output_tokens": 456,
+            "total_tokens": 6181,
+            "output_tps": 19.437340153452684,
+            "latency_ms": 23460
+          },
+          "latency_ms": 23478.5,
+          "signed": true
+        },
+        {
+          "agent": "investigator",
+          "app": "wlwt-investigator",
+          "scope": "wlwt-proof-20261024T115709Z-c6aed4",
+          "receipt_id": "rcpt_req_vufdhzkj",
+          "decision_id": "req_vufdhzkj",
+          "requested_model": "local-runtime/nemotron-3.5-lightning-30b-a3b",
+          "routed_model": "local-runtime/nemotron-3.5-lightning-30b-a3b",
+          "provider_model": "meterless/local",
+          "source_policy": "local-only",
+          "lanes": [
+            "nemotron-lightning"
+          ],
+          "mode": "local",
+          "from_cache": false,
+          "cache_status": "miss",
+          "cost_usd": 0,
+          "naive_usd": 0.020205,
+          "privacy": "local-only",
+          "tool_degraded": null,
+          "usage": {
+            "input_tokens": 6280,
+            "output_tokens": 91,
+            "total_tokens": 6371,
+            "output_tps": 15.379415244211595,
+            "latency_ms": 5917
+          },
+          "latency_ms": 5926.6,
+          "signed": true
+        }
+      ],
+      "wall_s": 30.0
+    },
+    {
+      "step": "Verifier on Nano",
+      "at": "2026-10-24T12:00:13Z",
+      "verdict": "verified",
+      "reply": "{\n  \"verdict\": \"verified\",\n  \"why\": \"The records state that ownership of billing-api transferred to Luca Ostrander effective 2026‑09‑22, matching the answer.\"\n}",
+      "records": [
+        "ADR-0009",
+        "msg-0148"
+      ],
+      "feedback": [
+        {
+          "id": "mem-2",
+          "confidence": 0.75,
+          "tags": [
+            "finding",
+            "about:billing-api",
+            "about:Luca Ostrander",
+            "src:ADR-0009",
+            "src:msg-0148"
+          ]
+        },
+        {
+          "id": "mem-1",
+          "confidence": 0.75,
+          "tags": [
+            "finding",
+            "about:billing-api",
+            "about:Luca Ostrander",
+            "src:ADR-0009",
+            "src:msg-0148"
+          ]
+        }
+      ],
+      "receipt": {
+        "agent": "verifier",
+        "app": "wlwt-verifier",
+        "scope": "wlwt-proof-20261024T115709Z-c6aed4",
+        "receipt_id": "rcpt_req_bapsz4xu",
+        "decision_id": "req_bapsz4xu",
+        "requested_model": "local-runtime/nemotron-3-nano-30b-a3b",
+        "routed_model": "local-runtime/nemotron-3-nano-30b-a3b",
+        "provider_model": "meterless/local",
+        "source_policy": "local-only",
+        "lanes": [
+          "nemotron-nano"
+        ],
+        "mode": "local",
+        "from_cache": false,
+        "cache_status": "miss",
+        "cost_usd": 0,
+        "naive_usd": 0.006395999999999999,
+        "privacy": "local-only",
+        "tool_degraded": null,
+        "usage": {
+          "input_tokens": 752,
+          "output_tokens": 276,
+          "total_tokens": 1028,
+          "output_tps": 30.558015943312665,
+          "latency_ms": 9032
+        },
+        "latency_ms": 9059.4,
+        "signed": true
+      }
+    }
+  ],
+  "ledger_for_memory": [
+    {
+      "action": "create",
+      "actor": "wlwt",
+      "timestamp": 1792843029879,
+      "kind": null
+    },
+    {
+      "action": "read",
+      "actor": "wlwt",
+      "timestamp": 1792843043768,
+      "kind": null
+    },
+    {
+      "action": "feedback",
+      "actor": "wlwt",
+      "timestamp": 1792843213611,
+      "kind": "helpful"
+    }
+  ],
+  "receipts_export": {
+    "path": "<repo>/logs/receipts-wlwt-proof-20261024T115709Z-c6aed4.jsonl",
+    "receipts": 3,
+    "redacted": 0,
+    "listed": 14,
+    "missing": []
+  },
+  "finished": "2026-10-24T12:00:56Z"
+}

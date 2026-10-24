@@ -1,0 +1,763 @@
+{
+  "scope": "wlwt-smoke-20261024T120604Z-7adfb3",
+  "at": "2026-10-24T12:06:04Z",
+  "calls": [
+    {
+      "agent": "verifier",
+      "finish_reason": "stop",
+      "content": "{\"verdict\":\"supported\"}",
+      "receipt": {
+        "agent": "verifier",
+        "app": "wlwt-verifier",
+        "scope": "wlwt-smoke-20261024T120604Z-7adfb3",
+        "receipt_id": "rcpt_req_wf3g56vk",
+        "decision_id": "req_wf3g56vk",
+        "requested_model": "local-runtime/nemotron-3-nano-30b-a3b",
+        "routed_model": "local-runtime/nemotron-3-nano-30b-a3b",
+        "provider_model": "meterless/local",
+        "source_policy": "local-only",
+        "lanes": [
+          "nemotron-nano"
+        ],
+        "mode": "local",
+        "from_cache": false,
+        "cache_status": "miss",
+        "cost_usd": 0,
+        "naive_usd": 0.001392,
+        "privacy": "local-only",
+        "tool_degraded": null,
+        "usage": {
+          "input_tokens": 74,
+          "output_tokens": 78,
+          "total_tokens": 152,
+          "output_tps": 30.636292223095055,
+          "latency_ms": 2546
+        },
+        "latency_ms": 2606.3,
+        "signed": true
+      },
+      "meterless": {
+        "schema": "meterless.compute_receipt.v1",
+        "receipt_id": "rcpt_req_wf3g56vk",
+        "decision_id": "req_wf3g56vk",
+        "requested_model": "local-runtime/nemotron-3-nano-30b-a3b",
+        "provider_model": "meterless/local",
+        "routed_model": "local-runtime/nemotron-3-nano-30b-a3b",
+        "winning_route": {
+          "model": "local-runtime/nemotron-3-nano-30b-a3b",
+          "label": "Nemotron 3 Nano 30B-A3B ⚠️ 22GB+ RAM (Runtime GGUF)",
+          "provider": "local-runtime",
+          "kind": "local",
+          "tier": "C"
+        },
+        "requires_review": false,
+        "phases": [
+          {
+            "phase": "final_synthesis",
+            "model": "local-runtime/nemotron-3-nano-30b-a3b",
+            "ms": 2546,
+            "tokensIn": 74,
+            "tokensOut": 78,
+            "outputTps": 30.636292223095055,
+            "coherence": null,
+            "tier": "A",
+            "reflex_decided_in_ms": 0.01
+          }
+        ],
+        "usage": {
+          "input_tokens": 74,
+          "output_tokens": 78,
+          "total_tokens": 152,
+          "output_tps": 30.636292223095055,
+          "latency_ms": 2546
+        },
+        "cost": {
+          "actual_usd": 0,
+          "naive_usd": 0.001392,
+          "baseline": {
+            "model": "claude-sonnet-4-5-20250929",
+            "label": "Claude 4.5 Sonnet",
+            "source": "fixed-reference"
+          },
+          "verifier_usd": 0,
+          "race_overhead_usd": 0
+        },
+        "savings": {
+          "amount": 0.001392,
+          "currency": "USD",
+          "vs": "Claude 4.5 Sonnet",
+          "baseline_source": "fixed-reference"
+        },
+        "cache": {
+          "status": "miss",
+          "losers_reclaimed": 0,
+          "partials_reclaimed": 0
+        },
+        "privacy": {
+          "path": "local-only",
+          "redaction": {
+            "applied": false,
+            "spans": 0
+          }
+        },
+        "from_cache": false,
+        "losers_reclaimed": 0,
+        "receipt": {
+          "app": "wlwt-verifier",
+          "app_policy": {
+            "app": "wlwt-verifier",
+            "bound_mode": "local",
+            "cross_check": "auto",
+            "has_rule": true,
+            "lanes": [
+              "nemotron-nano"
+            ],
+            "mode_coerced": true,
+            "premium_budget": null,
+            "privacy": "cloud-ok",
+            "race_width": 6,
+            "requested_mode": "auto",
+            "routed_mode": "local"
+          },
+          "autopilot": {
+            "ctx_dropped": [],
+            "ctx_unfilterable": false,
+            "envelope": {
+              "allocatable_mb": 0,
+              "pressure": "unknown",
+              "remaining_mb": 0,
+              "used_mb": 0
+            },
+            "needs": {
+              "coding": false,
+              "tools": false,
+              "vision": false
+            },
+            "prompt_tokens": 49,
+            "scout": {
+              "candidates": [],
+              "category": null,
+              "confident": false,
+              "mode": "ROUTING",
+              "ms": 0.18,
+              "score": 0,
+              "source": "none",
+              "tier": null
+            },
+            "tier_hint": null,
+            "why": [
+              "no scout mode matched — the phase classifier alone plans",
+              "~49 prompt tokens — lanes whose slot cannot hold them are not asked"
+            ]
+          },
+          "bar": null,
+          "budget_degrade": null,
+          "cache": {
+            "losers_reclaimed": 0,
+            "partials_reclaimed": 0,
+            "status": "miss"
+          },
+          "consensus": {
+            "agree": 1,
+            "coherence": null,
+            "detail": "one model handled this — no cross-model agreement to check",
+            "label": "single route",
+            "level": "solo",
+            "raced": 1,
+            "tone": "neutral",
+            "verified": null
+          },
+          "consensus_escalation": null,
+          "cost": {
+            "actual_usd": 0,
+            "baseline": {
+              "label": "Claude 4.5 Sonnet",
+              "model": "claude-sonnet-4-5-20250929",
+              "source": "fixed-reference"
+            },
+            "naive_usd": 0.001392,
+            "race_overhead_usd": 0,
+            "verifier_usd": 0
+          },
+          "created_at": 1792843566633,
+          "cross_check": {
+            "app": "wlwt-verifier",
+            "blocking": false,
+            "checks": [],
+            "recommended_action": "allow",
+            "reflex_ms": 0.45,
+            "risk_level": "low",
+            "skip_reason": "tier_a_chat",
+            "status": "skipped",
+            "verifier": "none",
+            "verifier_model": null,
+            "verifier_ms": 0,
+            "verifier_ran": false,
+            "verifier_verdict": null
+          },
+          "debate": null,
+          "decision_id": "req_wf3g56vk",
+          "deliberation": null,
+          "egress": {
+            "coverage": "pattern_floor",
+            "destination": "none",
+            "never_eligible": [],
+            "sent": {
+              "context_sources": [
+                "messages"
+              ],
+              "prompt_chars": 132,
+              "redacted": []
+            },
+            "withheld": []
+          },
+          "eligible": null,
+          "error": "",
+          "fusion": null,
+          "gen_verifier": null,
+          "graded_weight": null,
+          "hmem": null,
+          "host_pressure": {
+            "battery": null,
+            "pressure": {
+              "battery": {
+                "hard": 0.5,
+                "label": "nominal",
+                "score": 0.18,
+                "sensor": "battery%, charging",
+                "soft": 0.3
+              },
+              "cpu": {
+                "hard": 0.9,
+                "label": "nominal",
+                "score": 0.34,
+                "sensor": "30s load avg",
+                "soft": 0.7
+              },
+              "gpu": {
+                "hard": 0.92,
+                "label": "nominal",
+                "score": 0.38,
+                "sensor": "GPU + VRAM",
+                "soft": 0.75
+              },
+              "memory": {
+                "hard": 0.85,
+                "label": "warm",
+                "score": 0.51,
+                "sensor": "committed/swap",
+                "soft": 0.7
+              },
+              "network": {
+                "hard": 0.85,
+                "label": "nominal",
+                "score": 0.12,
+                "sensor": "RTT to providers",
+                "soft": 0.5
+              },
+              "quota": {
+                "hard": 0.95,
+                "label": "nominal",
+                "score": 0.28,
+                "sensor": "per-key window",
+                "soft": 0.8
+              },
+              "thermal": {
+                "hard": 0.8,
+                "label": "nominal",
+                "score": 0.22,
+                "sensor": "thermal API",
+                "soft": 0.55
+              }
+            },
+            "thermal": "nominal"
+          },
+          "job": null,
+          "mcp": null,
+          "method": null,
+          "mode": "local",
+          "optimistic": null,
+          "phases": [
+            {
+              "coherence": null,
+              "model": "local-runtime/nemotron-3-nano-30b-a3b",
+              "ms": 2546,
+              "outputTps": 30.636292223095055,
+              "phase": "final_synthesis",
+              "reflex_decided_in_ms": 0.01,
+              "tier": "A",
+              "tokensIn": 74,
+              "tokensOut": 78
+            }
+          ],
+          "privacy": {
+            "path": "local-only",
+            "redaction": {
+              "applied": false,
+              "spans": 0
+            }
+          },
+          "prompt_preview": "Claim: \"Luca Ostrander owns billing-api.\" Record ADR-0009: \"billing-api moves to Luca Ostrander (Platform).\" Is the claim supported?",
+          "quality_race": null,
+          "reasoning_scaffold": null,
+          "receipt_id": "rcpt_req_wf3g56vk",
+          "refine": null,
+          "request_id": "chatcmpl-0e99a2ff-1448-4920-80fc-c6755e22df86",
+          "requested_mode": "meterless/local",
+          "routing": {
+            "confidence": null,
+            "escalated": null,
+            "escalated_on_divergence": false,
+            "hedge": null,
+            "hedges_skipped": 0,
+            "of": 2,
+            "policy": "learned-router",
+            "predicted": "local-runtime/nemotron-3-nano-30b-a3b",
+            "reason": "single-candidate",
+            "width": 2,
+            "winner": "local-runtime/nemotron-3-nano-30b-a3b"
+          },
+          "savings": {
+            "amount": 0.001392,
+            "baseline_source": "fixed-reference",
+            "currency": "USD",
+            "vs": "Claude 4.5 Sonnet"
+          },
+          "schema": "meterless.compute_receipt.v1",
+          "score": null,
+          "scorecard": null,
+          "status": "ok",
+          "summary": "ok · Nemotron 3 Nano 30B-A3B ⚠️ 22GB+ RAM (Runtime GGUF) · miss · $0.0014 saved",
+          "synthesis": null,
+          "test_time_compute": null,
+          "tool_degraded": null,
+          "unmet": null,
+          "usage": {
+            "input_tokens": 74,
+            "latency_ms": 2546,
+            "output_tokens": 78,
+            "output_tps": 30.636292223095055,
+            "total_tokens": 152
+          },
+          "verdict": null,
+          "verification": null,
+          "winning_route": {
+            "kind": "local",
+            "label": "Nemotron 3 Nano 30B-A3B ⚠️ 22GB+ RAM (Runtime GGUF)",
+            "model": "local-runtime/nemotron-3-nano-30b-a3b",
+            "provider": "local-runtime",
+            "tier": "C"
+          }
+        },
+        "receipt_envelope": {
+          "body": {
+            "llama_cpp_ref": "08659901c43b51de735740f1cf61bb82fbe0c4e4",
+            "manifest_hash": "ce648a2bd06083851c65dabae1915686e386ff057b89834b3c517bd3c3bb1d49",
+            "receipt": {
+              "app": "wlwt-verifier",
+              "app_policy": {
+                "app": "wlwt-verifier",
+                "bound_mode": "local",
+                "cross_check": "auto",
+                "has_rule": true,
+                "lanes": [
+                  "nemotron-nano"
+                ],
+                "mode_coerced": true,
+                "premium_budget": null,
+                "privacy": "cloud-ok",
+                "race_width": 6,
+                "requested_mode": "auto",
+                "routed_mode": "local"
+              },
+              "autopilot": {
+                "ctx_dropped": [],
+                "ctx_unfilterable": false,
+                "envelope": {
+                  "allocatable_mb": 0,
+                  "pressure": "unknown",
+                  "remaining_mb": 0,
+                  "used_mb": 0
+                },
+                "needs": {
+                  "coding": false,
+                  "tools": false,
+                  "vision": false
+                },
+                "prompt_tokens": 49,
+                "scout": {
+                  "candidates": [],
+                  "category": null,
+                  "confident": false,
+                  "mode": "ROUTING",
+                  "ms": 0.18,
+                  "score": 0,
+                  "source": "none",
+                  "tier": null
+                },
+                "tier_hint": null,
+                "why": [
+                  "no scout mode matched — the phase classifier alone plans",
+                  "~49 prompt tokens — lanes whose slot cannot hold them are not asked"
+                ]
+              },
+              "bar": null,
+              "budget_degrade": null,
+              "cache": {
+                "losers_reclaimed": 0,
+                "partials_reclaimed": 0,
+                "status": "miss"
+              },
+              "consensus": {
+                "agree": 1,
+                "coherence": null,
+                "detail": "one model handled this — no cross-model agreement to check",
+                "label": "single route",
+                "level": "solo",
+                "raced": 1,
+                "tone": "neutral",
+                "verified": null
+              },
+              "consensus_escalation": null,
+              "cost": {
+                "actual_usd": 0,
+                "baseline": {
+                  "label": "Claude 4.5 Sonnet",
+                  "model": "claude-sonnet-4-5-20250929",
+                  "source": "fixed-reference"
+                },
+                "naive_usd": 0.001392,
+                "race_overhead_usd": 0,
+                "verifier_usd": 0
+              },
+              "created_at": 1792843566633,
+              "cross_check": {
+                "app": "wlwt-verifier",
+                "blocking": false,
+                "checks": [],
+                "recommended_action": "allow",
+                "reflex_ms": 0.45,
+                "risk_level": "low",
+                "skip_reason": "tier_a_chat",
+                "status": "skipped",
+                "verifier": "none",
+                "verifier_model": null,
+                "verifier_ms": 0,
+                "verifier_ran": false,
+                "verifier_verdict": null
+              },
+              "debate": null,
+              "decision_id": "req_wf3g56vk",
+              "deliberation": null,
+              "egress": {
+                "coverage": "pattern_floor",
+                "destination": "none",
+                "never_eligible": [],
+                "sent": {
+                  "context_sources": [
+                    "messages"
+                  ],
+                  "prompt_chars": 132,
+                  "redacted": []
+                },
+                "withheld": []
+              },
+              "eligible": null,
+              "error": "",
+              "fusion": null,
+              "gen_verifier": null,
+              "graded_weight": null,
+              "hmem": null,
+              "host_pressure": {
+                "battery": null,
+                "pressure": {
+                  "battery": {
+                    "hard": 0.5,
+                    "label": "nominal",
+                    "score": 0.18,
+                    "sensor": "battery%, charging",
+                    "soft": 0.3
+                  },
+                  "cpu": {
+                    "hard": 0.9,
+                    "label": "nominal",
+                    "score": 0.34,
+                    "sensor": "30s load avg",
+                    "soft": 0.7
+                  },
+                  "gpu": {
+                    "hard": 0.92,
+                    "label": "nominal",
+                    "score": 0.38,
+                    "sensor": "GPU + VRAM",
+                    "soft": 0.75
+                  },
+                  "memory": {
+                    "hard": 0.85,
+                    "label": "warm",
+                    "score": 0.51,
+                    "sensor": "committed/swap",
+                    "soft": 0.7
+                  },
+                  "network": {
+                    "hard": 0.85,
+                    "label": "nominal",
+                    "score": 0.12,
+                    "sensor": "RTT to providers",
+                    "soft": 0.5
+                  },
+                  "quota": {
+                    "hard": 0.95,
+                    "label": "nominal",
+                    "score": 0.28,
+                    "sensor": "per-key window",
+                    "soft": 0.8
+                  },
+                  "thermal": {
+                    "hard": 0.8,
+                    "label": "nominal",
+                    "score": 0.22,
+                    "sensor": "thermal API",
+                    "soft": 0.55
+                  }
+                },
+                "thermal": "nominal"
+              },
+              "job": null,
+              "mcp": null,
+              "method": null,
+              "mode": "local",
+              "optimistic": null,
+              "phases": [
+                {
+                  "coherence": null,
+                  "model": "local-runtime/nemotron-3-nano-30b-a3b",
+                  "ms": 2546,
+                  "outputTps": 30.636292223095055,
+                  "phase": "final_synthesis",
+                  "reflex_decided_in_ms": 0.01,
+                  "tier": "A",
+                  "tokensIn": 74,
+                  "tokensOut": 78
+                }
+              ],
+              "privacy": {
+                "path": "local-only",
+                "redaction": {
+                  "applied": false,
+                  "spans": 0
+                }
+              },
+              "prompt_preview": "Claim: \"Luca Ostrander owns billing-api.\" Record ADR-0009: \"billing-api moves to Luca Ostrander (Platform).\" Is the claim supported?",
+              "quality_race": null,
+              "reasoning_scaffold": null,
+              "receipt_id": "rcpt_req_wf3g56vk",
+              "refine": null,
+              "request_id": "chatcmpl-0e99a2ff-1448-4920-80fc-c6755e22df86",
+              "requested_mode": "meterless/local",
+              "routing": {
+                "confidence": null,
+                "escalated": null,
+                "escalated_on_divergence": false,
+                "hedge": null,
+                "hedges_skipped": 0,
+                "of": 2,
+                "policy": "learned-router",
+                "predicted": "local-runtime/nemotron-3-nano-30b-a3b",
+                "reason": "single-candidate",
+                "width": 2,
+                "winner": "local-runtime/nemotron-3-nano-30b-a3b"
+              },
+              "savings": {
+                "amount": 0.001392,
+                "baseline_source": "fixed-reference",
+                "currency": "USD",
+                "vs": "Claude 4.5 Sonnet"
+              },
+              "schema": "meterless.compute_receipt.v1",
+              "score": null,
+              "scorecard": null,
+              "status": "ok",
+              "summary": "ok · Nemotron 3 Nano 30B-A3B ⚠️ 22GB+ RAM (Runtime GGUF) · miss · $0.0014 saved",
+              "synthesis": null,
+              "test_time_compute": null,
+              "tool_degraded": null,
+              "unmet": null,
+              "usage": {
+                "input_tokens": 74,
+                "latency_ms": 2546,
+                "output_tokens": 78,
+                "output_tps": 30.636292223095055,
+                "total_tokens": 152
+              },
+              "verdict": null,
+              "verification": null,
+              "winning_route": {
+                "kind": "local",
+                "label": "Nemotron 3 Nano 30B-A3B ⚠️ 22GB+ RAM (Runtime GGUF)",
+                "model": "local-runtime/nemotron-3-nano-30b-a3b",
+                "provider": "local-runtime",
+                "tier": "C"
+              }
+            },
+            "signer": "meterlessd",
+            "ts_ms": 1792843566633
+          },
+          "pubkey_b64": "2H+qxKptHwp75GN5LelQVtEJkBQzWG0miHPlHeXj4vU=",
+          "sig_b64": "+i/QSc71hPKS2YgIWN/ACQg5I34uEn5i97F4eSSORmujgwWcTLado/LZFKFIcmtGRRyvqSrysHrM1sZ6uM11Ag=="
+        },
+        "mcp": null,
+        "job": {
+          "id": "job_mvmbeev402",
+          "kind": "app_stream",
+          "lane": "local",
+          "turn": 8,
+          "cluster": 1
+        },
+        "egress": {
+          "destination": "none",
+          "coverage": "pattern_floor",
+          "sent": {
+            "prompt_chars": 132,
+            "context_sources": [
+              "messages"
+            ],
+            "redacted": []
+          },
+          "withheld": [],
+          "never_eligible": []
+        },
+        "consensus": {
+          "level": "solo",
+          "raced": 1,
+          "agreed": null,
+          "coherence": null,
+          "label": "single route",
+          "basis": "lexical"
+        },
+        "lineage": {
+          "families": [
+            "unknown"
+          ],
+          "distinct": 1,
+          "note": "1 distinct lineages across 1 panelists"
+        },
+        "trace": {
+          "id": "req_wf3g56vk",
+          "app": "wlwt-verifier",
+          "startedAt": 1792843564073,
+          "completedAt": 1792843566633,
+          "mode": "local",
+          "intent": "chat",
+          "scout": "ROUTING",
+          "autopilot": {
+            "scout": {
+              "mode": "ROUTING",
+              "category": null,
+              "tier": null,
+              "score": 0,
+              "confident": false,
+              "source": "none",
+              "candidates": [],
+              "ms": 0.18
+            },
+            "needs": {
+              "tools": false,
+              "vision": false,
+              "coding": false
+            },
+            "prompt_tokens": 49,
+            "tier_hint": null,
+            "envelope": {
+              "pressure": "unknown",
+              "remaining_mb": 0,
+              "used_mb": 0,
+              "allocatable_mb": 0
+            }
+          },
+          "result": "ok",
+          "winner": "local-runtime/nemotron-3-nano-30b-a3b",
+          "phaseIdx": 1,
+          "source": "race",
+          "failed": false,
+          "error": null,
+          "tokensIn": 74,
+          "tokensOut": 78,
+          "outputTps": 30.636292223095055,
+          "ttc": {
+            "active": false,
+            "probe": null
+          },
+          "candidate_errors": [],
+          "losers_reclaimed": 0,
+          "tier_split_disabled": false,
+          "router_plan": null,
+          "router_escalation": null,
+          "fusion_local_mode": null,
+          "consensus": {
+            "level": "solo",
+            "tone": "neutral",
+            "label": "single route",
+            "detail": "one model handled this — no cross-model agreement to check",
+            "raced": 1,
+            "agree": 1,
+            "coherence": null,
+            "verified": null
+          },
+          "quality_race": null,
+          "consensus_escalating": false,
+          "fusion": null,
+          "synthesis": null,
+          "gen_verifier": null,
+          "cross_check": {
+            "status": "skipped",
+            "risk_level": "low",
+            "verifier": "none",
+            "reflex_ms": 0.45,
+            "verifier_ms": 0,
+            "verifier_ran": false,
+            "verifier_model": null,
+            "verifier_verdict": null,
+            "checks": [],
+            "recommended_action": "allow",
+            "blocking": false,
+            "app": "wlwt-verifier",
+            "skip_reason": "tier_a_chat"
+          },
+          "racing": [
+            {
+              "id": "local-runtime/nemotron-3-nano-30b-a3b",
+              "name": "Nemotron 3 Nano 30B-A3B ⚠️ 22GB+ RAM (Runtime GGUF)",
+              "vendor": "local-runtime",
+              "kind": "local",
+              "ms": 2546,
+              "status": "won",
+              "outcome": "won",
+              "role": null,
+              "coherence": null,
+              "error": null
+            }
+          ],
+          "phases": [
+            {
+              "phase": "final_synthesis",
+              "name": "final_synthesis",
+              "model": null,
+              "tier": "A",
+              "ms": 2546,
+              "source": "Nemotron 3 Nano 30B-A3B ⚠️ 22GB+ RAM (Runtime GGUF)",
+              "source_policy": "local-only",
+              "reflex_decided_in_ms": 0.01,
+              "tokensIn": 74,
+              "tokensOut": 78,
+              "outputTps": 30.636292223095055
+            }
+          ]
+        },
+        "app": "wlwt-verifier",
+        "mode": "local",
+        "scope": "wlwt-smoke-20261024T120604Z-7adfb3"
+      }
+    }
+  ]
+}
