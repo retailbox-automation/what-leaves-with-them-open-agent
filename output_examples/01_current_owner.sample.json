@@ -1,10 +1,11 @@
 {
-  "run_id": "20261024T123152Z-5a7d",
+  "run_id": "20261024T133943Z-587f",
   "mode": "sample",
   "endpoint": "local-sample",
   "question": "Who owns billing-api now?",
+  "tenant": "openagent_sample_c",
   "llm": null,
-  "sample_mode_note": "SAMPLE_MODE: the three sources are read from sample_data/sources/ by an in-process SQLite (endpoint local-sample) with the same SQL text, not through Zetaris; no model is called: the Investigator uses the deterministic router and the Verifier's model judgement is skipped. The agent loop, the quote re-reads and the write gate are the real code on this cached data.",
+  "sample_mode_note": "SAMPLE_MODE: the three sources are read from sample_data/sources/ by an in-process SQLite (endpoint local-sample) with the same SQL text, not through Zetaris; no model is called: the Investigator uses the deterministic router and the Verifier's model judgement is skipped. The agent loop, the quote re-reads, the write gate and the H-MEM memory (recall, store, feedback; no model needed) are the real code on this cached data.",
   "status": "verified",
   "answer": "Luca Ostrander (Platform) owns billing-api, since 2026-09-22; before that Sana Petrov (Payments) until 2026-09-22. Sources: ADR-0009, msg-0148.",
   "answer_author": "template",
@@ -31,6 +32,7 @@
     }
   ],
   "dropped_citations": [],
+  "conflicts": [],
   "notices": [],
   "absence_checks": [],
   "contradictions_unaddressed": [],
@@ -68,7 +70,7 @@
   "write_gate": {
     "written": true,
     "outcome": "accepted",
-    "receipt": "GD-00227-61c6ea1064",
+    "receipt": "GD-00227-f29e04393e",
     "reasons": [
       "new_finding"
     ],
@@ -81,9 +83,30 @@
       "Luca Ostrander",
       "Sana Petrov",
       "billing-api",
-      "ADR-0009",
-      "Payments"
-    ]
+      "Platform",
+      "ADR-0009"
+    ],
+    "memory": {
+      "memory_id": "mem-1",
+      "backend": "hmem"
+    },
+    "conflicts_not_written": []
+  },
+  "memory": {
+    "engine": "Meterless H-MEM (vendor/hmem)",
+    "recall": {
+      "status": "ok",
+      "ids": [],
+      "memories": []
+    },
+    "stored": {
+      "memory_id": "mem-1",
+      "backend": "hmem"
+    },
+    "feedback": {
+      "given": false,
+      "reason": "no memory was recalled for this question"
+    }
   },
   "investigator_path": "router",
   "agents": [
@@ -98,6 +121,6 @@
       "role": "re-reads each cited record by id at its source; quote check, then a model judgement"
     }
   ],
-  "execution_time_seconds": 1.46,
-  "trace_file": "logs/trace-20261024T123152Z-5a7d.jsonl"
+  "execution_time_seconds": 1.35,
+  "trace_file": "logs/trace-20261024T133943Z-587f.jsonl"
 }

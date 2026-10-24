@@ -221,6 +221,8 @@ def chat(messages: list[dict], *, agent: str, scope: str, tools: list | None = N
             warming = any(code in detail for code in WARMING_CODES)
             if not warming and exc.code < 500 and exc.code != 429:   # a refusal is final
                 raise last from exc
+            if "empty_response" in detail:   # the model answered with nothing; asking again costs the same again
+                raise last from exc
         except (urllib.error.URLError, TimeoutError, ConnectionError) as exc:
             last = NightshiftUnavailable(f"Nightshift unreachable at {base_url()}: {exc}")
         else:
@@ -240,6 +242,71 @@ def chat(messages: list[dict], *, agent: str, scope: str, tools: list | None = N
         attempt += 1
         time.sleep(RETRY_DELAY_S)
     raise last  # type: ignore[misc]
+
+
+# --- one lane at a time (NIGHTSHIFT_SWAP=1) ---------------------------------------------------
+# On a Mac that cannot hold both Nemotron lanes next to other work, the agent's lane is started before its call and
+# the other lane is stopped, over the daemon's control socket (the same endpoints scripts/nightshift_headless.sh uses).
+# Measured 2026-10-24: with both lanes loaded and the Mac swapping, Nightshift answered wlwt-verifier from the
+# Lightning lane although its allowlist names only nemotron-nano (receipt rcpt_req_bm9j53u7; check_routing stopped
+# the run). With one lane loaded no other Nemotron model is there to answer.
+
+def swap_enabled() -> bool:
+    return os.environ.get("NIGHTSHIFT_SWAP", "").strip().lower() in ("1", "true", "yes", "on")
+
+
+def control_socket() -> Path:
+    return Path(os.environ.get("NIGHTSHIFT_CONTROL_SOCKET") or home() / "run" / "runtime.sock")
+
+
+def _ctl(method: str, path: str, timeout: float = 60.0) -> dict:
+    import http.client
+    import socket
+
+    class _Unix(http.client.HTTPConnection):
+        def connect(self):
+            s = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+            s.settimeout(timeout)
+            s.connect(str(control_socket()))
+            self.sock = s
+
+    conn = _Unix("meterlessd", timeout=timeout)
+    try:
+        conn.request(method, path)
+        raw = conn.getresponse().read()
+    except OSError as exc:
+        raise NightshiftUnavailable(f"Nightshift control socket {control_socket()}: {exc}") from exc
+    finally:
+        conn.close()
+    return json.loads(raw or b"{}")
+
+
+def lane_states() -> dict[str, str]:
+    return {l["id"]: l["state"] for l in _ctl("GET", "/admin/status").get("lanes", [])}
+
+
+def ensure_lane(lane: str, wait_s: float = 300.0) -> dict:
+    """Make `lane` the one loaded Nemotron lane: stop the others of ours, start it, wait until ready."""
+    t0 = time.perf_counter()
+    states = lane_states()
+    if states.get(lane) == "ready" and all(s == "stopped" for l, s in states.items() if l != lane and l in LANES):
+        return {"lane": lane, "swapped": False}
+    stopped = [l for l, s in states.items() if l != lane and l in LANES and s != "stopped"]
+    for other in stopped:
+        _ctl("POST", f"/admin/lanes/{other}/stop")
+    if states.get(lane) != "ready":
+        _ctl("POST", f"/admin/lanes/{lane}/start")
+    deadline = time.monotonic() + wait_s
+    state = states.get(lane)
+    while time.monotonic() < deadline:
+        state = lane_states().get(lane)
+        if state == "ready":
+            return {"lane": lane, "swapped": True, "stopped": stopped, "seconds": round(time.perf_counter() - t0, 2)}
+        if state in ("failed", "crashed"):
+            break
+        time.sleep(1.0)
+    raise NightshiftUnavailable(f"lane {lane} did not become ready (state {state!r}) after "
+                                f"{time.perf_counter() - t0:.0f} s")
 
 
 RECEIPTS: list[Receipt] = []      # every receipt of this process, newest last

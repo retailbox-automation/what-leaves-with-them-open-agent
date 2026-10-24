@@ -13,14 +13,16 @@ An answer that cites nothing because a name is not in the memory is checked agai
 
 from __future__ import annotations
 
+import os
 import re
 from dataclasses import asdict, dataclass, field
 
 from honest_memory import answer as A
-from honest_memory.agent import Agent, AgentConfig, AgentRun, combined, model_view
+from honest_memory import tools as T
+from honest_memory.agent import MEMORY_PREFIX, Agent, AgentConfig, AgentRun, combined, model_view
 from honest_memory.answer import _ABSENCE, _mentions, check_sentence
 
-from .llm import LLMConfig, TracedClient
+from .llm import LLMConfig, TracedClient, make_client
 from .sources import SYSTEM_OF, SourceUnavailable, by_id, mentions
 
 MAX_CITATIONS = 4
@@ -43,8 +45,10 @@ and rejected some of your citations. Revise your answer from its notes.
 - For each record the notes give current_lines: the record as its source system holds it now, line by line. A \
 citation is a record id and ONE of its current_lines, copied exactly. Never join lines or quote a whole record.
 - Drop a citation whose current lines do not speak to the answer.
-- must_address lists the records the Verifier found contradicting your answer. Each must not just disappear: \
-change the answer to what the records say now, or name that record id in the answer and say what it says now.
+- must_address lists records that contradict your answer or changed at their source after the memory read them. \
+Answer only with what the records you cite support now. Do not restate, blend in or describe a must_address record: \
+a separate conflict line, written for you from the Verifier's notes, reports each one and flags it for a human. \
+If the records you cite no longer support the answer, change the answer.
 - Keep citations the Verifier accepted. Cite only records you were given.
 - For each citation give claim: the part of your answer that this line backs, in a few words.
 Reply with JSON only: {"answer": "...", "citations": [{"id": "...", "quote": "...", "claim": "..."}]}"""
@@ -69,7 +73,10 @@ REASON_TEXT = {"quote_not_in_record": "the quoted sentence is not in the record 
                "model_contradicts": "the record as it reads now contradicts the answer",
                "model_unrelated": "the record as it reads now does not speak to the answer",
                "contradiction_dropped": "this record contradicted the answer and was dropped without a word; say "
-                                        "what it says now, or change the answer"}
+                                        "what it says now, or change the answer",
+               "evidence_changed": "the memory's answer rests on this record, and it changed at its source since the "
+                                   "memory read it"}
+MAX_EVIDENCE_REREADS = 12
 
 
 @dataclass
@@ -90,10 +97,18 @@ class Draft:
     absence_terms: list[str] = field(default_factory=list)
     author: str = "template"                    # "model" or "template": who wrote answer and citations
     round: int = 1
+    main: str = ""                              # the answer without its conflict lines ("" = the whole answer)
+    conflicts: list[dict] = field(default_factory=list)   # records flagged for a human, one line each in answer
+
+    @property
+    def claim_text(self) -> str:
+        """What the answer itself claims: the answer without the conflict lines the Investigator appended."""
+        return self.main or self.answer
 
     def to_dict(self) -> dict:
         return {"round": self.round, "answer": self.answer, "author": self.author,
-                "citations": [asdict(c) for c in self.citations], "absence_terms": self.absence_terms}
+                "citations": [asdict(c) for c in self.citations], "absence_terms": self.absence_terms,
+                "conflicts": [c["id"] for c in self.conflicts]}
 
 
 @dataclass
@@ -144,8 +159,53 @@ def quotable(text: str) -> list[str]:
     return [s for s in sentences(text) if len(s.split()) >= MIN_QUOTE_WORDS and len(s) <= MAX_QUOTE_CHARS]
 
 
+KIND_OF = {"chat": "chat message", "doc": "document", "ticket": "ticket"}
+_CLAUSE = re.compile(r",?\s+(?:but|while|whereas|although|though|yet|however)\s+|;\s+|\s+[\u2014\u2013]\s+")
+
+
+def _flat(text: str, limit: int) -> str:
+    text = re.sub(r"\s+", " ", text or "").strip()
+    return text if len(text) <= limit else text[:limit - 3].rstrip() + "..."
+
+
+def conflict_line(c: "Check", kind: str) -> dict:
+    """One plain sentence per flagged record, built from the Verifier's check (no model writes it)."""
+    what = KIND_OF.get(c.channel, "record")
+    if kind == "changed_at_source":
+        now = c.current_text or ""
+        line = (f'Conflict: {c.id} ({what}) was edited after the memory read it and now says "{_flat(now, 240)}"; '
+                f'the earlier quote "{_flat(c.quote, 160)}" is no longer in the record. Flagged for a human.')
+    else:
+        now = c.quote if c.quote_found else (c.current_text or "")
+        line = (f'Conflict: {c.id} ({what}) says "{_flat(now, 240)}", which contradicts this answer. '
+                "Flagged for a human.")
+    return {"id": c.id, "source": SYSTEM_OF.get(c.channel, c.channel), "kind": kind, "now_says": _flat(now, 600),
+            "earlier_quote": c.quote, "verifier_note": c.note, "flagged_for": "human", "line": line}
+
+
+def _grams(text: str, n: int = 5) -> set[tuple[str, ...]]:
+    words = re.findall(r"[a-z0-9][a-z0-9-]*", (text or "").lower())
+    return {tuple(words[i:i + n]) for i in range(len(words) - n + 1)}
+
+
+def strip_restatements(answer: str, flagged: list[dict], support: str) -> str:
+    """The answer without the clauses that name a flagged record or repeat its wording (a run of 5 words found in
+    the flagged record and in none of the cited ones). Sentences with nothing to take out are kept verbatim."""
+    ids = [cf["id"] for cf in flagged]
+    bad = set().union(*(_grams(cf["now_says"]) for cf in flagged)) - _grams(support)
+    kept = []
+    for sentence in re.split(r"(?<=[.!?])\s+", (answer or "").strip()):
+        parts = [p.strip() for p in _CLAUSE.split(sentence) if p and p.strip()]
+        keep = [p for p in parts if not (any(_mentions(p, i) for i in ids) or _grams(p) & bad)]
+        if len(keep) == len(parts):
+            kept.append(sentence)
+        elif keep:
+            kept.append("; ".join(p.rstrip(" .") for p in keep) + ".")
+    return " ".join(kept)
+
+
 def _client(cfg: LLMConfig | None, trace, agent: str, client) -> TracedClient | None:
-    return TracedClient(cfg, trace, agent, client) if cfg and cfg.model else None
+    return make_client(cfg, trace, agent, client)
 
 
 class Investigator:
@@ -158,6 +218,8 @@ class Investigator:
                if self.client else AgentConfig(model=None))
         self.agent = Agent(store, name=self.NAME, role="investigator", config=cfg, client=self.client)
         self.agent.tool = self._tool        # every graph tool call lands in the trace as it happens
+        self.memory: dict = {"status": "not_run", "ids": [], "context": "", "memories": []}
+        self.conflicts: dict[str, dict] = {}   # record id -> its conflict line, over all rounds
 
     def _tool(self, name: str, args: dict | None = None):
         try:
@@ -174,11 +236,54 @@ class Investigator:
 
     # -- first answer -------------------------------------------------------------------------
 
+    def recall_memory(self, question: str) -> dict:
+        """H-MEM before the Investigator answers: findings the write gate accepted earlier (any process, any run)
+        that match the question. The model gets them as a system message before its first call; the router reads
+        none, but the recall is recorded either way, so the Verifier's verdict can be fed back to those memories."""
+        if os.environ.get("HM_MEMORY_CONTEXT", "on").strip().lower() == "off":
+            why = "HM_MEMORY_CONTEXT=off"
+        else:
+            backend, why = T.memory_backend()
+            why = "" if backend == "hmem" else why
+        if why:
+            self.trace.event("Investigator", "memory_recall", status="skipped", reason=why, memory_ids=[])
+            return {"status": "skipped", "reason": why, "ids": [], "context": "", "memories": []}
+        try:
+            from .hmem_bridge import memory_context
+
+            context, hits = memory_context(self.store, question)
+        except Exception as exc:  # no memory is not a reason to refuse the question; the trace says it failed
+            err = f"{type(exc).__name__}: {str(exc)[:200]}"
+            self.trace.event("Investigator", "memory_recall", status="error", error=err, memory_ids=[])
+            return {"status": "error", "reason": err, "ids": [], "context": "", "memories": []}
+        mems = [{"memory_id": h["memory"]["id"], "relevance": round(h["relevance"], 4),
+                 "confidence": round(h["memory"].get("confidence", 0), 4), "layer": h["memory"].get("layer"),
+                 "finding": next((r for r in (h["memory"].get("provenance") or {}).get("refs", [])[1:2]), None),
+                 "session": h["memory"].get("chatId"), "content": (h["memory"].get("content") or "")[:300]}
+                for h in hits]
+        used_by = ("model: a system message before its first call" if self.client and context else
+                   "nobody: the deterministic router reads no memory (recorded for the Verifier's feedback)"
+                   if context else "nothing matched")
+        self.trace.event("Investigator", "memory_recall", backend="hmem", memory_ids=[m["memory_id"] for m in mems],
+                         memories=mems, used_by=used_by)
+        return {"status": "ok", "ids": [m["memory_id"] for m in mems], "context": context, "memories": mems}
+
+    def _memory_messages(self, run: AgentRun, memory: dict) -> list[dict]:
+        if not memory["context"]:
+            return []
+        run.memory_ids = list(memory["ids"])
+        return [{"role": "system", "content": MEMORY_PREFIX + memory["context"]}]
+
     def investigate(self, question: str) -> Draft:
         self.trace.event("Investigator", "question", question=question,
                          model=self.client.cfg.model if self.client else None,
                          path="model picks tools" if self.client else "deterministic router (no model)")
+        self.memory = self.recall_memory(question)
+        # the agent's own lookup is replaced by the one just traced (one recall per question, one ledger read)
+        self.agent._memory_messages = lambda run, q: self._memory_messages(run, self.memory)
         run = self.agent.ask(question)
+        if not run.memory_ids:
+            run.memory_ids = list(self.memory["ids"])
         self.trace.event("Investigator", "graph_answer", outcome=run.outcome, path=run.mode, sentence=run.sentence,
                          sentence_source=run.sentence_source, sentence_check=run.check, rejected=run.rejected,
                          errors=run.errors, ms=run.ms)
@@ -207,7 +312,7 @@ class Investigator:
         # A record the Verifier re-read is shown as its source holds it now; the memory's older copy is not offered.
         now = {c.id: c.current_text for c in (review.checks + review.ignored_checks if review else [])
                if c.current_text is not None}
-        ctx = {"question": draft.question, "draft_answer": draft.answer, "tool_rows": model_view(combined(useful)),
+        ctx = {"question": draft.question, "draft_answer": draft.claim_text, "tool_rows": model_view(combined(useful)),
                "records": [{"id": r["id"], "source": SYSTEM_OF.get(r["channel"], r["channel"]), "title": r["title"],
                             "lines": quotable(now.get(r["id"], r["text"])),
                             "as_of": "source now" if r["id"] in now else "memory"} for r in draft.records.values()]}
@@ -217,11 +322,13 @@ class Investigator:
                                       "reason": REASON_TEXT.get(c.reason, c.reason), "verdict": c.verdict,
                                       "note": c.note, "current_lines": quotable(c.current_text or "")}
                                      for c in review.checks]
-            ctx["verifier_notes"] += [{"id": c.id, "quote": c.quote, "accepted": False, "verdict": "contradicts",
-                                       "reason": REASON_TEXT["contradiction_dropped"], "note": c.note,
+            ctx["verifier_notes"] += [{"id": c.id, "quote": c.quote, "accepted": False,
+                                       "verdict": c.verdict or "changed at its source",
+                                       "reason": REASON_TEXT["evidence_changed" if c.reason == "evidence_changed"
+                                                             else "contradiction_dropped"], "note": c.note,
                                        "current_lines": quotable(c.current_text or "")} for c in review.ignored_checks]
             ctx["verifier_summary"] = review.notes
-            ctx["must_address"] = review.contradicted
+            ctx["must_address"] = list(dict.fromkeys(list(self.conflicts) + review.contradicted))
         return ctx
 
     def _cite_from_rows(self, draft: Draft) -> Draft:
@@ -263,7 +370,7 @@ class Investigator:
         if not ok:
             self.trace.event("Investigator", purpose, status="warning", reason=f"the model's answer failed the "
                              f"sentence check ({why}); keeping the previous answer", rejected_answer=answer)
-            answer = draft.answer
+            answer = draft.claim_text
         if not cites:
             self.trace.event("Investigator", purpose, status="fallback", reason="the model gave no usable citation")
             return None
@@ -274,6 +381,7 @@ class Investigator:
 
     def revise(self, draft: Draft, review: Review) -> Draft:
         self.trace.event("Investigator", "revise", round=review.round + 1, notes=review.notes)
+        self._note_conflicts(review)
         new = None
         if self.client and draft.citations:
             current = " ".join(c.current_text or "" for c in review.checks)
@@ -284,32 +392,51 @@ class Investigator:
         self.trace.event("Investigator", "draft", target_agent="Verifier", **new.to_dict())
         return new
 
+    def _note_conflicts(self, review: Review) -> None:
+        """Records to flag for a human, from the Verifier's notes: changed at the source after the memory read them
+        (the quoted line is gone from a record that is still there), or judged as contradicting the answer."""
+        for c in review.ignored_checks + review.checks:
+            if c.record_found and not c.quote_found:
+                self.conflicts[c.id] = conflict_line(c, "changed_at_source")
+            elif c.verdict == "contradicts" and c.record_found and c.id not in self.conflicts:
+                self.conflicts[c.id] = conflict_line(c, "contradicts")
+
     def _address_contradictions(self, new: Draft, review: Review) -> None:
-        """Like the sentence check on the model's sentence: a record that contradicted the answer is never dropped
-        without a word. If the revision neither cites nor names it, say what it reads now at its source."""
-        # what to show: the line it was quoted for when that line is still there, else the record as it reads now
-        current = {c.id: c.quote if c.quote_found else c.current_text
-                   for c in review.checks + review.ignored_checks if c.current_text}
+        """A record that changed at its source or contradicts the answer is never dropped without a word, and never
+        blended into the answer. The answer keeps what the cited records support (clauses that restate a flagged
+        record are taken out); each flagged record gets one deterministic conflict line, flagged for a human."""
         cited = {c.id for c in new.citations}
-        silent = [i for i in review.contradicted if i not in cited and not _mentions(new.answer, i)]
-        for i in silent:
-            text = re.sub(r"\s+", " ", current.get(i, "")).strip()
-            new.answer += (f' {i} says otherwise now: "{text[:240]}"' if text else f" {i} contradicts this answer.")
-        if silent:
-            self.trace.event("Investigator", "revise", status="warning", reason="the revision dropped records that "
-                             "contradict the answer without a word; added what they say now", records=silent)
+        flagged = [cf for i, cf in self.conflicts.items() if i not in cited]
+        if not flagged:
+            return
+        support = " ".join(new.records[c.id]["text"] for c in new.citations if c.id in new.records)
+        support += " " + " ".join(c.current_text or "" for c in review.checks if c.id in cited)
+        before = new.claim_text
+        stripped = strip_restatements(before, flagged, support) or before
+        main = stripped
+        if cited and not any(_mentions(main, i) for i in cited):
+            main = main.rstrip().rstrip(".") + f" [{', '.join(c.id for c in new.citations)}]."
+        new.main, new.conflicts = main, flagged
+        new.answer = " ".join([main] + [cf["line"] for cf in flagged])
+        self.trace.event("Investigator", "conflict_flagged", status="warning", round=review.round + 1,
+                         records=[cf["id"] for cf in flagged], kinds=[cf["kind"] for cf in flagged],
+                         removed_from_answer=before if stripped != before else None, answer_before=before,
+                         flagged_for="human",
+                         reason="records that changed at their source or contradict the answer are reported on their "
+                                "own line, not blended into it")
 
     def _revise_from_rows(self, draft: Draft, review: Review) -> Draft:
         """No model: keep the accepted citations, drop the rejected ones and say why in the answer."""
         kept = [Citation(c.id, c.channel, c.quote, c.claim) for c in review.checks if c.accepted]
         gone = [c for c in review.checks if not c.accepted]
-        answer = draft.answer
+        answer = draft.claim_text
         if gone and not kept:
             answer = (f"The memory's answer was: {draft.answer} The records behind it changed at their source since "
                       f"the memory read them ({', '.join(c.id for c in gone)}), so it is not confirmed now.")
         elif gone:
             answer = re.sub(r" Sources: [^.]*\.", f" Sources: {', '.join(c.id for c in kept)}.", answer)
-            answer += "".join(f" {c.id} is no longer cited: {REASON_TEXT.get(c.reason, c.reason)}." for c in gone)
+            answer += "".join(f" {c.id} is no longer cited: {REASON_TEXT.get(c.reason, c.reason)}." for c in gone
+                              if c.id not in self.conflicts)      # a flagged record gets its conflict line instead
         for a in review.absence:
             if not a["accepted"] and a["ids"]:
                 answer += (f" The source systems do mention {a['term']} ({', '.join(a['ids'])}), but the memory "
@@ -325,6 +452,7 @@ class Verifier:
         self.client = None if sample else _client(llm, trace, "Verifier", client)
         self.contradicted: dict[str, Check] = {}   # record id -> its last "contradicts" check, over all rounds
         self.supported: dict[str, Check] = {}      # records accepted in an earlier round
+        self.changed: dict[str, Check] = {}        # uncited records the answer rests on that changed at their source
 
     def review(self, draft: Draft) -> Review:
         rv = Review(draft.round)
@@ -351,20 +479,48 @@ class Verifier:
         # A record that contradicted the answer may be answered or cited again, but not dropped without a word.
         self.contradicted.update({c.id: c for c in rv.checks if c.verdict == "contradicts" and c.record_found})
         cited = {c.id for c in draft.citations}
+        if draft.round == 1:
+            self._reread_evidence(draft, cited)
         self._recheck_dropped(draft, cited)
         self.supported.update({c.id: c for c in rv.checks if c.accepted})
         rv.contradicted = list(self.contradicted)
-        rv.ignored = [i for i in self.contradicted if i not in cited and not _mentions(draft.answer, i)]
+        flagged = {**self.changed, **self.contradicted}
+        rv.ignored = [i for i in flagged if i not in cited and not _mentions(draft.answer, i)]
         if rv.ignored:
             rv.accepted, rv.needs_revision = False, True
-            rv.notes += [f"{i}: {REASON_TEXT['contradiction_dropped']}; it says: {self.contradicted[i].note}"
-                         for i in rv.ignored]
-            rv.ignored_checks = [self.contradicted[i] for i in rv.ignored]
+            rv.notes += [f"{i}: {REASON_TEXT['contradiction_dropped']}; it says: {flagged[i].note}"
+                         if i in self.contradicted else f"{i}: {REASON_TEXT['evidence_changed']}; it now reads: "
+                         f"{_flat(flagged[i].current_text or '', 240)}" for i in rv.ignored]
+            rv.ignored_checks = [flagged[i] for i in rv.ignored]
         self.trace.event("Verifier", "verdict", round=draft.round, accepted=rv.accepted, target_agent=(
             "Investigator" if rv.needs_revision else "write-gate" if rv.accepted else "final"),
                          checks=[{k: v for k, v in asdict(c).items() if k != "current_text"} for c in rv.checks],
                          absence=rv.absence, ignored=rv.ignored, notes=rv.notes)
         return rv
+
+    def _reread_evidence(self, draft: Draft, cited: set[str]) -> None:
+        """The records the memory's answer rests on but the draft does not cite are re-read by id too. One that
+        changed at its source since the memory read it may not pass without a word: the answer has to name it
+        (the Investigator adds a conflict line). Deterministic, so it does not depend on what the model cited."""
+        for rid, rec in list(draft.records.items())[:MAX_EVIDENCE_REREADS]:
+            if rid in cited or rid in self.changed or rec["channel"] not in SYSTEM_OF:
+                continue
+            sql = by_id(rec["channel"], rid)
+            try:
+                rows, secs = self.source.sql(sql)
+            except SourceUnavailable as exc:
+                self.trace.event("Verifier", "evidence_reread", status="error", endpoint=self.source.endpoint,
+                                 sql=sql, record_id=rid, error=str(exc))
+                continue
+            now = str(rows[0].get("text") or "") if rows else None
+            changed = now is not None and _flat(now, 10**6) != _flat(rec["text"], 10**6)
+            self.trace.event("Verifier", "evidence_reread", endpoint=self.source.endpoint,
+                             source=SYSTEM_OF[rec["channel"]], sql=sql, record_id=rid, rows=len(rows),
+                             seconds=round(secs, 3), changed=changed, cited=False)
+            if changed:
+                self.changed[rid] = Check(rid, rec["channel"], _flat(rec["text"], 300), True, False, "",
+                                          "changed at its source since the memory read it", False,
+                                          "evidence_changed", now)
 
     def _recheck_dropped(self, draft: Draft, cited: set[str]) -> None:
         """A record accepted in an earlier round that the new draft neither cites nor names is judged again
@@ -417,7 +573,7 @@ class Verifier:
         if self.client is None:
             return ("skipped: no model in SAMPLE_MODE" if self.sample else "skipped: no model configured"), ""
         obj, why = self.client.ask_json("judge", JUDGE_PROMPT, {
-            "answer": draft.answer, "claim": c.claim or draft.answer, "question": draft.question,
+            "answer": draft.claim_text, "claim": c.claim or draft.claim_text, "question": draft.question,
             "record": {"id": c.id, "source": SYSTEM_OF[c.channel], "current_text": text}, "quote": c.quote})
         if obj is None:
             return f"skipped: {why}", ""

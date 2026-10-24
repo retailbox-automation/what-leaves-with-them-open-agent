@@ -32,6 +32,11 @@ ADR_LINE = ("Decision: Ownership of billing-api transfers from Sana Petrov (Paym
 QUESTION = "Who owns billing-api now?"
 
 
+def conflict(now: str, rid: str = "msg-0148", quote: str = STALE) -> str:
+    return (f'Conflict: {rid} (chat message) was edited after the memory read it and now says "{now}"; the earlier '
+            f'quote "{quote}" is no longer in the record. Flagged for a human.')
+
+
 @pytest.fixture(scope="module")
 def corpus_dir(tmp_path_factory):
     return write_corpus(build(42), tmp_path_factory.mktemp("corpus") / "corpus")
@@ -155,7 +160,10 @@ def test_router_tamper_is_caught_revised_and_restored(graph, trace):
     assert out["dropped_citations"][0]["text_at_source_now"] == EDITED
     assert out["notices"] == ["msg-0148 is not cited: the quoted sentence is not in the record as its source system "
                               f"holds it now. At its source it now reads: \"{EDITED}\""]
-    assert "msg-0148 is no longer cited" in out["answer"] and "Sources: ADR-0009." in out["answer"]
+    assert "Sources: ADR-0009." in out["answer"] and "msg-0148 is no longer cited" not in out["answer"]
+    assert out["answer"].endswith(f'Conflict: msg-0148 (chat message) was edited after the memory read it and now says '
+                                  f'"{EDITED}"; the earlier quote "{STALE}" is no longer in the record. Flagged for a human.')
+    assert [c["id"] for c in out["conflicts"]] == ["msg-0148"] and out["conflicts"][0]["kind"] == "changed_at_source"
     assert out["write_gate"]["source_ids"] == ["ADR-0009"]
     steps = [(e["agent"], e["step"]) for e in trace.events]
     assert steps.index(("Verifier", "feedback")) < steps.index(("Investigator", "revise"))
@@ -292,7 +300,9 @@ def test_model_loop_rejection_feedback_revision(graph, trace):
     first = {c["id"]: c for c in out["rounds_detail"][0]["checks"]}
     assert first["msg-0148"] == {"id": "msg-0148", "accepted": False, "reason": "quote_not_in_record",
                                  "verdict": "contradicts"}
-    assert out["answer"].endswith("msg-0148 now says the transfer is on hold.") and out["answer_author"] == "model"
+    # the model named msg-0148 in its own words; that clause is replaced by the deterministic conflict line
+    assert out["answer"] == ("Luca Ostrander owns billing-api since 2026-09-22 [ADR-0009]. " + conflict(EDITED))
+    assert out["answer_author"] == "model"
     assert fake_i.calls == ["tools", "tools", "cite", "revise"] and fake_v.calls == ["judge"] * 3
     assert out["write_gate"]["source_ids"] == ["ADR-0009"]
     llm = [e for e in trace.events if e["step"] == "llm_call"]
@@ -329,8 +339,8 @@ def test_investigator_names_a_contradicting_record_its_model_dropped(graph, trac
     finally:
         R.restore(src, "msg-0148", original, trace)
     assert out["status"] == "verified" and out["rounds"] == 2
-    assert out["answer"] == f'Luca Ostrander owns billing-api since 2026-09-22. msg-0148 says otherwise now: "{EDITED}"'
-    assert any(e["step"] == "revise" and e["status"] == "warning" for e in trace.events)
+    assert out["answer"] == "Luca Ostrander owns billing-api since 2026-09-22 [ADR-0009]. " + conflict(EDITED)
+    assert any(e["step"] == "conflict_flagged" and e["records"] == ["msg-0148"] for e in trace.events)
 
 
 def test_verifier_rejects_a_contradicting_record_dropped_silently(graph, trace):
@@ -363,7 +373,7 @@ def test_a_contradicting_record_cannot_be_dropped_silently(graph, trace):
                             verifier_client=FakeOpenAI(None, judge=judge_by_text))
     finally:
         R.restore(src, "msg-0148", original, trace)
-    assert out["rounds"] == 2 and out["status"] == "verified" and "msg-0148 says otherwise now" in out["answer"]
+    assert out["rounds"] == 2 and out["status"] == "verified" and out["answer"].endswith(conflict(EDITED))
     assert seen[0]["must_address"] == ["msg-0148"]
     shown = {r["id"]: r for r in seen[0]["records"]}
     assert shown["msg-0148"]["lines"] == AG.quotable(EDITED) and shown["msg-0148"]["as_of"] == "source now"
@@ -404,7 +414,10 @@ def test_evidence_for_the_old_answer_is_rejudged_when_dropped(graph, trace):
     recheck = [e for e in trace.events if e["step"] == "recheck_dropped"]
     assert [(e["record_id"], e["verdict"]) for e in recheck] == [("ADR-0009", "contradicts")]
     assert out["rounds_detail"][1]["ignored"] == ["ADR-0009"]
-    assert out["rounds"] == 3 and out["status"] == "verified" and "ADR-0009 says otherwise now" in out["answer"]
+    assert out["rounds"] == 3 and out["status"] == "verified"
+    assert out["answer"].startswith("Sana Petrov remains the owner of billing-api until further notice [msg-0148]. ")
+    assert out["answer"].endswith(f'Conflict: ADR-0009 (document) says "{ADR_LINE}", which contradicts this answer. '
+                                  "Flagged for a human.")
 
 
 def test_unaddressed_contradiction_is_not_written(graph, trace):

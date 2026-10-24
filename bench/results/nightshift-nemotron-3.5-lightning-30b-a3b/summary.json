@@ -1,0 +1,274 @@
+{
+  "meta": {
+    "started": "2026-10-24T14:06:49Z",
+    "finished": "2026-10-24T14:24:56Z",
+    "wall_seconds": 1086.6,
+    "seed": 42,
+    "generator_version": "0.3.0",
+    "corpus_sha256": "7fd55087879c7184b2384a7e4fafbf6ad727c19c4a81c321eed999383f8a5450",
+    "questions": 82,
+    "k": 8,
+    "chunk": "episode",
+    "reasoning": "default",
+    "commit": "bc9453a",
+    "ollama_version": "not used",
+    "provider": "nightshift",
+    "models": {
+      "chat": {
+        "name": "local-runtime/nemotron-3.5-lightning-30b-a3b",
+        "provider": "meterless-nightshift",
+        "app": "wlwt-investigator",
+        "lane": "nemotron-lightning",
+        "receipts": 171,
+        "cost_usd": 0,
+        "routed_models": [
+          "local-runtime/nemotron-3.5-lightning-30b-a3b"
+        ],
+        "trace": "bench/results/nightshift-nemotron-3.5-lightning-30b-a3b/trace-bench-20261024T140649Z-754e.jsonl"
+      },
+      "embedding": {
+        "name": "embeddinggemma",
+        "note": "not used (no plain RAG in this run)"
+      }
+    },
+    "falkordb_version": "6.0.2",
+    "falkordb_port": 6395,
+    "systems": [
+      "honest-agent"
+    ],
+    "ingest": {
+      "tenant": "bench_5247f381eb",
+      "episodes": 403,
+      "gate_calls": 226,
+      "outcomes": {
+        "ACCEPT": 108,
+        "CONFIRM": 110,
+        "SUPERSEDE": 1,
+        "CLOSE": 3,
+        "REJECT": 4
+      },
+      "reasons": {
+        "already_current": 110,
+        "conflicts_current": 1,
+        "ended": 3,
+        "new_fact": 107,
+        "new_handoff": 1,
+        "newer_than_current": 1,
+        "no_source": 1,
+        "older_than_current": 1,
+        "pii": 2
+      },
+      "seconds": 1.53
+    }
+  },
+  "systems": {
+    "honest-agent": {
+      "overall": {
+        "n": 82,
+        "correct": 97.6,
+        "correct_literal": 89.0,
+        "correct_sentence_only": 95.1,
+        "stale": 0.0,
+        "unsupported": 0.0,
+        "abstained": 0.0,
+        "clean": 97.6,
+        "leaked": 0,
+        "median_ms": 10385
+      },
+      "by_type": {
+        "adversarial": {
+          "n": 4,
+          "correct": 100.0,
+          "correct_literal": 100.0,
+          "correct_sentence_only": 75.0,
+          "stale": 0.0,
+          "unsupported": 0.0,
+          "abstained": 0.0,
+          "clean": 100.0,
+          "leaked": 0,
+          "median_ms": 9900
+        },
+        "bridges": {
+          "n": 2,
+          "correct": 50.0,
+          "correct_literal": 50.0,
+          "correct_sentence_only": 50.0,
+          "stale": 0.0,
+          "unsupported": 0.0,
+          "abstained": 0.0,
+          "clean": 50.0,
+          "leaked": 0,
+          "median_ms": 6680
+        },
+        "current_state": {
+          "n": 24,
+          "correct": 100.0,
+          "correct_literal": 75.0,
+          "correct_sentence_only": 100.0,
+          "stale": 0.0,
+          "unsupported": 0.0,
+          "abstained": 0.0,
+          "clean": 100.0,
+          "leaked": 0,
+          "median_ms": 4627
+        },
+        "departure_depth1": {
+          "n": 2,
+          "correct": 100.0,
+          "correct_literal": 100.0,
+          "correct_sentence_only": 100.0,
+          "stale": 0.0,
+          "unsupported": 0.0,
+          "abstained": 0.0,
+          "clean": 100.0,
+          "leaked": 0,
+          "median_ms": 21704
+        },
+        "departure_depth4": {
+          "n": 2,
+          "correct": 100.0,
+          "correct_literal": 100.0,
+          "correct_sentence_only": 100.0,
+          "stale": 0.0,
+          "unsupported": 0.0,
+          "abstained": 0.0,
+          "clean": 100.0,
+          "leaked": 0,
+          "median_ms": 24794
+        },
+        "handoff": {
+          "n": 1,
+          "correct": 0.0,
+          "correct_literal": 0.0,
+          "correct_sentence_only": 0.0,
+          "stale": 0.0,
+          "unsupported": 0.0,
+          "abstained": 0.0,
+          "clean": 0.0,
+          "leaked": 0,
+          "median_ms": 48206
+        },
+        "handoff_plan": {
+          "n": 1,
+          "correct": 100.0,
+          "correct_literal": 100.0,
+          "correct_sentence_only": 100.0,
+          "stale": 0.0,
+          "unsupported": 0.0,
+          "abstained": 0.0,
+          "clean": 100.0,
+          "leaked": 0,
+          "median_ms": 14571
+        },
+        "impact": {
+          "n": 6,
+          "correct": 100.0,
+          "correct_literal": 100.0,
+          "correct_sentence_only": 100.0,
+          "stale": 0.0,
+          "unsupported": 0.0,
+          "abstained": 0.0,
+          "clean": 100.0,
+          "leaked": 0,
+          "median_ms": 19213
+        },
+        "not_in_graph": {
+          "n": 1,
+          "correct": 100.0,
+          "correct_literal": 100.0,
+          "correct_sentence_only": 100.0,
+          "stale": 0.0,
+          "unsupported": 0.0,
+          "abstained": 0.0,
+          "clean": 100.0,
+          "leaked": 0,
+          "median_ms": 8701
+        },
+        "provenance": {
+          "n": 9,
+          "correct": 100.0,
+          "correct_literal": 100.0,
+          "correct_sentence_only": 100.0,
+          "stale": 0.0,
+          "unsupported": 0.0,
+          "abstained": 0.0,
+          "clean": 100.0,
+          "leaked": 0,
+          "median_ms": 13886
+        },
+        "single_source": {
+          "n": 4,
+          "correct": 100.0,
+          "correct_literal": 100.0,
+          "correct_sentence_only": 100.0,
+          "stale": 0.0,
+          "unsupported": 0.0,
+          "abstained": 0.0,
+          "clean": 100.0,
+          "leaked": 0,
+          "median_ms": 9303
+        },
+        "state_at_time": {
+          "n": 7,
+          "correct": 100.0,
+          "correct_literal": 100.0,
+          "correct_sentence_only": 100.0,
+          "stale": 0.0,
+          "unsupported": 0.0,
+          "abstained": 0.0,
+          "clean": 100.0,
+          "leaked": 0,
+          "median_ms": 9585
+        },
+        "successors": {
+          "n": 1,
+          "correct": 100.0,
+          "correct_literal": 0.0,
+          "correct_sentence_only": 100.0,
+          "stale": 0.0,
+          "unsupported": 0.0,
+          "abstained": 0.0,
+          "clean": 100.0,
+          "leaked": 0,
+          "median_ms": 12791
+        },
+        "what_changed_since": {
+          "n": 6,
+          "correct": 100.0,
+          "correct_literal": 100.0,
+          "correct_sentence_only": 83.3,
+          "stale": 0.0,
+          "unsupported": 0.0,
+          "abstained": 0.0,
+          "clean": 100.0,
+          "leaked": 0,
+          "median_ms": 25148
+        },
+        "what_if": {
+          "n": 2,
+          "correct": 100.0,
+          "correct_literal": 100.0,
+          "correct_sentence_only": 100.0,
+          "stale": 0.0,
+          "unsupported": 0.0,
+          "abstained": 0.0,
+          "clean": 100.0,
+          "leaked": 0,
+          "median_ms": 10359
+        },
+        "who_knows": {
+          "n": 10,
+          "correct": 100.0,
+          "correct_literal": 100.0,
+          "correct_sentence_only": 100.0,
+          "stale": 0.0,
+          "unsupported": 0.0,
+          "abstained": 0.0,
+          "clean": 100.0,
+          "leaked": 0,
+          "median_ms": 11652
+        }
+      }
+    }
+  }
+}

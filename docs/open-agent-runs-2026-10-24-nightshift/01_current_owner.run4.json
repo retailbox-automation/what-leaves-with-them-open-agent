@@ -1,0 +1,203 @@
+{
+  "run_id": "20261024T135624Z-8732",
+  "mode": "live",
+  "endpoint": "zetaris",
+  "question": "Who owns billing-api now?",
+  "tenant": "openagent_c2",
+  "llm": {
+    "provider": "nightshift",
+    "endpoint": "http://127.0.0.1:8088/v1",
+    "scope": "wlwt-20261024T135624Z-8732",
+    "investigator": {
+      "app": "wlwt-investigator",
+      "lane": "nemotron-lightning",
+      "model": "local-runtime/nemotron-3.5-lightning-30b-a3b"
+    },
+    "verifier": {
+      "app": "wlwt-verifier",
+      "lane": "nemotron-nano",
+      "model": "local-runtime/nemotron-3-nano-30b-a3b"
+    }
+  },
+  "status": "verified",
+  "answer": "Luca Ostrander owns billing-api now, having taken ownership on 2026-09-22 (ADR-0009).",
+  "answer_author": "model",
+  "citations": [
+    {
+      "id": "ADR-0009",
+      "source": "docs REST API (wlwt_docs.docs_raw)",
+      "quote": "Decision: Ownership of billing-api transfers from Sana Petrov (Payments) to Luca Ostrander (Platform) effective 2026-09-22.",
+      "quote_found": true,
+      "verdict": "supports",
+      "note": "The record explicitly states the transfer is effective 2026-09-22.",
+      "accepted": true,
+      "reason": "ok"
+    },
+    {
+      "id": "msg-0148",
+      "source": "Postgres chat (WLWT_CHAT.chat)",
+      "quote": "Per ADR-0009, I am now the owner of billing-api.",
+      "quote_found": true,
+      "verdict": "supports",
+      "note": "The record states that, per ADR-0009, the speaker is now the owner of billing-api.",
+      "accepted": true,
+      "reason": "ok"
+    }
+  ],
+  "dropped_citations": [],
+  "conflicts": [],
+  "notices": [],
+  "absence_checks": [],
+  "contradictions_unaddressed": [],
+  "rounds": 1,
+  "revisions": 0,
+  "rounds_detail": [
+    {
+      "round": 1,
+      "accepted": true,
+      "notes": [],
+      "ignored": [],
+      "checks": [
+        {
+          "id": "ADR-0009",
+          "accepted": true,
+          "reason": "ok",
+          "verdict": "supports"
+        },
+        {
+          "id": "msg-0148",
+          "accepted": true,
+          "reason": "ok",
+          "verdict": "supports"
+        }
+      ]
+    }
+  ],
+  "verdict_counts": {
+    "supports": 2
+  },
+  "quote_checks": {
+    "total": 2,
+    "found": 2
+  },
+  "write_gate": {
+    "written": true,
+    "outcome": "accepted",
+    "receipt": "GD-00237-32fe2fc580",
+    "reasons": [
+      "new_finding"
+    ],
+    "finding": "FND-00011",
+    "source_ids": [
+      "ADR-0009",
+      "msg-0148"
+    ],
+    "about": [
+      "Luca Ostrander",
+      "billing-api",
+      "ADR-0009"
+    ],
+    "memory": {
+      "memory_id": "mem-11",
+      "backend": "hmem"
+    },
+    "conflicts_not_written": []
+  },
+  "memory": {
+    "engine": "Meterless H-MEM (vendor/hmem)",
+    "recall": {
+      "status": "ok",
+      "ids": [
+        "mem-2",
+        "mem-1",
+        "mem-5"
+      ],
+      "memories": [
+        {
+          "memory_id": "mem-2",
+          "relevance": 0.3518,
+          "confidence": 0.95,
+          "layer": "long_term",
+          "finding": "FND-00002",
+          "session": "s-8ab3aac0",
+          "content": "Luca Ostrander owns billing-api now, having taken ownership on 2026-09-22."
+        },
+        {
+          "memory_id": "mem-1",
+          "relevance": 0.3076,
+          "confidence": 1,
+          "layer": "long_term",
+          "finding": "FND-00001",
+          "session": "s-fd36a0b6",
+          "content": "Luca Ostrander currently owns billing-api, having taken ownership on 2026-09-22 [ADR-0009]."
+        },
+        {
+          "memory_id": "mem-5",
+          "relevance": 0.2778,
+          "confidence": 0.75,
+          "layer": "long_term",
+          "finding": "FND-00005",
+          "session": "s-3a2ebb73",
+          "content": "Luca Ostrander owns billing-api now, having taken ownership on 2026-09-22."
+        }
+      ]
+    },
+    "stored": {
+      "memory_id": "mem-11",
+      "backend": "hmem"
+    },
+    "feedback": {
+      "given": true,
+      "verdict": "verified",
+      "kind": "helpful",
+      "memory_ids": [
+        "mem-2",
+        "mem-1",
+        "mem-5"
+      ],
+      "memories": [
+        {
+          "memory_id": "mem-2",
+          "confidence_before": 0.95,
+          "confidence_after": 1,
+          "needs_review": false
+        },
+        {
+          "memory_id": "mem-1",
+          "confidence_before": 1,
+          "confidence_after": 1,
+          "needs_review": false
+        },
+        {
+          "memory_id": "mem-5",
+          "confidence_before": 0.75,
+          "confidence_after": 0.8,
+          "needs_review": false
+        }
+      ]
+    }
+  },
+  "investigator_path": "llm",
+  "agents": [
+    {
+      "name": "Investigator",
+      "id": "agent:investigator",
+      "role": "answers from the memory graph with cited records; revises on the Verifier's notes"
+    },
+    {
+      "name": "Verifier",
+      "id": "agent:verifier",
+      "role": "re-reads each cited record by id at its source; quote check, then a model judgement"
+    }
+  ],
+  "execution_time_seconds": 44.73,
+  "trace_file": "docs/open-agent-runs-2026-10-24-nightshift/trace-20261024T135624Z-8732.jsonl",
+  "receipts": {
+    "file": "docs/open-agent-runs-2026-10-24-nightshift/receipts-20261024T135624Z-8732.jsonl",
+    "calls": 5,
+    "signed_receipts": 5,
+    "redacted": 0,
+    "missing": [],
+    "scan": "secrets and personal data (open_agent.nightshift.scan_text)"
+  }
+}

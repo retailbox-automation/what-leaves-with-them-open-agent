@@ -124,12 +124,14 @@ EOF
 
 set_app_policy() {
   local doc
-  doc="{\"wlwt-investigator\":{\"mode\":\"local\",\"lanes\":[\"$INV_LANE\"]},\"wlwt-verifier\":{\"mode\":\"local\",\"lanes\":[\"$VER_LANE\"]}}"
+  # raceWidth 1: one candidate per call. Without it a local app races 2 (orchestrator.js:2058) and a tool-free prompt
+  # can be answered by a 3-way mixture (receipt rcpt_req_kin0ai9g: planning + code_patch + moa_synthesis, 154 s).
+  doc="{\"wlwt-investigator\":{\"mode\":\"local\",\"lanes\":[\"$INV_LANE\"],\"raceWidth\":1},\"wlwt-verifier\":{\"mode\":\"local\",\"lanes\":[\"$VER_LANE\"],\"raceWidth\":1}}"
   ctl POST /admin/app-policy "$doc" | "$PY" -c '
 import json, sys
 d = json.load(sys.stdin)
 p = d.get("app_policy", {})
-print("app policy:", {k: v.get("lanes") for k, v in p.items() if k.startswith("wlwt-")}, "ok" if d.get("ok") else d)'
+print("app policy:", {k: (v.get("lanes"), v.get("raceWidth")) for k, v in p.items() if k.startswith("wlwt-")}, "ok" if d.get("ok") else d)'
 }
 
 cmd_start() {

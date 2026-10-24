@@ -1,0 +1,5 @@
+{
+  "question": "Which person is in charge of the billing-api system at the moment?",
+  "after": "input_examples/01_current_owner.json, run first on the same tenant in another process (scripts/cross_session_proof.py does both)",
+  "what_it_shows": "Process A answers 01; the Verifier verifies it and the write gate keeps it, so H-MEM stores it as a long-term memory. Process B, a new process, gets this paraphrase: H-MEM puts A's verified answer in front of the Investigator's model before its first call (memory id in the trace), the Investigator still answers from the graph with citations, the Verifier re-reads them through Zetaris, and its verdict goes back to that memory as feedback (confidence up on helpful). The H-MEM ledger shows create (A), read and feedback (B)."
+}

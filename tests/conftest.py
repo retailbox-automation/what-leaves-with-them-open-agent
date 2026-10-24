@@ -5,6 +5,7 @@ Each run uses a unique tenant prefix and drops what it created.
 """
 
 import os
+import tempfile
 import uuid
 
 import pytest
@@ -12,6 +13,8 @@ import pytest
 from honest_memory.store import Store
 
 PORTS = [int(p) for p in os.environ.get("HM_TEST_PORTS", "6379").split(",")]
+# H-MEM state of test tenants goes to a throwaway folder, not the repo's .state/hmem (a test may still set its own).
+os.environ.setdefault("HM_HMEM_DIR", tempfile.mkdtemp(prefix="hm-hmem-tests-"))
 RUN = uuid.uuid4().hex[:8]
 
 

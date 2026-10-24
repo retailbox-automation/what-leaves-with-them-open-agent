@@ -57,15 +57,29 @@ class Honest:
     """One tenant graph on one FalkorDB, filled through the gate, queried by the router and by the agent."""
 
     def __init__(self, corpus: Corpus, host: str, port: int, model: str, base_url: str = BASE_URL,
-                 keep: bool = False, reasoning: str | None = None):
+                 keep: bool = False, reasoning: str | None = None, provider: str = "ollama", trace_dir=None):
         self.corpus, self.keep = corpus, keep
         self.db = _connect(host, port)
         self.tenant = f"bench_{uuid.uuid4().hex[:10]}"
         self.store = Store(self.db, self.tenant)
         self.router = Agent(self.store, name="agent:bench-router", config=AgentConfig(model=None))
-        self.agent = Agent(self.store, name="agent:bench-llm", config=AgentConfig(base_url=base_url, model=model,
-                                                                                  api_key=os.environ.get("HM_LLM_API_KEY", "ollama"),
-                                                                                  reasoning_effort=reasoning))
+        client, self.trace = None, None
+        if provider == "nightshift":
+            # Meterless Nightshift, through the same client the Investigator uses in the loop (open_agent.llm): its
+            # route (app wlwt-investigator, lane, Nemotron model), a receipt per call in a trace next to the results,
+            # the token budget, and a failure that is reported as the question's error, never a quiet fallback.
+            from open_agent import nightshift as N
+            from open_agent.llm import LLMConfig, NightshiftClient
+            from open_agent.trace import Trace, new_run_id
+
+            run_id = new_run_id()
+            self.trace = Trace(f"bench-{run_id}", log_dir=trace_dir, echo=False, mode="bench")
+            client = NightshiftClient(LLMConfig(base_url=N.base_url(), model=model, timeout=300.0,
+                                                provider="nightshift", scope=f"wlwt-bench-{run_id}"),
+                                      self.trace, "Investigator")
+        cfg = AgentConfig(base_url=base_url, model=model, api_key=os.environ.get("HM_LLM_API_KEY", "ollama"),
+                          reasoning_effort=reasoning)
+        self.agent = Agent(self.store, name="agent:bench-llm", config=cfg, client=client)
         self.ingest_summary: dict = {}
 
     @property

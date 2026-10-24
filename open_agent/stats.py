@@ -20,6 +20,8 @@ def _span(values: list[float]) -> str:
 def summarize(paths: list[str]) -> dict:
     runs, lat, llm, tokens = {}, defaultdict(list), defaultdict(list), defaultdict(list)
     verdicts, reasons, rounds = Counter(), Counter(), defaultdict(int)
+    providers, routed, receipts, swaps, memory = Counter(), Counter(), Counter(), [], Counter()
+    cost, naive, cache = 0.0, 0.0, Counter()
     for path in paths:
         for line in open(path, encoding="utf-8"):
             e = json.loads(line)
@@ -33,8 +35,31 @@ def summarize(paths: list[str]) -> dict:
             elif e["step"] in ("select", "reread", "absence_check") and e["status"] == "ok":
                 lat[f"{e['mode']} {e['endpoint']} {e['step']} {e.get('source', '')}".strip()].append(e["seconds"])
             elif e["step"] == "llm_call" and e["status"] == "ok":
-                llm[f"{e['agent']} {e['purpose']}"].append(e["seconds"])
-                tokens[f"{e['agent']} {e['purpose']}"].append((e.get("usage") or {}).get("prompt_tokens") or 0)
+                model = e.get("routed_model") or e.get("response_model") or e.get("model")
+                key = f"{e['agent']} {e['purpose']} [{e.get('provider') or 'openai-compatible'} {model}]"
+                # Nightshift: latency_ms is the answered request; seconds also counts waiting for a lane just started
+                llm[key].append(e["latency_ms"] / 1000 if e.get("latency_ms") else e["seconds"])
+                tokens[key].append((e.get("usage") or {}).get("prompt_tokens") or 0)
+                providers[e.get("provider") or "openai-compatible"] += 1
+                routed[f"{e['agent']} -> {model}"] += 1
+                if e.get("receipt_id"):
+                    receipts["calls with a receipt id"] += 1
+                    receipts["signed"] += bool(e.get("signed"))
+                    cost += e.get("cost_usd") or 0
+                    naive += e.get("naive_usd") or 0
+                    cache["from_cache" if e.get("from_cache") else "not from cache"] += 1
+            elif e["step"] == "llm_call":
+                providers[f"{e.get('provider') or 'openai-compatible'} {e['status']}"] += 1
+            elif e["step"] == "lane_swap":
+                swaps.append(e["seconds"])
+            elif e["step"] == "memory_recall":
+                memory["recalls with a memory" if e.get("memory_ids") else f"recalls: {e.get('used_by') or e['status']}"] += 1
+            elif e["step"] == "memory_feedback" and e["status"] == "ok":
+                memory[f"feedback {e.get('kind')}"] += 1
+            elif e["step"] == "write_gate" and (e.get("memory") or {}).get("memory_id"):
+                memory["stored in H-MEM (long_term)"] += 1
+            elif e["step"] == "receipts_export":
+                receipts[f"exported files ({e['status']})"] += 1
             elif e["step"] == "check":
                 verdicts[(e.get("verdict") or "").split(":")[0]] += 1
                 reasons[e.get("reason")] += 1
@@ -50,7 +75,10 @@ def summarize(paths: list[str]) -> dict:
             "source_reads_s": {k: _span(v) for k, v in sorted(lat.items())},
             "llm_calls_s": {k: _span(v) for k, v in sorted(llm.items())},
             "llm_prompt_tokens_p50": {k: statistics.median(v) for k, v in sorted(tokens.items())},
-            "check_verdicts": dict(verdicts), "check_reasons": dict(reasons)}
+            "check_verdicts": dict(verdicts), "check_reasons": dict(reasons),
+            "providers": dict(providers), "routed": dict(routed), "receipts": dict(receipts),
+            "cost_usd": round(cost, 6), "naive_usd_reference": round(naive, 6), "cache": dict(cache),
+            "lane_swaps_s": _span(swaps), "memory": dict(memory)}
 
 
 if __name__ == "__main__":

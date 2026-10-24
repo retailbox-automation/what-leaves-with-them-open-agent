@@ -61,6 +61,10 @@ govern systems other people own; ask for depth 1 and depth 4 to show the differe
 - promises: promises in the written records since a date; phone calls are not recorded, so none found means \
 not in the graph."""
 
+# How findings recalled from H-MEM are put in front of the model (the [MEMORY CONTEXT] block follows).
+MEMORY_PREFIX = ("Earlier findings kept in memory (they may be out of date; confirm with a tool before you rely on "
+                 "one):\n")
+
 NO_TOOL = ("I have no tool for that question. I can answer who owns a system now or on a date, its ownership history, "
            "whom to call, what depends on it, who worked on it, how a decision evolved, why the memory holds or "
            "refused a fact, what changed since a date, how two things connect, what agents remembered, and what "
@@ -280,8 +284,7 @@ class Agent:
         if not context:
             return []
         run.memory_ids = [h["memory"]["id"] for h in hits]
-        return [{"role": "system", "content": "Earlier findings kept in memory (they may be out of date; confirm with "
-                                              "a tool before you rely on one):\n" + context}]
+        return [{"role": "system", "content": MEMORY_PREFIX + context}]
 
     def _complete(self, messages: list, tools: list | None, force_text: bool):
         kwargs = {"model": self.config.model, "messages": messages, "temperature": 0}

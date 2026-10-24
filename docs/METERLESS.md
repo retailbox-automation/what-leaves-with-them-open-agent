@@ -43,8 +43,20 @@ Every response is checked by the client (`check_routing`):
 - The cost must be 0.
 
 If any check fails, the client raises `RoutingMismatch`. That error is not an `OpenAIError`, so the agent does not
-quietly fall back to its rule router. When Nightshift is down (`NightshiftUnavailable`), the agent does fall back, and
-the run says so in `errors`.
+quietly fall back to its rule router.
+
+In the Investigator ↔ Verifier loop (`python -m open_agent.run`, client `open_agent/llm.py` `NightshiftClient`) there
+is no fallback at all: Nightshift down, a lane not admitted (after the warming wait) or a routing mismatch stops the
+run with exit code 4 and `error.type` `ProviderDown` / `RoutingMismatch`, naming the agent, app, lane and model. Ollama
+is used only when a developer sets `OA_LLM_PROVIDER=ollama`. (The standalone `python -m honest_memory.agent ask` with
+`HM_LLM_PROVIDER=nightshift` keeps lane B's behaviour: Nightshift down falls back to the router and says so in
+`errors`.)
+
+This check fired for real on 24 Oct at 13:09Z: with both lanes loaded and the daemon at "admission posture Pause
+(memory pressure critical, swap 33 GB)", Nightshift answered `wlwt-verifier` from the **Lightning** lane although its
+allowlist names only `nemotron-nano` (receipt `rcpt_req_bm9j53u7`: `app_policy.lanes ["nemotron-nano"]`,
+`winning_route` Lightning). The run stopped with `RoutingMismatch`. Since then the runs load one lane at a time
+(below), so no other Nemotron model is there to answer.
 
 ## What runs where
 
@@ -79,6 +91,16 @@ python -m open_agent.nightshift export --trace logs/trace.jsonl --out logs/recei
 FALKORDB_PORT=6395 python scripts/meterless_live_proof.py --tenant <tenant> --swap   # the whole chain below
 ```
 
+## Findings from running the loop on Nightshift 1.2.1 (24 Oct)
+
+| What we saw | Evidence | What the code does now |
+|---|---|---|
+| A tool-free prompt is planned by keywords in the non-system text (engine `classify.js`: "test", "fix", "plan", "json"...). The Investigator's cite call, with the records in the user turn, became `planning` + `code_patch` + a 3-way `moa_synthesis` on the same lane: 154 s, 8,929 output tokens, and no JSON. | receipt `rcpt_req_kin0ai9g` phases | JSON prompts carry their data in the system message and the user turn is a short question (`NightshiftClient.ASK`): one `final_synthesis` phase, 14.4 s, 1,116 tokens (`rcpt_req_v3nn18jr`). |
+| A local app races 2 candidates by default (`orchestrator.js:2058`), on a 1-slot lane. | `app_policy.race_width` on receipts | `scripts/nightshift_headless.sh` sets `raceWidth: 1` per app. |
+| The lanes think before they answer and nothing in the public API turns that off (`chat_template_kwargs` is forwarded only from the engine's own jobs plane, `local-runtime.js:1272`; `reasoning_effort` goes to OpenAI Responses rows only). The local default `max_tokens` is 2048; the cite call used it all inside the thinking and Nightshift returned `502 ..._empty_response`. | lane log 12:58Z: 2 x 2,048 decoded tokens | Each call sends `max_tokens` (`OA_LLM_MAX_TOKENS`, default 6144). An empty reply is marked in the trace and the deterministic path takes that step; it is not treated as "down". |
+| Lightning writes ids and dates with U+2011 non-breaking hyphens ("ADR\u20110004"), which never match the records. | output of run 20261024T133400Z-fc26 (dev, not kept) | The client makes U+2010/U+2011/U+00A0/U+202F ASCII in text and tool arguments, and writes a `reply_normalised` event. |
+| Both lanes next to other work pushed the Mac into swap; latency rose and the routing check above fired. | daemon log 13:13Z | `NIGHTSHIFT_SWAP=1`: before a call, `ensure_lane` stops the other lane and starts the agent's own over the control socket (trace event `lane_swap`, about 5 to 8 s). |
+
 ## Receipts
 
 Each response carries a `meterless` block with these fields:
@@ -104,7 +126,11 @@ receipt that trips the scan anywhere else is left out.
 
 Receipt logs in this repo:
 
-- `logs/receipts-wlwt-proof-20261024T115709Z-c6aed4.jsonl`: 3 signed receipts, scan clean.
+- **One per loop run:** `logs/receipts-<run_id>.jsonl` next to `logs/trace-<run_id>.jsonl`, written by
+  `open_agent.run` after every live run (`export_run_receipts`, by the receipt ids of the run's `llm_call` events), and
+  named in the run's output JSON as `receipts.file` (with `calls`, `signed_receipts`, `redacted`, `missing`). Runs 2 to
+  5 of each example keep theirs in `docs/open-agent-runs-2026-10-24-nightshift/`.
+- `logs/receipts-wlwt-proof-20261024T115709Z-c6aed4.jsonl`: 3 signed receipts, scan clean (lane B's first proof).
 - Per-call blocks: `logs/nightshift-smoke-investigator.json`, `logs/nightshift-smoke-verifier.json`,
   `logs/nightshift-agent-trace.jsonl`, `logs/meterless-live-proof-wlwt-proof-20261024T115709Z-c6aed4.json`.
 
@@ -146,7 +172,30 @@ verdict_feedback(store, run.memory_ids, verdict)                              # 
 T.call(store, "remember", {"text": answer, "about": [...], "source_ids": cited}, ctx)  # approved: gate, then H-MEM
 ```
 
-## Measured (2026-10-24)
+## Measured in the integrated loop (24 Oct, 13:38Z to 14:06Z)
+
+20 live runs of the four examples (5 each) plus the two-process memory proof, code `9b6f7a7`, Nightshift 1.2.1 with
+`raceWidth 1` and one lane loaded at a time. Full table and method in
+[OPEN-AGENT-NEW-WORK.md](OPEN-AGENT-NEW-WORK.md#measured-24-oct-2026-the-integrated-system); from the 20 traces:
+
+| What | Number |
+|---|---|
+| Model calls / signed receipts | 95 / 95, `cost_usd` 0 on every one, 0 from cache |
+| Routed to the agent's own model | Investigator → `local-runtime/nemotron-3.5-lightning-30b-a3b` 59 of 59, Verifier → `local-runtime/nemotron-3-nano-30b-a3b` 36 of 36; 0 routing mismatches |
+| Receipt files | 20 (`logs/receipts-<run_id>.jsonl` for run 1 of each example, the rest next to their traces), each with exactly the run's receipts |
+| Investigator tool-loop call (Lightning, native tools, ~5.8k prompt tokens) | p50 4.27 s, max 10.59 s (n=40) |
+| Investigator cite call (Lightning, JSON) | p50 11.94 s, max 31.96 s (n=15) |
+| Investigator revise call (Lightning, JSON) | p50 44.12 s, max 58.60 s (n=4); 1 more came back empty after 2 x 6,144 tokens of thinking |
+| Verifier judge call (Nano, JSON in text, ~0.7k) | p50 2.52 s, max 9.83 s (n=36) |
+| Switching the loaded lane (`NIGHTSHIFT_SWAP=1`) | p50 5.48 s, max 7.31 s (n=40), plus about 5 s until the engine sees the new lane |
+| H-MEM | 15 verified answers stored long_term, 12 recalls with a memory, 9 `helpful` feedbacks; cross-session: B recalled A's `mem-1` and raised it 0.70 → 0.75 |
+
+Where to find them for the README: `output_examples/02_tampered_source.live.json` → `receipts.file` =
+`logs/receipts-20261024T133813Z-5253.jsonl` (the tamper run: 6 signed receipts, 3 on Lightning for
+the two tool-loop calls and the cite call, 3 on Nano for the three judge calls; the revise call came back empty and
+has none); `logs/receipts-20261024T140440Z-409c.jsonl` (the cross-session run B).
+
+## Measured by lane B before the integration (2026-10-24)
 
 | What | Number | Evidence |
 |---|---|---|
@@ -180,6 +229,24 @@ Scope `wlwt-proof-20261024T115709Z-c6aed4`:
    memories: confidence went from 0.70 to 0.75.
 4. The ledger for `mem-2` shows `create`, `read`, `feedback(helpful)`.
 
+## H-MEM in the Investigator ↔ Verifier loop
+
+- **Recall:** before the Investigator answers, `Investigator.recall_memory` asks H-MEM for findings that match the
+  question (`hmem_bridge.memory_context`, only findings the graph still holds). The trace gets a `memory_recall` event
+  with the memory ids, relevance, confidence and who reads them: the model (a system message before its first call) or
+  nobody (the router in SAMPLE_MODE; recorded so the feedback still lands).
+- **Store:** only a fully verified answer goes to the write gate (`remember`), and only what the gate accepts goes to
+  H-MEM, `layer: long_term`. The output's `write_gate.memory` and `memory.stored` give the memory id; conflict lines are
+  not stored (`write_gate.conflicts_not_written`).
+- **Feedback:** after the last Verifier round, the run's status becomes feedback on the recalled memories
+  (`memory_feedback` event): verified → helpful, partially_verified / unverified → not_helpful, contradicted → wrong
+  (tagged review); absence_confirmed and no_claim give none.
+- **Across processes:** `scripts/cross_session_proof.py` runs example 01 in process A and the paraphrase
+  `input_examples/05_cross_session_recall.json` in a new process B on a fresh tenant, then copies that tenant's
+  `ledger.jsonl` to `logs/hmem-ledger-<tenant>.jsonl`. Its output `output_examples/05_cross_session_recall.live.json`
+  carries a `cross_session_proof` block (both pids and run ids, A's memory id, B's recalled ids, B's feedback, the
+  ledger lines of that memory). `--sample` does the same without Zetaris or a model.
+
 ## Tests
 
 - `tests/test_nightshift.py` (18): run against a fake Nightshift on a loopback port. They cover:
@@ -203,6 +270,14 @@ Scope `wlwt-proof-20261024T115709Z-c6aed4`:
   - a rebuilt graph does not serve old memories;
   - a new session's model gets the memory before its first call, and a `refuted` verdict flags it.
 - `tests/test_nightshift_live.py`: runs only with `NIGHTSHIFT_LIVE=1` and Nightshift up.
+- `tests/test_loop_integration.py` (15): the whole loop against a fake Nightshift on loopback that answers like the
+  real one (OpenAI body plus `meterless` receipt). It covers: Nightshift is the default and each agent gets its own
+  Nemotron route; contradicting provider settings are refused; every `llm_call` carries the receipt fields; the run
+  exports its signed receipts and names the file; another model answering stops the run (exit 4, no retry, no other
+  model); Nightshift down stops the run and no other provider is constructed; a lane going down mid-run stops the run
+  and the tamper is restored; an empty reply is visible and not "down"; the conflict line; the uncited-evidence
+  re-read (changed and unchanged); H-MEM recall/store/feedback across runs without a model; the model gets the memory
+  before its first call; no feedback for an answer that states no result.
 
 ## Limits found
 

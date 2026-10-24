@@ -1,0 +1,240 @@
+{
+  "run_id": "20261024T135040Z-1dba",
+  "mode": "live",
+  "endpoint": "zetaris",
+  "question": "Who currently owns billing-api?",
+  "tenant": "openagent_c2",
+  "llm": {
+    "provider": "nightshift",
+    "endpoint": "http://127.0.0.1:8088/v1",
+    "scope": "wlwt-20261024T135040Z-1dba",
+    "investigator": {
+      "app": "wlwt-investigator",
+      "lane": "nemotron-lightning",
+      "model": "local-runtime/nemotron-3.5-lightning-30b-a3b"
+    },
+    "verifier": {
+      "app": "wlwt-verifier",
+      "lane": "nemotron-nano",
+      "model": "local-runtime/nemotron-3-nano-30b-a3b"
+    }
+  },
+  "tamper": {
+    "record_id": "msg-0148",
+    "new_text": "Per ADR-0009, the billing-api transfer is on hold. Sana Petrov remains the owner of billing-api until further notice.",
+    "original_text": "Per ADR-0009, I am now the owner of billing-api. Sana Petrov stays on as backup for 30 days. Send billing-api escalations to me.",
+    "restored": true
+  },
+  "status": "verified",
+  "answer": "Luca Ostrander owns billing-api, with ownership transferred effective 2026-09-22 per ADR-0009. Conflict: msg-0148 (chat message) was edited after the memory read it and now says \"Per ADR-0009, the billing-api transfer is on hold. Sana Petrov remains the owner of billing-api until further notice.\"; the earlier quote \"Per ADR-0009, I am now the owner of billing-api.\" is no longer in the record. Flagged for a human.",
+  "answer_author": "model",
+  "citations": [
+    {
+      "id": "ADR-0009",
+      "source": "docs REST API (wlwt_docs.docs_raw)",
+      "quote": "Decision: Ownership of billing-api transfers from Sana Petrov (Payments) to Luca Ostrander (Platform) effective 2026-09-22.",
+      "quote_found": true,
+      "verdict": "supports",
+      "note": "The record explicitly states that the transfer is effective 2026-09-22.",
+      "accepted": true,
+      "reason": "ok"
+    }
+  ],
+  "dropped_citations": [
+    {
+      "id": "msg-0148",
+      "round": 1,
+      "reason": "quote_not_in_record",
+      "verdict": "contradicts",
+      "note": "The record states that Sana Petrov remains the owner of billing-api until further notice, contradicting the claim that Luca Ostrander currently owns it.",
+      "quote": "Per ADR-0009, I am now the owner of billing-api.",
+      "text_at_source_now": "Per ADR-0009, the billing-api transfer is on hold. Sana Petrov remains the owner of billing-api until further notice."
+    }
+  ],
+  "conflicts": [
+    {
+      "id": "msg-0148",
+      "source": "Postgres chat (WLWT_CHAT.chat)",
+      "kind": "changed_at_source",
+      "now_says": "Per ADR-0009, the billing-api transfer is on hold. Sana Petrov remains the owner of billing-api until further notice.",
+      "earlier_quote": "Per ADR-0009, I am now the owner of billing-api.",
+      "verifier_note": "The record states that Sana Petrov remains the owner of billing-api until further notice, contradicting the claim that Luca Ostrander currently owns it.",
+      "flagged_for": "human",
+      "line": "Conflict: msg-0148 (chat message) was edited after the memory read it and now says \"Per ADR-0009, the billing-api transfer is on hold. Sana Petrov remains the owner of billing-api until further notice.\"; the earlier quote \"Per ADR-0009, I am now the owner of billing-api.\" is no longer in the record. Flagged for a human."
+    }
+  ],
+  "notices": [
+    "msg-0148 is not cited: the quoted sentence is not in the record as its source system holds it now. At its source it now reads: \"Per ADR-0009, the billing-api transfer is on hold. Sana Petrov remains the owner of billing-api until further notice.\""
+  ],
+  "absence_checks": [],
+  "contradictions_unaddressed": [],
+  "rounds": 2,
+  "revisions": 1,
+  "rounds_detail": [
+    {
+      "round": 1,
+      "accepted": false,
+      "notes": [
+        "msg-0148: the quoted sentence is not in the record as its source system holds it now; The record states that Sana Petrov remains the owner of billing-api until further notice, contradicting the claim that Luca Ostrander currently owns it."
+      ],
+      "ignored": [],
+      "checks": [
+        {
+          "id": "ADR-0009",
+          "accepted": true,
+          "reason": "ok",
+          "verdict": "supports"
+        },
+        {
+          "id": "msg-0148",
+          "accepted": false,
+          "reason": "quote_not_in_record",
+          "verdict": "contradicts"
+        }
+      ]
+    },
+    {
+      "round": 2,
+      "accepted": true,
+      "notes": [],
+      "ignored": [],
+      "checks": [
+        {
+          "id": "ADR-0009",
+          "accepted": true,
+          "reason": "ok",
+          "verdict": "supports"
+        }
+      ]
+    }
+  ],
+  "verdict_counts": {
+    "supports": 2,
+    "contradicts": 1
+  },
+  "quote_checks": {
+    "total": 3,
+    "found": 2
+  },
+  "write_gate": {
+    "written": true,
+    "outcome": "accepted",
+    "receipt": "GD-00233-9e1dceb644",
+    "reasons": [
+      "new_finding"
+    ],
+    "finding": "FND-00007",
+    "source_ids": [
+      "ADR-0009"
+    ],
+    "about": [
+      "Luca Ostrander",
+      "billing-api",
+      "ADR-0009"
+    ],
+    "memory": {
+      "memory_id": "mem-7",
+      "backend": "hmem"
+    },
+    "conflicts_not_written": [
+      "msg-0148"
+    ]
+  },
+  "memory": {
+    "engine": "Meterless H-MEM (vendor/hmem)",
+    "recall": {
+      "status": "ok",
+      "ids": [
+        "mem-1",
+        "mem-4",
+        "mem-2"
+      ],
+      "memories": [
+        {
+          "memory_id": "mem-1",
+          "relevance": 0.3096,
+          "confidence": 0.85,
+          "layer": "long_term",
+          "finding": "FND-00001",
+          "session": "s-fd36a0b6",
+          "content": "Luca Ostrander currently owns billing-api, having taken ownership on 2026-09-22 [ADR-0009]."
+        },
+        {
+          "memory_id": "mem-4",
+          "relevance": 0.2749,
+          "confidence": 0.75,
+          "layer": "long_term",
+          "finding": "FND-00004",
+          "session": "s-266b9fb3",
+          "content": "Luca Ostrander currently owns billing-api, having taken ownership effective 2026-09-22 [ADR-0009]."
+        },
+        {
+          "memory_id": "mem-2",
+          "relevance": 0.2531,
+          "confidence": 0.8,
+          "layer": "long_term",
+          "finding": "FND-00002",
+          "session": "s-8ab3aac0",
+          "content": "Luca Ostrander owns billing-api now, having taken ownership on 2026-09-22."
+        }
+      ]
+    },
+    "stored": {
+      "memory_id": "mem-7",
+      "backend": "hmem"
+    },
+    "feedback": {
+      "given": true,
+      "verdict": "verified",
+      "kind": "helpful",
+      "memory_ids": [
+        "mem-1",
+        "mem-4",
+        "mem-2"
+      ],
+      "memories": [
+        {
+          "memory_id": "mem-1",
+          "confidence_before": 0.85,
+          "confidence_after": 0.9,
+          "needs_review": false
+        },
+        {
+          "memory_id": "mem-4",
+          "confidence_before": 0.75,
+          "confidence_after": 0.8,
+          "needs_review": false
+        },
+        {
+          "memory_id": "mem-2",
+          "confidence_before": 0.8,
+          "confidence_after": 0.85,
+          "needs_review": false
+        }
+      ]
+    }
+  },
+  "investigator_path": "llm",
+  "agents": [
+    {
+      "name": "Investigator",
+      "id": "agent:investigator",
+      "role": "answers from the memory graph with cited records; revises on the Verifier's notes"
+    },
+    {
+      "name": "Verifier",
+      "id": "agent:verifier",
+      "role": "re-reads each cited record by id at its source; quote check, then a model judgement"
+    }
+  ],
+  "execution_time_seconds": 118.71,
+  "trace_file": "docs/open-agent-runs-2026-10-24-nightshift/trace-20261024T135040Z-1dba.jsonl",
+  "receipts": {
+    "file": "docs/open-agent-runs-2026-10-24-nightshift/receipts-20261024T135040Z-1dba.jsonl",
+    "calls": 7,
+    "signed_receipts": 7,
+    "redacted": 0,
+    "missing": [],
+    "scan": "secrets and personal data (open_agent.nightshift.scan_text)"
+  }
+}
