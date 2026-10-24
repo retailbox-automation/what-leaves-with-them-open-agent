@@ -120,7 +120,7 @@ In the container:
 - Panel `GET /`: 200.
 
 Full test suite on this branch at `61e47cc` (the later commits change only `.dockerignore` and the `Dockerfile`):
-`HM_TEST_PORTS=6395 FALKORDB_PORT=6395 python -m pytest -q` -> 525 passed, 1 skipped, 121 s.
+`HM_TEST_PORTS=6395 FALKORDB_PORT=6395 python -m pytest -q` -> 525 passed, 1 skipped, 121 s; again on `eb7d8da`: 525 passed, 1 skipped, 145 s.
 
 ## Clean-up
 
