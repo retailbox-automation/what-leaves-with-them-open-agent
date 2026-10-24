@@ -1,0 +1,184 @@
+{
+  "run_id": "20261024T123502Z-96be",
+  "mode": "live",
+  "endpoint": "zetaris",
+  "question": "What did the team decide about invoice rendering?",
+  "llm": {
+    "endpoint": "http://localhost:11434/v1",
+    "investigator_model": "nemotron-3-nano:30b-a3b-q4_K_M",
+    "verifier_model": "nemotron-3-nano:30b-a3b-q4_K_M"
+  },
+  "status": "partially_verified",
+  "answer": "The team decided to render invoices synchronously, as recorded in ADR-0004, but ADR-0011 states they should be rendered asynchronously through invoice-renderer, which directly conflicts with the synchronous decision.",
+  "answer_author": "model",
+  "citations": [
+    {
+      "id": "ADR-0004",
+      "source": "docs REST API (wlwt_docs.docs_raw)",
+      "quote": "ADR-0004: Render invoices synchronously",
+      "quote_found": true,
+      "verdict": "supports",
+      "note": "The record explicitly states the decision to render invoices synchronously.",
+      "accepted": true,
+      "reason": "ok"
+    },
+    {
+      "id": "ADR-0011",
+      "source": "docs REST API (wlwt_docs.docs_raw)",
+      "quote": "ADR-0011: Render invoices asynchronously through invoice-renderer",
+      "quote_found": true,
+      "verdict": "contradicts",
+      "note": "ADR-0011 explicitly states that invoices should be rendered asynchronously through invoice-renderer, directly contradicting the claim that they should be rendered asynchronously.",
+      "accepted": false,
+      "reason": "model_contradicts"
+    }
+  ],
+  "dropped_citations": [
+    {
+      "id": "ADR-0001",
+      "round": 1,
+      "reason": "model_unrelated",
+      "verdict": "unrelated",
+      "note": "The record describes idempotency keys for billing-api writes, not the team's decision about invoice rendering.",
+      "quote": "ADR-0001: Idempotency keys on billing-api writes",
+      "text_at_source_now": "ADR-0001: Idempotency keys on billing-api writes\nAuthor: Mateo Sandoval\nDraft opened: 2026-08-17. Status: accepted on 2026-08-18.\nContext: Client retries created duplicate charges in the sandbox.\nDecision: Every write endpoint of billing-api requires an Idempotency-Key header; keys are stored for 24 hours.\nConsequences: Clients must send a key. Replays return the original response."
+    },
+    {
+      "id": "ADR-0011",
+      "round": 3,
+      "reason": "model_contradicts",
+      "verdict": "contradicts",
+      "note": "ADR-0011 explicitly states that invoices should be rendered asynchronously through invoice-renderer, directly contradicting the claim that they should be rendered asynchronously.",
+      "quote": "ADR-0011: Render invoices asynchronously through invoice-renderer",
+      "text_at_source_now": "ADR-0011: Render invoices asynchronously through invoice-renderer\nAuthor: Viktor Hartwell\nDraft opened: 2026-08-31. Status: accepted on 2026-09-08.\nSupersedes: ADR-0004.\nContext: Synchronous rendering caused request timeouts for invoices with many line items.\nDecision: billing-api enqueues a render job and invoice-renderer produces the PDF; the API returns the invoice at once with a pending PDF link.\nConsequences: PDF links can be pending for a few seconds."
+    },
+    {
+      "id": "ADR-0016",
+      "round": 1,
+      "reason": "model_unrelated",
+      "verdict": "unrelated",
+      "note": "The record states that the team decided to rotate auth signing keys every 30 days, which does not address the question about how invoices should be rendered.",
+      "quote": "ADR-0016: Rotate auth signing keys every 30 days",
+      "text_at_source_now": "ADR-0016: Rotate auth signing keys every 30 days\nAuthor: Pavel Hollis\nCo-author: Oskar Alvarez\nDraft opened: 2026-08-31. Status: accepted on 2026-09-09.\nConstrains: auth.\nContext: Signing keys for auth had not been rotated since launch.\nDecision: auth rotates its token signing keys every 30 days; the security on-call runs the rotation.\nConsequences: Clients must fetch keys from the published key set."
+    }
+  ],
+  "notices": [
+    "ADR-0001 is not cited: the record as it reads now does not speak to the answer.",
+    "ADR-0011 is not cited: the record as it reads now contradicts the answer.",
+    "ADR-0016 is not cited: the record as it reads now does not speak to the answer."
+  ],
+  "absence_checks": [],
+  "contradictions_unaddressed": [],
+  "rounds": 3,
+  "revisions": 2,
+  "rounds_detail": [
+    {
+      "round": 1,
+      "accepted": false,
+      "notes": [
+        "ADR-0001: the record as it reads now does not speak to the answer; The record describes idempotency keys for billing-api writes, not the team's decision about invoice rendering.",
+        "ADR-0011: the record as it reads now contradicts the answer; The record states that invoices should be rendered asynchronously through invoice-renderer, which directly conflicts with the claim that they should be rendered synchronously.",
+        "ADR-0016: the record as it reads now does not speak to the answer; The record states that the team decided to rotate auth signing keys every 30 days, which does not address the question about how invoices should be rendered."
+      ],
+      "ignored": [],
+      "checks": [
+        {
+          "id": "ADR-0004",
+          "accepted": true,
+          "reason": "ok",
+          "verdict": "supports"
+        },
+        {
+          "id": "ADR-0001",
+          "accepted": false,
+          "reason": "model_unrelated",
+          "verdict": "unrelated"
+        },
+        {
+          "id": "ADR-0011",
+          "accepted": false,
+          "reason": "model_contradicts",
+          "verdict": "contradicts"
+        },
+        {
+          "id": "ADR-0016",
+          "accepted": false,
+          "reason": "model_unrelated",
+          "verdict": "unrelated"
+        }
+      ]
+    },
+    {
+      "round": 2,
+      "accepted": false,
+      "notes": [
+        "ADR-0011: the record as it reads now contradicts the answer; ADR-0011 explicitly states that invoices should be rendered asynchronously through invoice-renderer, directly opposing the synchronous decision attributed to ADR-0004."
+      ],
+      "ignored": [],
+      "checks": [
+        {
+          "id": "ADR-0004",
+          "accepted": true,
+          "reason": "ok",
+          "verdict": "supports"
+        },
+        {
+          "id": "ADR-0011",
+          "accepted": false,
+          "reason": "model_contradicts",
+          "verdict": "contradicts"
+        }
+      ]
+    },
+    {
+      "round": 3,
+      "accepted": false,
+      "notes": [
+        "ADR-0011: the record as it reads now contradicts the answer; ADR-0011 explicitly states that invoices should be rendered asynchronously through invoice-renderer, directly contradicting the claim that they should be rendered asynchronously."
+      ],
+      "ignored": [],
+      "checks": [
+        {
+          "id": "ADR-0004",
+          "accepted": true,
+          "reason": "ok",
+          "verdict": "supports"
+        },
+        {
+          "id": "ADR-0011",
+          "accepted": false,
+          "reason": "model_contradicts",
+          "verdict": "contradicts"
+        }
+      ]
+    }
+  ],
+  "verdict_counts": {
+    "supports": 3,
+    "unrelated": 2,
+    "contradicts": 3
+  },
+  "quote_checks": {
+    "total": 8,
+    "found": 8
+  },
+  "write_gate": {
+    "written": false,
+    "reason": "the Verifier did not accept every citation of this answer; nothing written"
+  },
+  "investigator_path": "llm",
+  "agents": [
+    {
+      "name": "Investigator",
+      "id": "agent:investigator",
+      "role": "answers from the memory graph with cited records; revises on the Verifier's notes"
+    },
+    {
+      "name": "Verifier",
+      "id": "agent:verifier",
+      "role": "re-reads each cited record by id at its source; quote check, then a model judgement"
+    }
+  ],
+  "execution_time_seconds": 16.55,
+  "trace_file": "docs/open-agent-runs-2026-10-24/trace-20261024T123502Z-96be.jsonl"
+}
