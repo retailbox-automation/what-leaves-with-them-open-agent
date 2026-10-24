@@ -49,8 +49,8 @@ Same track named in README (first line), deck (slide 1), metadata.json `track`. 
 ```text
 Team member 1:
 Full name: Michael Oskola
-HackOS account email: <confirm>
-GitHub username: <confirm>
+HackOS account email: oskola7@gmail.com
+GitHub username: retailbox-automation
 Role: Everything: product, agents, Zetaris and Meterless integration, packaging
 Primary contact: Yes
 ```
@@ -123,4 +123,4 @@ The memory graph on FalkorDB, its write gate, the graph tools, the rule router, 
 ## Before pasting (checks, not form fields)
 
 - The humanizer pass was run over every field text above (no em dashes, plain text, no markdown inside fields).
-- Roster locks at the first submission; confirm the HackOS email and GitHub username first (name: Michael Oskola, as on HackOS).
+- Roster locks at the first submission. HackOS account: Google SSO oskola7@gmail.com (registered 24.09, team "RetailBox", profile name Michael Oskola); GitHub: retailbox-automation, the author of every commit in the repo (`git log --format=%an`).
