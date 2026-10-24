@@ -371,6 +371,30 @@ def test_a_contradicting_record_cannot_be_dropped_silently(graph, trace):
     assert note and note[0]["current_lines"] == AG.quotable(EDITED) and note[0]["verdict"] == "contradicts"
 
 
+def judge_by_answer(user):
+    """Judges the record against the answer: the edited chat backs "Sana Petrov remains", the ADR backs Luca."""
+    text, answer = user["record"]["current_text"], user["answer"]
+    agrees = "Sana Petrov remains" in answer if "on hold" in text else "Luca Ostrander" in answer
+    return {"verdict": "supports" if agrees else "contradicts", "note": f"now says: {text[:40]}"}
+
+
+def test_evidence_for_the_old_answer_is_rejudged_when_dropped(graph, trace):
+    src = LocalSample()
+    original = R.tamper(src, "msg-0148", EDITED, trace)
+    switch = {"answer": "Sana Petrov remains the owner of billing-api until further notice.",
+              "citations": [{"id": "msg-0148", "quote": "Sana Petrov remains the owner of billing-api."}]}
+    try:
+        out = R.investigate(QUESTION, graph, src, trace, model_cfg(), sample=False,
+                            investigator_client=FakeOpenAI(cite_stale, revise=lambda u: switch),
+                            verifier_client=FakeOpenAI(None, judge=judge_by_answer))
+    finally:
+        R.restore(src, "msg-0148", original, trace)
+    recheck = [e for e in trace.events if e["step"] == "recheck_dropped"]
+    assert [(e["record_id"], e["verdict"]) for e in recheck] == [("ADR-0009", "contradicts")]
+    assert out["rounds_detail"][1]["ignored"] == ["ADR-0009"]
+    assert out["rounds"] == 3 and out["status"] == "verified" and "ADR-0009 says otherwise now" in out["answer"]
+
+
 def test_unaddressed_contradiction_is_not_written(graph, trace):
     inv = AG.Investigator(graph, trace)
     draft = inv.investigate(QUESTION)

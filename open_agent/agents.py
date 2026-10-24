@@ -315,6 +315,7 @@ class Verifier:
         self.source, self.trace, self.sample = source, trace, sample
         self.client = None if sample else _client(llm, trace, "Verifier", client)
         self.contradicted: dict[str, Check] = {}   # record id -> its last "contradicts" check, over all rounds
+        self.supported: dict[str, Check] = {}      # records accepted in an earlier round
 
     def review(self, draft: Draft) -> Review:
         rv = Review(draft.round)
@@ -340,8 +341,10 @@ class Verifier:
                      if not a["accepted"]]
         # A record that contradicted the answer may be answered or cited again, but not dropped without a word.
         self.contradicted.update({c.id: c for c in rv.checks if c.verdict == "contradicts" and c.record_found})
-        rv.contradicted = list(self.contradicted)
         cited = {c.id for c in draft.citations}
+        self._recheck_dropped(draft, cited)
+        self.supported.update({c.id: c for c in rv.checks if c.accepted})
+        rv.contradicted = list(self.contradicted)
         rv.ignored = [i for i in self.contradicted if i not in cited and not _mentions(draft.answer, i)]
         if rv.ignored:
             rv.accepted, rv.needs_revision = False, True
@@ -353,6 +356,19 @@ class Verifier:
                          checks=[{k: v for k, v in asdict(c).items() if k != "current_text"} for c in rv.checks],
                          absence=rv.absence, ignored=rv.ignored, notes=rv.notes)
         return rv
+
+    def _recheck_dropped(self, draft: Draft, cited: set[str]) -> None:
+        """A record accepted in an earlier round that the new draft neither cites nor names is judged again
+        against the new answer (from the text already re-read): evidence for the old answer may contradict the new."""
+        for rid, old in list(self.supported.items()):
+            if rid in cited or _mentions(draft.answer, rid) or rid in self.contradicted:
+                continue
+            del self.supported[rid]
+            verdict, note = self._judge(draft, Citation(old.id, old.channel, old.quote), old.current_text or "")
+            self.trace.event("Verifier", "recheck_dropped", round=draft.round, record_id=rid, verdict=verdict, note=note)
+            if verdict == "contradicts":
+                self.contradicted[rid] = Check(old.id, old.channel, old.quote, True, old.quote_found, verdict, note,
+                                               False, "contradiction_dropped", old.current_text)
 
     def _check(self, draft: Draft, c: Citation) -> Check:
         chk = Check(c.id, c.channel, c.quote)
