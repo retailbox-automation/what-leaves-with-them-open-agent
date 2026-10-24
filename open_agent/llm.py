@@ -258,6 +258,12 @@ class NightshiftClient(TracedClient):
         if effort:
             extra["reasoning_effort"] = effort
         try:
+            if N.swap_enabled():
+                swap = N.ensure_lane(route.lane)
+                if swap["swapped"]:
+                    self.trace.event(self.agent, "lane_swap", provider="nightshift", **swap,
+                                     note="NIGHTSHIFT_SWAP=1: one Nemotron lane loaded at a time")
+                    t0 = time.perf_counter()     # the call's own latency starts once its lane is ready
             reply = N.chat(kwargs.get("messages") or [], agent=route.agent, scope=self.cfg.scope or N.new_scope(),
                            tools=kwargs.get("tools"), tool_choice=kwargs.get("tool_choice"),
                            temperature=kwargs.get("temperature", 0), timeout=self.cfg.timeout, extra=extra)
@@ -296,6 +302,26 @@ class NightshiftClient(TracedClient):
         msg["tool_calls"] = msg.get("tool_calls") or None
         return SimpleNamespace(choices=[SimpleNamespace(message=N._ns(msg), finish_reason=reply.finish_reason)],
                                model=r.routed_model, id=r.receipt_id)
+
+
+    # Nightshift chooses its plan from the non-system text by keywords (engine classify.js: "test", "fix", "plan",
+    # "decide", "json" ...). With the records in the user turn, a cite call was planned as code: planning, code_patch,
+    # then a 3-way mixture synthesis on the same lane (receipt rcpt_req_kin0ai9g: 154 s, 8,929 tokens, and no JSON).
+    # The data goes into the system message and the user turn is a short question, which keeps it one answer phase.
+    ASK = "Your reply?"
+
+    def ask_json(self, purpose: str, system: str, user: dict) -> tuple[dict | None, str]:
+        self.purpose = purpose
+        try:
+            completion = self.create(model=self.cfg.model, temperature=0, messages=[
+                {"role": "system", "content": system + "\n\nINPUT (JSON):\n" + json.dumps(user, ensure_ascii=False,
+                                                                                         default=str)},
+                {"role": "user", "content": self.ASK}])
+        finally:
+            self.purpose = "tool_loop"
+        content = completion.choices[0].message.content if completion.choices else ""
+        obj = parse_json_object(content or "")
+        return (obj, "") if obj is not None else (None, f"model reply was not a JSON object: {(content or '')[:120]!r}")
 
 
 def make_client(cfg: LLMConfig | None, trace, agent: str, client=None) -> TracedClient | None:

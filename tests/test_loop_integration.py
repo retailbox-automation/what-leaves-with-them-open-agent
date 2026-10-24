@@ -27,6 +27,7 @@ EDITED = "Per ADR-0009, the billing-api transfer is on hold. Sana Petrov remains
 ADR_LINE = ("Decision: Ownership of billing-api transfers from Sana Petrov (Payments) to Luca Ostrander (Platform) "
             "effective 2026-09-22.")
 QUESTION = "Who owns billing-api now?"
+MEMORY_COPY = (STALE + " Sana Petrov stays on as backup for 30 days. Send billing-api escalations to me.")  # msg-0148
 ROUTE = {"wlwt-investigator": (N.LIGHTNING, "nemotron-lightning"), "wlwt-verifier": (N.NANO, "nemotron-nano")}
 
 
@@ -112,9 +113,10 @@ class FakeNightshift:
             else:
                 msg["content"] = "Luca Ostrander owns billing-api."
         else:
-            user = json.loads(msgs[-1]["content"])
-            fn = {AG.CITE_PROMPT: self.cite, AG.REVISE_PROMPT: self.revise, AG.JUDGE_PROMPT: self.judge}[system]
-            msg["content"] = json.dumps(fn(user))
+            prompt, data = system.split("\n\nINPUT (JSON):\n", 1)      # the data rides in the system message
+            assert msgs[-1] == {"role": "user", "content": L.NightshiftClient.ASK}
+            fn = {AG.CITE_PROMPT: self.cite, AG.REVISE_PROMPT: self.revise, AG.JUDGE_PROMPT: self.judge}[prompt]
+            msg["content"] = json.dumps(fn(json.loads(data)))
         rid = f"rcpt_req_{len(self.envelopes):04d}"
         block = receipt_block(app, rid)
         self.envelopes.append(block["receipt_envelope"])
@@ -316,7 +318,7 @@ def test_a_changed_source_is_reported_on_its_own_line_not_blended_into_the_answe
     assert flag and flag[0]["removed_from_answer"].endswith("but Sana Petrov remains the owner of billing-api until "
                                                             "further notice.")
     # the Verifier judged the ADR claim without the conflict line, and the memory keeps the claim only
-    judged = [json.loads(r["body"]["messages"][1]["content"]) for r in ns.requests
+    judged = [json.loads(r["body"]["messages"][0]["content"].split("INPUT (JSON):\n", 1)[1]) for r in ns.requests
               if r.get("app") == "wlwt-verifier"][-1]
     assert "Conflict:" not in judged["answer"]
     assert out["write_gate"]["written"] and out["write_gate"]["conflicts_not_written"] == ["msg-0148"]
@@ -377,3 +379,37 @@ def test_no_feedback_for_an_answer_that_states_no_result(graph, tmp_path, monkey
     fb = R.memory_feedback(graph, {"ids": ["mem-1"], "memories": []}, "absence_confirmed", t)
     assert fb["given"] is False and "not a verdict" in fb["reason"]
     assert R.memory_feedback(graph, {"ids": []}, "verified", t)["given"] is False
+
+
+def test_a_changed_record_the_model_did_not_cite_is_still_found_and_flagged(graph, ns, trace):
+    """Nemotron Lightning often cites only ADR-0009; the memory's answer also rests on msg-0148, which was edited."""
+    ns.cite = lambda u: {"answer": "Luca Ostrander owns billing-api since 2026-09-22.",
+                         "citations": [{"id": "ADR-0009", "quote": ADR_LINE, "claim": "Luca Ostrander owns billing-api"}]}
+    ns.revise = lambda u: {"answer": "Luca Ostrander owns billing-api since 2026-09-22.",
+                           "citations": [{"id": "ADR-0009", "quote": ADR_LINE}]}
+    src = LocalSample()
+    original = R.tamper(src, "msg-0148", EDITED, trace)
+    try:
+        out = R.investigate(QUESTION, graph, src, trace, nightshift_cfg(), sample=False)
+    finally:
+        R.restore(src, "msg-0148", original, trace)
+    first = out["rounds_detail"][0]
+    assert first["accepted"] is False and first["ignored"] == ["msg-0148"]          # rejected: changed, unmentioned
+    assert [c["id"] for c in first["checks"]] == ["ADR-0009"] and first["checks"][0]["accepted"]
+    reread = [e for e in trace.events if e["step"] == "evidence_reread"]
+    assert [(e["record_id"], e["changed"]) for e in reread] == [("msg-0148", True)]
+    assert out["status"] == "verified" and out["rounds"] == 2
+    assert out["answer"] == ("Luca Ostrander owns billing-api since 2026-09-22 [ADR-0009]. Conflict: msg-0148 (chat "
+                             f'message) was edited after the memory read it and now says "{EDITED}"; the earlier quote '
+                             f'"{MEMORY_COPY}" is no longer in the record. Flagged for a human.')
+    revise = [r for r in ns.requests if r.get("body") and AG.REVISE_PROMPT in r["body"]["messages"][0]["content"]]
+    shown = json.loads(revise[0]["body"]["messages"][0]["content"].split("INPUT (JSON):\n", 1)[1])
+    assert shown["must_address"] == ["msg-0148"]
+
+
+def test_an_unchanged_uncited_record_is_reread_and_not_flagged(graph, ns, trace):
+    ns.cite = lambda u: {"answer": "Luca Ostrander owns billing-api since 2026-09-22.",
+                         "citations": [{"id": "ADR-0009", "quote": ADR_LINE}]}
+    out = R.investigate(QUESTION, graph, LocalSample(), trace, nightshift_cfg(), sample=False)
+    assert out["status"] == "verified" and out["rounds"] == 1 and out["conflicts"] == []
+    assert [(e["record_id"], e["changed"]) for e in trace.events if e["step"] == "evidence_reread"] == [("msg-0148", False)]

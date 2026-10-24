@@ -73,7 +73,10 @@ REASON_TEXT = {"quote_not_in_record": "the quoted sentence is not in the record 
                "model_contradicts": "the record as it reads now contradicts the answer",
                "model_unrelated": "the record as it reads now does not speak to the answer",
                "contradiction_dropped": "this record contradicted the answer and was dropped without a word; say "
-                                        "what it says now, or change the answer"}
+                                        "what it says now, or change the answer",
+               "evidence_changed": "the memory's answer rests on this record, and it changed at its source since the "
+                                   "memory read it"}
+MAX_EVIDENCE_REREADS = 12
 
 
 @dataclass
@@ -319,8 +322,10 @@ class Investigator:
                                       "reason": REASON_TEXT.get(c.reason, c.reason), "verdict": c.verdict,
                                       "note": c.note, "current_lines": quotable(c.current_text or "")}
                                      for c in review.checks]
-            ctx["verifier_notes"] += [{"id": c.id, "quote": c.quote, "accepted": False, "verdict": "contradicts",
-                                       "reason": REASON_TEXT["contradiction_dropped"], "note": c.note,
+            ctx["verifier_notes"] += [{"id": c.id, "quote": c.quote, "accepted": False,
+                                       "verdict": c.verdict or "changed at its source",
+                                       "reason": REASON_TEXT["evidence_changed" if c.reason == "evidence_changed"
+                                                             else "contradiction_dropped"], "note": c.note,
                                        "current_lines": quotable(c.current_text or "")} for c in review.ignored_checks]
             ctx["verifier_summary"] = review.notes
             ctx["must_address"] = list(dict.fromkeys(list(self.conflicts) + review.contradicted))
@@ -445,6 +450,7 @@ class Verifier:
         self.client = None if sample else _client(llm, trace, "Verifier", client)
         self.contradicted: dict[str, Check] = {}   # record id -> its last "contradicts" check, over all rounds
         self.supported: dict[str, Check] = {}      # records accepted in an earlier round
+        self.changed: dict[str, Check] = {}        # uncited records the answer rests on that changed at their source
 
     def review(self, draft: Draft) -> Review:
         rv = Review(draft.round)
@@ -471,20 +477,48 @@ class Verifier:
         # A record that contradicted the answer may be answered or cited again, but not dropped without a word.
         self.contradicted.update({c.id: c for c in rv.checks if c.verdict == "contradicts" and c.record_found})
         cited = {c.id for c in draft.citations}
+        if draft.round == 1:
+            self._reread_evidence(draft, cited)
         self._recheck_dropped(draft, cited)
         self.supported.update({c.id: c for c in rv.checks if c.accepted})
         rv.contradicted = list(self.contradicted)
-        rv.ignored = [i for i in self.contradicted if i not in cited and not _mentions(draft.answer, i)]
+        flagged = {**self.changed, **self.contradicted}
+        rv.ignored = [i for i in flagged if i not in cited and not _mentions(draft.answer, i)]
         if rv.ignored:
             rv.accepted, rv.needs_revision = False, True
-            rv.notes += [f"{i}: {REASON_TEXT['contradiction_dropped']}; it says: {self.contradicted[i].note}"
-                         for i in rv.ignored]
-            rv.ignored_checks = [self.contradicted[i] for i in rv.ignored]
+            rv.notes += [f"{i}: {REASON_TEXT['contradiction_dropped']}; it says: {flagged[i].note}"
+                         if i in self.contradicted else f"{i}: {REASON_TEXT['evidence_changed']}; it now reads: "
+                         f"{_flat(flagged[i].current_text or '', 240)}" for i in rv.ignored]
+            rv.ignored_checks = [flagged[i] for i in rv.ignored]
         self.trace.event("Verifier", "verdict", round=draft.round, accepted=rv.accepted, target_agent=(
             "Investigator" if rv.needs_revision else "write-gate" if rv.accepted else "final"),
                          checks=[{k: v for k, v in asdict(c).items() if k != "current_text"} for c in rv.checks],
                          absence=rv.absence, ignored=rv.ignored, notes=rv.notes)
         return rv
+
+    def _reread_evidence(self, draft: Draft, cited: set[str]) -> None:
+        """The records the memory's answer rests on but the draft does not cite are re-read by id too. One that
+        changed at its source since the memory read it may not pass without a word: the answer has to name it
+        (the Investigator adds a conflict line). Deterministic, so it does not depend on what the model cited."""
+        for rid, rec in list(draft.records.items())[:MAX_EVIDENCE_REREADS]:
+            if rid in cited or rid in self.changed or rec["channel"] not in SYSTEM_OF:
+                continue
+            sql = by_id(rec["channel"], rid)
+            try:
+                rows, secs = self.source.sql(sql)
+            except SourceUnavailable as exc:
+                self.trace.event("Verifier", "evidence_reread", status="error", endpoint=self.source.endpoint,
+                                 sql=sql, record_id=rid, error=str(exc))
+                continue
+            now = str(rows[0].get("text") or "") if rows else None
+            changed = now is not None and _flat(now, 10**6) != _flat(rec["text"], 10**6)
+            self.trace.event("Verifier", "evidence_reread", endpoint=self.source.endpoint,
+                             source=SYSTEM_OF[rec["channel"]], sql=sql, record_id=rid, rows=len(rows),
+                             seconds=round(secs, 3), changed=changed, cited=False)
+            if changed:
+                self.changed[rid] = Check(rid, rec["channel"], _flat(rec["text"], 300), True, False, "",
+                                          "changed at its source since the memory read it", False,
+                                          "evidence_changed", now)
 
     def _recheck_dropped(self, draft: Draft, cited: set[str]) -> None:
         """A record accepted in an earlier round that the new draft neither cites nor names is judged again

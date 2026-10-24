@@ -1,0 +1,62 @@
+{
+  "run_id": "20261024T123207Z-a1bd",
+  "mode": "live",
+  "endpoint": "zetaris",
+  "question": "Who owns payroll-export?",
+  "llm": {
+    "endpoint": "http://localhost:11434/v1",
+    "investigator_model": "nemotron-3-nano:30b-a3b-q4_K_M",
+    "verifier_model": "nemotron-3-nano:30b-a3b-q4_K_M"
+  },
+  "status": "absence_confirmed",
+  "answer": "There is no system named 'payroll-export' in this memory.",
+  "answer_author": "template",
+  "citations": [],
+  "dropped_citations": [],
+  "notices": [],
+  "absence_checks": [
+    {
+      "term": "payroll-export",
+      "ids": [],
+      "accepted": true,
+      "states_absence": true,
+      "reason": "absent from all three systems"
+    }
+  ],
+  "contradictions_unaddressed": [],
+  "rounds": 1,
+  "revisions": 0,
+  "rounds_detail": [
+    {
+      "round": 1,
+      "accepted": true,
+      "notes": [],
+      "ignored": [],
+      "checks": []
+    }
+  ],
+  "verdict_counts": {},
+  "quote_checks": {
+    "total": 0,
+    "found": 0
+  },
+  "write_gate": {
+    "written": false,
+    "reason": "the write gate keeps a finding only with a verified source; nothing written"
+  },
+  "investigator_path": "llm",
+  "agents": [
+    {
+      "name": "Investigator",
+      "id": "agent:investigator",
+      "role": "answers from the memory graph with cited records; revises on the Verifier's notes"
+    },
+    {
+      "name": "Verifier",
+      "id": "agent:verifier",
+      "role": "re-reads each cited record by id at its source; quote check, then a model judgement"
+    }
+  ],
+  "execution_time_seconds": 1.84,
+  "trace_file": "logs/trace-20261024T123207Z-a1bd.jsonl"
+}
