@@ -1,0 +1,112 @@
+/* RetailBox W1 «Выделение» — rb-brand.css (30.09.2026). Правила употребления: brand/README.md, ~/.claude/rules-ondemand/79-retailbox-brand-w1.md.
+   Профиль движения — класс на корне (html) или на блоке: .rb-motion-full (по умолчанию) | .rb-motion-calm | .rb-motion-static.
+   Печать, PDF (@media print и html.print) и prefers-reduced-motion — всегда статичный последний кадр. */
+:root {
+  --rb-ink: #0b1030;           /* буквы логотипа на светлом */
+  --rb-acc: #4a9fd8;           /* голубой RetailBox: плашка логотипа и Mikh[ai]l */
+  --rb-knk: #ffffff;           /* AI по плашке */
+  --rb-hl-bg: #4a9fd8;         /* плашка выделения фразы; в доке клиента = акцент клиента */
+  --rb-hl-fg: #ffffff;         /* текст под плашкой */
+  --rb-muted: #6b7280;
+  --rb-ease: cubic-bezier(.45, 0, .3, 1);
+}
+.rb-on-dark { --rb-ink: #f3f5ff; --rb-muted: #a3aac4; }
+
+/* ── логотип ─────────────────────────────────────────────────────── */
+.rb-logo { display: inline-flex; align-items: center; line-height: 0; vertical-align: middle; }
+.rb-logo svg { display: block; height: var(--rb-logo-h, 1.6em); width: auto; }
+.rb-f-ink { fill: var(--rb-ink); }
+.rb-f-acc { fill: var(--rb-acc); }
+.rb-f-knk { fill: var(--rb-knk); }
+.rb-logo, .rb-hl, .rb-ai, .rb-hl-in, .rb-prep { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+/* A1 «выделил»: каретка мигает перед AI → выделение прокатывается по AI → держится; цикл 6 с */
+.rb-a1-clip { transform-box: fill-box; transform-origin: 0 50%; }
+.rb-logo .rb-a1-clip { animation: rbA1clip 6s var(--rb-ease) infinite; }
+.rb-logo .rb-a1-car { animation: rbA1car 6s var(--rb-ease) infinite; }
+@keyframes rbA1car { 0%,7% { opacity: 1; transform: translateX(0) } 7.01%,14% { opacity: 0; transform: translateX(0) }
+  14.01%,21% { opacity: 1; transform: translateX(0) } 21.01%,27% { opacity: 0; transform: translateX(0) }
+  27.01% { opacity: 1; transform: translateX(0) } 47% { opacity: 1; transform: translateX(1464px) }
+  47.01%,100% { opacity: 0; transform: translateX(1464px) } }
+@keyframes rbA1clip { 0%,27% { transform: scaleX(0) } 47% { transform: scaleX(1) } 90% { transform: scaleX(1) } 90.01%,100% { transform: scaleX(0) } }
+
+/* calm: одна прокрутка (≈3 с) и держится, без петли */
+.rb-motion-calm .rb-logo .rb-a1-clip { animation: rbA1clipOnce 3s var(--rb-ease) both; }
+.rb-motion-calm .rb-logo .rb-a1-car { animation: rbA1carOnce 3s var(--rb-ease) both; }
+@keyframes rbA1carOnce { 0%,14% { opacity: 1; transform: translateX(0) } 14.01%,28% { opacity: 0; transform: translateX(0) }
+  28.01%,42% { opacity: 1; transform: translateX(0) } 42.01%,54% { opacity: 0; transform: translateX(0) }
+  54.01% { opacity: 1; transform: translateX(0) } 94% { opacity: 1; transform: translateX(1464px) }
+  94.01%,100% { opacity: 0; transform: translateX(1464px) } }
+@keyframes rbA1clipOnce { 0%,54% { transform: scaleX(0) } 94%,100% { transform: scaleX(1) } }
+
+/* static: последний кадр, без движения */
+.rb-motion-static .rb-logo .rb-a1-clip { animation: none; transform: none; }
+.rb-motion-static .rb-logo .rb-a1-car { animation: none; opacity: 0; }
+
+/* ── выделение фразы (.rb-hl) ─────────────────────────────────────────
+   Главная фраза — сплошная плашка; прокатывается один раз при появлении (rbReveal) и при входе на слайд (rbPlay).
+   Три слоя фона: белый текст (обрезан по буквам) · исходный цвет текста · плашка.
+   Прокрутка = ширина 1-го и 3-го слоя 0 → 100%; буквы выворачиваются ровно по краю плашки, по строкам подряд. */
+.rb-hl {
+  background-image: linear-gradient(var(--rb-hl-fg), var(--rb-hl-fg)), linear-gradient(currentColor, currentColor),
+    linear-gradient(var(--rb-hl-bg), var(--rb-hl-bg));
+  background-repeat: no-repeat;
+  background-size: 100% 100%, 100% 100%, 100% 100%;
+  -webkit-background-clip: text, text, padding-box;
+  background-clip: text, text, padding-box;
+  -webkit-text-fill-color: transparent;
+  padding: 0 .08em;
+}
+.rb-hl::selection { -webkit-text-fill-color: #fff; background: #0b1030; }
+.rb-hl.rb-armed { background-size: 0 100%, 100% 100%, 0 100%; }       /* ждёт появления (rbReveal) */
+.rb-hl.rb-play { animation: rbHlRoll .8s var(--rb-ease) both; }        /* один проход (rbPlay) */
+@keyframes rbHlRoll { from { background-size: 0 100%, 100% 100%, 0 100% } to { background-size: 100% 100%, 100% 100%, 100% 100% } }
+
+/* static — сразу выделено */
+.rb-motion-static .rb-hl { animation: none; background-size: 100% 100%, 100% 100%, 100% 100%; }
+
+/* браузер без background-clip:text — простая плашка */
+@supports not ((-webkit-background-clip: text) or (background-clip: text)) {
+  .rb-hl { background: var(--rb-hl-bg); color: var(--rb-hl-fg); -webkit-text-fill-color: currentColor; }
+}
+
+/* ── статичные плашки: Mikh[ai]l (.rb-ai, наш голубой) и ai внутри слова (.rb-hl-in, em[ai]l — цвет фразы) ──
+   Никогда не анимируются (решение Михаила 30.09: «Mikh[ai]l статично»). .rb-hl-in без полей: слово остаётся словом
+   и на экране, и в печати (поля .rb-hl давали «em ai l» с зазорами). */
+.rb-ai, .rb-hl-in {
+  background: var(--rb-hl-bg); color: var(--rb-hl-fg); -webkit-text-fill-color: var(--rb-hl-fg);
+  animation: none !important;
+}
+.rb-ai { --rb-hl-bg: var(--rb-acc); --rb-hl-fg: var(--rb-knk); padding: 0 .04em; }   /* наш голубой всегда */
+.rb-hl-in { padding: 0; margin: 0; white-space: nowrap; -webkit-box-decoration-break: slice; box-decoration-break: slice; }
+.rb-ai::selection, .rb-hl-in::selection { -webkit-text-fill-color: #fff; background: #0b1030; }
+
+@media (forced-colors: active) {
+  .rb-hl, .rb-ai, .rb-hl-in { background: Highlight; color: HighlightText; -webkit-text-fill-color: HighlightText; forced-color-adjust: none; }
+}
+
+/* ── строка бренда: [клиент] × [W1] prepared by Mikh[ai]l ──────────── */
+.rb-brandline { display: flex; align-items: center; flex-wrap: wrap; gap: .55em; font-size: var(--rb-brand-size, 14px); line-height: 1.2; }
+.rb-client { display: inline-flex; align-items: center; line-height: 0; color: var(--rb-client-ink, currentColor); }
+.rb-client svg, .rb-client img { display: block; height: var(--rb-client-h, 1.5em); width: auto; }
+.rb-x { color: var(--rb-muted); font-weight: 400; }
+.rb-brandline .rb-logo svg { height: var(--rb-logo-h, 1.55em); }
+.rb-prep { font-size: .74em; font-weight: 500; color: var(--rb-muted); white-space: nowrap; margin-left: .15em; }
+.rb-prep .rb-who { color: var(--rb-ink); font-weight: 600; }
+
+/* ── печать, PDF, «уменьшить движение»: статичный последний кадр ──────── */
+html.print .rb-logo .rb-a1-clip { animation: none !important; transform: none !important; }
+html.print .rb-logo .rb-a1-car { animation: none !important; opacity: 0 !important; }
+html.print .rb-hl, html.print .rb-hl-in {
+  animation: none !important; background: var(--rb-hl-bg) !important; color: var(--rb-hl-fg) !important; -webkit-text-fill-color: var(--rb-hl-fg) !important;
+}
+@media print {
+  .rb-logo .rb-a1-clip { animation: none !important; transform: none !important; }
+  .rb-logo .rb-a1-car { animation: none !important; opacity: 0 !important; }
+  .rb-hl, .rb-hl-in { animation: none !important; background: var(--rb-hl-bg) !important; color: var(--rb-hl-fg) !important; -webkit-text-fill-color: var(--rb-hl-fg) !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rb-logo .rb-a1-clip { animation: none !important; transform: none !important; }
+  .rb-logo .rb-a1-car { animation: none !important; opacity: 0 !important; }
+  .rb-hl { animation: none !important; background-size: 100% 100%, 100% 100%, 100% 100% !important; }
+}
