@@ -94,6 +94,10 @@ def restore(source, record_id: str, original: str, trace: Trace) -> bool:
 def write_finding(inv: Investigator, draft, review, trace: Trace) -> dict:
     """The verified answer goes through honest_memory's write gate as a Finding citing only verified records."""
     ids = [c.id for c in review.checks if c.accepted]
+    if review.ignored:
+        reason = f"records contradict the answer and it does not say so ({', '.join(review.ignored)}); nothing written"
+        trace.event("Investigator", "write_gate", status="skipped", reason=reason)
+        return {"written": False, "reason": reason}
     if not ids:
         reason = "the write gate keeps a finding only with a verified source; nothing written"
         trace.event("Investigator", "write_gate", status="skipped", reason=reason)
@@ -118,6 +122,8 @@ def write_finding(inv: Investigator, draft, review, trace: Trace) -> dict:
 
 def status_of(draft, reviews) -> str:
     last = reviews[-1]
+    if last.ignored:
+        return "contradicted"
     if last.accepted:
         return "verified" if last.checks else "absence_confirmed" if last.absence else "no_claim"
     return "partially_verified" if any(c.accepted for c in last.checks) else "unverified"
@@ -165,8 +171,9 @@ def investigate(question: str, store: Store, source, trace: Trace, llm: LLMConfi
                     + (f" At its source it now reads: \"{d['text_at_source_now'][:240]}\"" if d["text_at_source_now"]
                        and d["reason"] == "quote_not_in_record" else "") for d in gone],
         "absence_checks": last.absence,
+        "contradictions_unaddressed": last.ignored,
         "rounds": len(reviews), "revisions": len(reviews) - 1,
-        "rounds_detail": [{"round": r.round, "accepted": r.accepted, "notes": r.notes,
+        "rounds_detail": [{"round": r.round, "accepted": r.accepted, "notes": r.notes, "ignored": r.ignored,
                            "checks": [{"id": c.id, "accepted": c.accepted, "reason": c.reason, "verdict": c.verdict}
                                       for c in r.checks]} for r in reviews],
         "verdict_counts": dict(Counter(c.verdict.split(":")[0] for c in checks)),

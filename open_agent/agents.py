@@ -30,8 +30,8 @@ VERDICTS = ("supports", "contradicts", "unrelated")
 
 CITE_PROMPT = """You are agent:investigator. You answered a question from a company memory graph; now back the \
 answer with citations that another agent will check against the source systems.
-- Use only the records given. Each citation is a record id and a quote copied character for character from that \
-record's text: one sentence or one line, at least five words. Never paraphrase or shorten a quote.
+- Use only the records given. Each record comes as a list of lines. A citation is a record id and ONE of \
+its lines, copied exactly. Never join lines, never quote a whole record, never paraphrase or shorten a line.
 - Write the answer as one or two plain sentences that use only names, dates and ids found in the tool rows or the \
 records. Keep what the draft answer says unless a record contradicts it.
 - Cite at most 4 records, the ones that support the answer.
@@ -39,10 +39,11 @@ Reply with JSON only: {"answer": "...", "citations": [{"id": "...", "quote": "..
 
 REVISE_PROMPT = """You are agent:investigator. agent:verifier re-read every record you cited in its source system \
 and rejected some of your citations. Revise your answer from its notes.
-- For each record the notes give current_text: the record as its source system holds it now. Quote only from \
-current_text, character for character, one sentence or one line of at least five words.
-- Drop a citation whose current text no longer supports the answer. If what a record says now changes the answer, \
-change the answer and say what the record says now and that it changed since the memory read it.
+- For each record the notes give current_lines: the record as its source system holds it now, line by line. A \
+citation is a record id and ONE of its current_lines, copied exactly. Never join lines or quote a whole record.
+- Drop a citation whose current lines do not speak to the answer.
+- must_address lists the records the Verifier found contradicting your answer. Each must not just disappear: \
+change the answer to what the records say now, or name that record id in the answer and say what it says now.
 - Keep citations the Verifier accepted. Cite only records you were given.
 Reply with JSON only: {"answer": "...", "citations": [{"id": "...", "quote": "..."}]}"""
 
@@ -62,7 +63,9 @@ REASON_TEXT = {"quote_not_in_record": "the quoted sentence is not in the record 
                "record_missing": "the source system has no record with this id",
                "unreadable": "the source system could not be read",
                "model_contradicts": "the record as it reads now contradicts the answer",
-               "model_unrelated": "the record as it reads now does not speak to the answer"}
+               "model_unrelated": "the record as it reads now does not speak to the answer",
+               "contradiction_dropped": "this record contradicted the answer and was dropped without a word; say "
+                                        "what it says now, or change the answer"}
 
 
 @dataclass
@@ -110,6 +113,9 @@ class Review:
     accepted: bool = False
     needs_revision: bool = False
     notes: list[str] = field(default_factory=list)
+    ignored: list[str] = field(default_factory=list)   # records that contradicted the answer, then vanished from it
+    ignored_checks: list[Check] = field(default_factory=list)
+    contradicted: list[str] = field(default_factory=list)   # every record that contradicted the answer so far
 
 
 def _norm(text: str) -> str:
@@ -125,6 +131,11 @@ def sentences(text: str) -> list[str]:
     for line in (text or "").splitlines():
         out += [s.strip() for s in re.split(r"(?<=[.!?])\s+(?=[A-Z])", line) if s.strip()]
     return out
+
+
+def quotable(text: str) -> list[str]:
+    """The lines of a record a citation may quote, as the agents see them: one sentence or line each."""
+    return [s for s in sentences(text) if len(s.split()) >= MIN_QUOTE_WORDS and len(s) <= MAX_QUOTE_CHARS]
 
 
 def _client(cfg: LLMConfig | None, trace, agent: str, client) -> TracedClient | None:
@@ -189,12 +200,18 @@ class Investigator:
         useful = [a for a in draft.run.answers if a.outcome not in (A.UNKNOWN_ENTITY,)] or draft.run.answers
         ctx = {"question": draft.question, "draft_answer": draft.answer, "tool_rows": model_view(combined(useful)),
                "records": [{"id": r["id"], "source": SYSTEM_OF.get(r["channel"], r["channel"]), "title": r["title"],
-                            "text": r["text"]} for r in draft.records.values()]}
+                            "lines": quotable(r["text"])} for r in draft.records.values()]}
         if review:
             ctx["previous_citations"] = [asdict(c) for c in draft.citations]
             ctx["verifier_notes"] = [{"id": c.id, "quote": c.quote, "accepted": c.accepted,
                                       "reason": REASON_TEXT.get(c.reason, c.reason), "verdict": c.verdict,
-                                      "note": c.note, "current_text": c.current_text} for c in review.checks]
+                                      "note": c.note, "current_lines": quotable(c.current_text or "")}
+                                     for c in review.checks]
+            ctx["verifier_notes"] += [{"id": c.id, "quote": c.quote, "accepted": False, "verdict": "contradicts",
+                                       "reason": REASON_TEXT["contradiction_dropped"], "note": c.note,
+                                       "current_lines": quotable(c.current_text or "")} for c in review.ignored_checks]
+            ctx["verifier_summary"] = review.notes
+            ctx["must_address"] = review.contradicted
         return ctx
 
     def _cite_from_rows(self, draft: Draft) -> Draft:
@@ -203,8 +220,7 @@ class Investigator:
         key = [n for n in names if _mentions(draft.answer, n)]
         cites = []
         for rec in draft.records.values():
-            scored = [(sum(_mentions(s, n) for n in key), -i, s) for i, s in enumerate(sentences(rec["text"]))
-                      if len(s.split()) >= MIN_QUOTE_WORDS]
+            scored = [(sum(_mentions(s, n) for n in key), -i, s) for i, s in enumerate(quotable(rec["text"]))]
             best = max(scored, default=None)
             if best and best[0] > 0:
                 cites.append(Citation(rec["id"], rec["channel"], best[2]))
@@ -252,9 +268,23 @@ class Investigator:
             current = " ".join(c.current_text or "" for c in review.checks)
             new = self._from_model("revise", REVISE_PROMPT, self._context(draft, review), draft, extra_text=current)
         new = new or self._revise_from_rows(draft, review)
+        self._address_contradictions(new, review)
         new.round = review.round + 1
         self.trace.event("Investigator", "draft", target_agent="Verifier", **new.to_dict())
         return new
+
+    def _address_contradictions(self, new: Draft, review: Review) -> None:
+        """Like the sentence check on the model's sentence: a record that contradicted the answer is never dropped
+        without a word. If the revision neither cites nor names it, say what it reads now at its source."""
+        current = {c.id: c.current_text for c in review.checks + review.ignored_checks if c.current_text}
+        cited = {c.id for c in new.citations}
+        silent = [i for i in review.contradicted if i not in cited and not _mentions(new.answer, i)]
+        for i in silent:
+            text = re.sub(r"\s+", " ", current.get(i, "")).strip()
+            new.answer += (f' {i} says otherwise now: "{text[:240]}"' if text else f" {i} contradicts this answer.")
+        if silent:
+            self.trace.event("Investigator", "revise", status="warning", reason="the revision dropped records that "
+                             "contradict the answer without a word; added what they say now", records=silent)
 
     def _revise_from_rows(self, draft: Draft, review: Review) -> Draft:
         """No model: keep the accepted citations, drop the rejected ones and say why in the answer."""
@@ -280,6 +310,7 @@ class Verifier:
     def __init__(self, source, trace, llm: LLMConfig | None = None, client=None, sample: bool = False):
         self.source, self.trace, self.sample = source, trace, sample
         self.client = None if sample else _client(llm, trace, "Verifier", client)
+        self.contradicted: dict[str, Check] = {}   # record id -> its last "contradicts" check, over all rounds
 
     def review(self, draft: Draft) -> Review:
         rv = Review(draft.round)
@@ -303,10 +334,20 @@ class Verifier:
                      for c in rv.checks if not c.accepted]
         rv.notes += [f"{a['term']}: mentioned in the source systems ({', '.join(a['ids'])})" for a in rv.absence
                      if not a["accepted"]]
+        # A record that contradicted the answer may be answered or cited again, but not dropped without a word.
+        self.contradicted.update({c.id: c for c in rv.checks if c.verdict == "contradicts" and c.record_found})
+        rv.contradicted = list(self.contradicted)
+        cited = {c.id for c in draft.citations}
+        rv.ignored = [i for i in self.contradicted if i not in cited and not _mentions(draft.answer, i)]
+        if rv.ignored:
+            rv.accepted, rv.needs_revision = False, True
+            rv.notes += [f"{i}: {REASON_TEXT['contradiction_dropped']}; it says: {self.contradicted[i].note}"
+                         for i in rv.ignored]
+            rv.ignored_checks = [self.contradicted[i] for i in rv.ignored]
         self.trace.event("Verifier", "verdict", round=draft.round, accepted=rv.accepted, target_agent=(
             "Investigator" if rv.needs_revision else "write-gate" if rv.accepted else "final"),
                          checks=[{k: v for k, v in asdict(c).items() if k != "current_text"} for c in rv.checks],
-                         absence=rv.absence, notes=rv.notes)
+                         absence=rv.absence, ignored=rv.ignored, notes=rv.notes)
         return rv
 
     def _check(self, draft: Draft, c: Citation) -> Check:

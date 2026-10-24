@@ -269,7 +269,8 @@ def judge_by_text(user):
 
 def revise_drop(user):
     notes = {n["id"]: n for n in user["verifier_notes"]}
-    assert notes["msg-0148"]["accepted"] is False and notes["msg-0148"]["current_text"] == EDITED
+    assert notes["msg-0148"]["accepted"] is False and notes["msg-0148"]["current_lines"] == AG.quotable(EDITED)
+    assert all(len(line) <= AG.MAX_QUOTE_CHARS and "\n" not in line for r in user["records"] for line in r["lines"])
     return {"answer": "Luca Ostrander owns billing-api since 2026-09-22; msg-0148 now says the transfer is on hold.",
             "citations": [{"id": "ADR-0009", "quote": ADR_LINE}]}
 
@@ -314,6 +315,68 @@ def test_model_revision_is_capped(graph, trace):
     assert out["rounds"] == 3 and out["revisions"] == 2 and stubborn.calls.count("revise") == 2
     assert out["status"] == "partially_verified"
     assert out["write_gate"]["source_ids"] == ["ADR-0009"]      # only what was verified reaches the gate
+
+
+def test_investigator_names_a_contradicting_record_its_model_dropped(graph, trace):
+    src = LocalSample()
+    original = R.tamper(src, "msg-0148", EDITED, trace)
+    silent = {"answer": "Luca Ostrander owns billing-api since 2026-09-22.", "citations": [{"id": "ADR-0009", "quote": ADR_LINE}]}
+    try:
+        out = R.investigate(QUESTION, graph, src, trace, model_cfg(), sample=False,
+                            investigator_client=FakeOpenAI(cite_stale, revise=lambda u: silent),
+                            verifier_client=FakeOpenAI(None, judge=judge_by_text))
+    finally:
+        R.restore(src, "msg-0148", original, trace)
+    assert out["status"] == "verified" and out["rounds"] == 2
+    assert out["answer"] == f'Luca Ostrander owns billing-api since 2026-09-22. msg-0148 says otherwise now: "{EDITED}"'
+    assert any(e["step"] == "revise" and e["status"] == "warning" for e in trace.events)
+
+
+def test_verifier_rejects_a_contradicting_record_dropped_silently(graph, trace):
+    inv = AG.Investigator(graph, trace)
+    ver = AG.Verifier(LocalSample(), trace, sample=True)
+    draft = inv.investigate(QUESTION)
+    contradicting = AG.Check("msg-0148", "chat", STALE, record_found=True, verdict="contradicts", note="on hold now",
+                             current_text=EDITED)
+    ver.contradicted["msg-0148"] = contradicting           # as if an earlier round had judged it
+    draft.citations = [c for c in draft.citations if c.id == "ADR-0009"]
+    draft.answer = "Luca Ostrander owns billing-api."
+    rv = ver.review(draft)
+    assert rv.ignored == ["msg-0148"] and not rv.accepted and rv.needs_revision
+    assert rv.ignored_checks == [contradicting] and rv.contradicted == ["msg-0148"]
+    draft.answer += " msg-0148 now says the transfer is on hold."
+    assert ver.review(draft).accepted
+
+
+def test_a_contradicting_record_cannot_be_dropped_silently(graph, trace):
+    src = LocalSample()
+    original = R.tamper(src, "msg-0148", EDITED, trace)
+    seen = []
+    answers = iter([{"answer": "Luca Ostrander owns billing-api since 2026-09-22.",      # drops msg-0148, no word
+                     "citations": [{"id": "ADR-0009", "quote": ADR_LINE}]},
+                    {"answer": "Luca Ostrander owns billing-api since 2026-09-22; msg-0148 now says the transfer is "
+                               "on hold.", "citations": [{"id": "ADR-0009", "quote": ADR_LINE}]}])
+    fake = FakeOpenAI(cite_stale, revise=lambda u: seen.append(u) or next(answers))
+    try:
+        out = R.investigate(QUESTION, graph, src, trace, model_cfg(), sample=False, investigator_client=fake,
+                            verifier_client=FakeOpenAI(None, judge=judge_by_text))
+    finally:
+        R.restore(src, "msg-0148", original, trace)
+    assert out["rounds"] == 2 and out["status"] == "verified" and "msg-0148 says otherwise now" in out["answer"]
+    assert seen[0]["must_address"] == ["msg-0148"]
+    note = [n for n in seen[0]["verifier_notes"] if n["id"] == "msg-0148"]
+    assert note and note[0]["current_lines"] == AG.quotable(EDITED) and note[0]["verdict"] == "contradicts"
+
+
+def test_unaddressed_contradiction_is_not_written(graph, trace):
+    inv = AG.Investigator(graph, trace)
+    draft = inv.investigate(QUESTION)
+    ok = AG.Check("ADR-0009", "doc", ADR_LINE, record_found=True, quote_found=True, verdict="supports", accepted=True,
+                  reason="ok")
+    rv = AG.Review(3, checks=[ok], ignored=["msg-0148"], contradicted=["msg-0148"])
+    gate = R.write_finding(inv, draft, rv, trace)
+    assert gate["written"] is False and "contradict" in gate["reason"]
+    assert R.status_of(draft, [rv]) == "contradicted"
 
 
 def test_model_down_falls_back_everywhere(graph, trace):
