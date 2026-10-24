@@ -1,0 +1,137 @@
+{
+  "question": "Who currently owns billing-api?",
+  "agent": "agent:support",
+  "session": "s-1acf0b35",
+  "mode": "llm",
+  "outcome": "answered_with_path",
+  "sentence": "Luca Ostrander currently owns billing-api, having taken ownership on 2026‑09‑22 15:28 UTC.",
+  "sentence_source": "model",
+  "check": "ok",
+  "rejected": "",
+  "rule": "",
+  "errors": [],
+  "ms": 26626.7,
+  "memory_ids": [],
+  "answers": [
+    {
+      "outcome": "answered_with_path",
+      "tool": "current_owner",
+      "args": {
+        "system": "billing-api"
+      },
+      "rows": [
+        {
+          "owner": "Luca Ostrander",
+          "team": "Platform",
+          "system": "billing-api",
+          "since": "2026-09-22T15:28:00Z",
+          "previous_owner": "Sana Petrov",
+          "previous_team": "Payments",
+          "previous_until": "2026-09-22T15:28:00Z",
+          "source_ids": [
+            "ADR-0009",
+            "msg-0148"
+          ],
+          "gate_id": "GD-00176-76e59a6315"
+        }
+      ],
+      "paths": [
+        [
+          "Luca Ostrander",
+          "OWNS",
+          "billing-api",
+          "<-ABOUT",
+          "GD-00176-76e59a6315",
+          "CITES",
+          "ADR-0009"
+        ],
+        [
+          "Luca Ostrander",
+          "OWNS",
+          "billing-api",
+          "<-ABOUT",
+          "GD-00177-ba567d5983",
+          "CITES",
+          "ADR-0009"
+        ],
+        [
+          "Luca Ostrander",
+          "OWNS",
+          "billing-api",
+          "<-ABOUT",
+          "GD-00177-ba567d5983",
+          "CITES",
+          "msg-0148"
+        ]
+      ],
+      "sources": [
+        {
+          "id": "ADR-0009",
+          "title": "ADR-0009: Transfer billing-api ownership from Sana Petrov to Luca Ostrander",
+          "ts": "2026-09-22T15:28:00Z",
+          "channel": "doc",
+          "author": "Selma Marsh"
+        },
+        {
+          "id": "msg-0148",
+          "title": "#platform",
+          "ts": "2026-09-22T17:31:00Z",
+          "channel": "chat",
+          "author": "Luca Ostrander"
+        }
+      ],
+      "receipts": [
+        {
+          "id": "GD-00177-ba567d5983",
+          "outcome": "CONFIRM",
+          "reasons": [
+            "already_current"
+          ],
+          "ts": "2026-09-22T17:31:00Z",
+          "predicate": "OWNS",
+          "subject": "Luca Ostrander",
+          "object": "billing-api",
+          "cites": [
+            "ADR-0009",
+            "msg-0148"
+          ],
+          "claim": "msg-0148"
+        },
+        {
+          "id": "GD-00176-76e59a6315",
+          "outcome": "SUPERSEDE",
+          "reasons": [
+            "newer_than_current"
+          ],
+          "ts": "2026-09-22T15:28:00Z",
+          "predicate": "OWNS",
+          "subject": "Luca Ostrander",
+          "object": "billing-api",
+          "cites": [
+            "ADR-0009"
+          ],
+          "claim": "ADR-0009"
+        }
+      ],
+      "trace": [
+        {
+          "tool": "current_owner",
+          "args": {
+            "system": "billing-api"
+          },
+          "ms": 10.63,
+          "rows": 1,
+          "queries": [
+            "MATCH (n:System) WHERE n.name = $n RETURN 'System' AS label, n.name AS name",
+            "MATCH (p:Person)-[r:OWNS]->(s:System {name: $system}) OPTIONAL MATCH (p)-[:MEMBER_OF]->(t:Team) OPTIONAL MATCH prov = (s)<-[:ABOUT]-(g:GateDecision)-[:CITES]->(e:Episode) WHERE g.predicate = 'OWNS' AND g.subject = p.name AND g.outcome IN $ok AND e.id IN r.source_ids RETURN p.name, t.name, r.valid_at, r.source_ids, r.gate_id, [n IN nodes(prov) | coalesce(n.name, n.id)], [x IN relationships(prov) | type(x)] ORDER BY e.id, g.ts",
+            "MATCH (q:Person)-[h:WAS]->(s:System {name: $system}) WHERE h.predicate = 'OWNS' OPTIONAL MATCH (q)-[:MEMBER_OF]->(t:Team) RETURN q.name, t.name, h.invalid_at ORDER BY h.invalid_at DESC LIMIT 1",
+            "UNWIND $ids AS i MATCH (g:GateDecision {id: i}) OPTIONAL MATCH (g)-[:CITES]->(e:Episode) RETURN g.id, g.outcome, g.reasons, g.ts, g.predicate, g.subject, g.object, collect(DISTINCT e.id), g.claim_episode",
+            "UNWIND $ids AS i MATCH (e:Episode {id: i}) RETURN e.id, e.title, e.ts, e.channel, e.author"
+          ]
+        }
+      ],
+      "sentence": "Luca Ostrander (Platform) owns billing-api, since 2026-09-22; before that Sana Petrov (Payments) until 2026-09-22. Sources: ADR-0009, msg-0148.",
+      "note": ""
+    }
+  ]
+}
