@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en" class="rb-motion-static">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What Leaves With Them, track 02</title>
+<link rel="stylesheet" href="assets/rb-brand.css">
+<style>
+  /* Deck: 8 slides, 1280x720 each, printed to deck/what-leaves-with-them-deck.pdf. Numbers and their sources: deck/NOTES.md. */
+  :root { --bg: #0b1224; --panel: rgba(22, 31, 56, 0.92); --ink: #eef2fb; --muted: #9aa6bf; --line: rgba(120, 140, 180, 0.32);
+          --blue: #4a9fd8; --green: #30a46c; --red: #e5484d; --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+          --rb-ink: #f3f5ff; --rb-muted: #9aa6bf; }
+  @page { size: 1280px 720px; margin: 0; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg); color: var(--ink);
+    font-family: "Inter", -apple-system, "Helvetica Neue", Arial, sans-serif; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .slide { width: 1280px; height: 720px; position: relative; overflow: hidden; padding: 54px 64px 46px;
+    background: radial-gradient(1200px 600px at 85% 0%, rgba(74, 159, 216, 0.10), transparent 60%), var(--bg);
+    page-break-after: always; break-after: page; display: flex; flex-direction: column; }
+  .slide:last-child { page-break-after: auto; break-after: auto; }
+  .top { display: flex; justify-content: space-between; align-items: center; font-size: 15px; color: var(--muted); }
+  .top .n { font-family: var(--mono); }
+  .rb-brandline { --rb-brand-size: 15px; }
+  .rb-logo img { height: 1.45em; width: auto; display: block; }
+  h1 { font-size: 46px; line-height: 1.12; margin: 26px 0 14px; letter-spacing: -0.01em; }
+  h2 { font-size: 36px; line-height: 1.15; margin: 22px 0 18px; letter-spacing: -0.01em; }
+  p, li { font-size: 21px; line-height: 1.45; color: #d3dbea; }
+  ul { margin: 0; padding-left: 1.1em; } li { margin: 4px 0; }
+  .k { color: var(--muted); }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: start; min-height: 0; }
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; align-items: start; }
+  .shot.half { height: 236px; width: auto; max-width: 100%; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 18px 22px; }
+  .card h3 { margin: 0 0 8px; font-size: 21px; }
+  .card p, .card li { font-size: 17px; line-height: 1.42; margin: 4px 0; }
+  .big { font-size: 64px; font-weight: 700; line-height: 1; }
+  .src { font-size: 13px; color: var(--muted); }
+  .foot { margin-top: auto; font-size: 13px; color: var(--muted); display: flex; justify-content: space-between; }
+  table { border-collapse: collapse; width: 100%; font-size: 17px; }
+  td, th { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; font-size: 14px; text-transform: uppercase; letter-spacing: 0.04em; }
+  code, .mono { font-family: var(--mono); font-size: 0.92em; }
+  .flow { display: grid; grid-template-columns: 1fr 1.25fr 1.25fr 1fr; gap: 18px; align-items: stretch; margin-top: 8px; }
+  .box { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; font-size: 16px; line-height: 1.38; }
+  .box b { display: block; font-size: 18px; margin-bottom: 4px; }
+  .box.z { border-color: rgba(74, 159, 216, 0.7); } .box.v { border-color: rgba(229, 72, 77, 0.6); } .box.g { border-color: rgba(48, 164, 108, 0.7); }
+  .arrow { text-align: center; color: var(--muted); font-size: 15px; margin: 10px 0 0; }
+  .loop { margin-top: 14px; border: 1px dashed rgba(229, 72, 77, 0.6); border-radius: 12px; padding: 10px 16px; font-size: 16px; color: #f2c4c6; }
+  .side { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 16px; }
+  pre.trace { margin: 0; background: #060b18; border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; font-family: var(--mono);
+    font-size: 12.6px; line-height: 1.5; color: #c8d2e6; white-space: pre-wrap; }
+  pre.trace .bad { color: #f2a5a8; } pre.trace .ok { color: #8fe3b6; }
+  .shot { width: 100%; border-radius: 10px; border: 1px solid var(--line); display: block; }
+  .pill { display: inline-block; font-family: var(--mono); font-size: 13px; padding: 2px 10px; border-radius: 999px; border: 1px solid rgba(48, 164, 108, 0.6); color: #8fe3b6; }
+  aside.notes { display: none; }
+</style>
+</head>
+<body>
+
+<!-- 1. The problem and target users -->
+<section class="slide">
+  <div class="top">
+    <div class="rb-brandline"><span class="rb-logo" role="img" aria-label="RetailBox"><img src="assets/retailbox-w1-color-dark.svg" alt="RetailBox"></span>
+      <span class="rb-prep">prepared by <span class="rb-who">Mikh<span class="rb-ai">ai</span>l</span></span></div>
+    <div>Open Agent Hackathon 2026 · Track 02 · The Agent That Can Explain Why <span class="n">· 1/8</span></div>
+  </div>
+  <h1>What Leaves With Them</h1>
+  <p style="font-size:26px; margin:0 0 26px; max-width: 1050px">When a colleague leaves, a team lead has to find out <span class="rb-hl">who owns what now, and why</span>, from chat, tickets and documents that disagree and keep changing.</p>
+  <div class="grid3">
+    <div class="card"><div class="big">67%</div><p>of 1,000 IT managers at large UK and US organizations are concerned about losing knowledge when people leave</p></div>
+    <div class="card"><div class="big">64%</div><p>say their organization has already lost knowledge that way</p></div>
+    <div class="card"><h3>Who it is for</h3><p>A team lead or new owner who asks "Who owns billing-api now?" or "Who decided ADR-0014?" and needs an answer they can check, not a confident guess from an old copy.</p></div>
+  </div>
+  <div class="foot"><span>Source: Sinequa press release, August 2022 (survey of 1,000 IT managers, UK and US)</span><span>Synthetic company: Quillfield Billing</span></div>
+  <aside class="notes">Numbers: Sinequa press release Aug 2022, linked in README section top. No other numbers on this slide.</aside>
+</section>
+
+<!-- 2. The solution -->
+<section class="slide">
+  <div class="top"><span>The solution</span><span class="n">2/8</span></div>
+  <h2>Two agents that check each other <span class="rb-hl">against the source</span></h2>
+  <div class="grid2">
+    <div>
+      <ul>
+        <li><b>Investigator</b> answers from a memory graph and cites every claim: record id, one quoted line, the claim it backs.</li>
+        <li><b>Verifier</b> re-reads each cited record through Zetaris, in the system it lives in. A quote that is not there any more is rejected, even if a model says it fits.</li>
+        <li>A rejection goes back with notes and the record as it reads now. The Investigator revises, at most twice.</li>
+        <li>Only an answer whose every citation survived is <b>stored</b>. Everything else says what was dropped and why.</li>
+      </ul>
+      <p class="k" style="font-size:17px; margin-top:18px">Output: answer · citations (system, id, quote, verdict) · dropped citations with the reason · rounds · stored or not · trace file</p>
+    </div>
+    <div><img class="shot" src="assets/panel-after-answer-card.png" alt="Panel: an answer card with the evidence the Verifier re-read at the source">
+      <p class="src">The panel (real screenshot, sample mode): the answer card shows DOC-14 and DOC-16, docs REST API, round 1, quote found.</p></div>
+  </div>
+  <aside class="notes">Screenshot: SUBMISSION/panel-after-answer-card.png, served by serve.py at commit c5b859c, sample mode.</aside>
+</section>
+
+<!-- 3. Agent workflow / architecture -->
+<section class="slide">
+  <div class="top"><span>Agent workflow</span><span class="n">3/8</span></div>
+  <h2>A loop, <span class="rb-hl">not a pipeline</span></h2>
+  <div class="flow">
+    <div class="box z"><b>Three systems</b>Postgres chat<br>tickets CSV<br>docs REST API<div class="arrow">registered in Zetaris</div></div>
+    <div class="box"><b>Memory graph</b>built from 3 SELECTs through Zetaris; pre-existing write gate (FalkorDB)<div class="arrow">H-MEM memories in front of the model</div></div>
+    <div class="box"><b>Investigator</b>graph tools (21) → answer + citations; Nemotron via Nightshift<div class="arrow">draft ↓</div></div>
+    <div class="box v"><b>Verifier</b>re-read by id through Zetaris → quote check (hard) → model judgement (Nemotron via Nightshift)</div>
+  </div>
+  <div class="loop">Rejected → notes + each record as its source holds it now → Investigator revises (max 2 revisions, 3 rounds) → Verifier again</div>
+  <div class="side">
+    <div class="box g"><b>All citations accepted</b>write gate stores a Finding; H-MEM keeps it as a long-term memory</div>
+    <div class="box"><b>Something left unverified</b>status says what was verified; nothing stored; dropped citations listed with the reason</div>
+    <div class="box"><b>Name in no system</b>one UNION ALL over all three systems → absence_confirmed, nothing stored</div>
+  </div>
+  <div class="foot"><span>Code: open_agent/run.py (loop), open_agent/agents.py (agents), open_agent/sources.py (SQL)</span><span>Trace: logs/trace-&lt;run_id&gt;.jsonl, one event per step</span></div>
+  <aside class="notes">21 tools: GET /health "tools": 21 (SUBMISSION/FRESH-CLONE-TEST.md). Max 2 revisions: MAX_REVISIONS in open_agent/run.py.</aside>
+</section>
+
+<!-- 4. Technical stack -->
+<section class="slide">
+  <div class="top"><span>Technical stack</span><span class="n">4/8</span></div>
+  <h2>Runs with <span class="rb-hl">one command</span>, no keys</h2>
+  <table>
+    <tr><th>Layer</th><th>What</th><th>Where in the repo</th></tr>
+    <tr><td>Data access</td><td>Zetaris 2.4.3.1, local bundle, Lightning SQL over Postgres (JDBC), CSV, REST</td><td class="mono">zetaris_spike/, open_agent/sources.py</td></tr>
+    <tr><td>Agents and loop</td><td>Python 3.12, plain code, OpenAI-compatible client</td><td class="mono">open_agent/</td></tr>
+    <tr><td>Models</td><td>NVIDIA Nemotron 3.5 Lightning 30B-A3B (Investigator), Nemotron 3 Nano 30B-A3B (Verifier)</td><td class="mono">docs/METERLESS.md</td></tr>
+    <tr><td>Model provider</td><td>Meterless Nightshift 1.2.1, headless, loopback only, signed receipts</td><td class="mono">open_agent/nightshift.py</td></tr>
+    <tr><td>Agent memory</td><td>Meterless H-MEM reference engine, pinned, Node sidecar</td><td class="mono">vendor/hmem/, open_agent/hmem_bridge.py</td></tr>
+    <tr><td>Graph, gate, tools</td><td>FalkorDB 6.0.2 (pre-existing core)</td><td class="mono">honest_memory/</td></tr>
+    <tr><td>Run path</td><td><code>docker compose up --build</code> · <code>POST /run</code> · SAMPLE_MODE on by default</td><td class="mono">serve.py, docker-compose.yml</td></tr>
+  </table>
+  <div class="foot"><span>Fresh clone, empty .env: build, up, 4 examples + 1 new question through POST /run, all success (SUBMISSION/FRESH-CLONE-TEST.md)</span><span>No GPU, no hosted API</span></div>
+  <aside class="notes">Versions: Zetaris 2.4.3.1 (zetaris_spike/README.md), Nightshift 1.2.1 (docs/METERLESS.md), FalkorDB 6.0.2 pinned by digest (docker-compose.yml).</aside>
+</section>
+
+<!-- 5. How Zetaris and Meterless were used -->
+<section class="slide">
+  <div class="top"><span>Sponsor technology</span><span class="n">5/8</span></div>
+  <h2>Zetaris for every read, <span class="rb-hl">Nightshift</span> for every model call</h2>
+  <div class="grid3">
+    <div class="card"><h3>Zetaris</h3>
+      <ul><li>3 SELECTs build the memory graph: 403 records, 0 field differences from the corpus</li>
+          <li>The Verifier re-reads each cited record by id; p50 0.11 s (chat), 0.18 s (docs) <!-- C-UPDATE --></li>
+          <li>Absence: one UNION ALL over the three systems</li>
+          <li>Spike: JOIN 45/45, tampered quotes 8/8 rejected</li></ul></div>
+    <div class="card"><h3>Meterless Nightshift</h3>
+      <ul><li>Primary provider for both agents, one app id per agent with a one-lane allowlist</li>
+          <li>Every response checked: routed model, lane, cost 0; a mismatch raises, it is not hidden</li>
+          <li>Receipts signed Ed25519 by the daemon, exported to <span class="mono">logs/receipts-*.jsonl</span> <!-- C-UPDATE --></li></ul></div>
+    <div class="card"><h3>Meterless H-MEM + NVIDIA</h3>
+      <ul><li>H-MEM stores answers that passed the gate, recalls them before the model answers, takes the Verifier's verdict as feedback (0.70 → 0.75 in the cross-session proof)</li>
+          <li>Nemotron 3.5 Lightning: Investigator (tool calls). Nemotron 3 Nano: Verifier (JSON verdicts)</li></ul></div>
+  </div>
+  <div class="foot"><span>Sources: docs/OPEN-AGENT-NEW-WORK.md (Measured), zetaris_spike/README.md, docs/METERLESS.md</span><span>Cursor: not used (optional per the organizer, 23 Oct)</span></div>
+  <aside class="notes">All numbers with files in deck/NOTES.md.</aside>
+</section>
+
+<!-- 6. What was unique -->
+<section class="slide">
+  <div class="top"><span>What was unique</span><span class="n">6/8</span></div>
+  <h2>The Verifier trusts <span class="rb-hl">the source</span>, not the memory and not a model</h2>
+  <div class="grid2">
+    <div>
+      <p>Before any answer counts, the Verifier goes back through Zetaris to the system that owns each cited record and re-reads the line. That check is plain code, and no model can overrule it.</p>
+      <p>In one untouched run, the Investigator's model quoted a chat sentence as if it were ADR-0009, and the Verifier's model said "supports". The quote check rejected it, and the revision quoted the ADR's own line.</p>
+      <p>Only answers that survived reach H-MEM, so the agents' memory does not learn from a stale or misquoted answer.</p>
+    </div>
+    <div class="card">
+      <h3>Tampered source, live run (Zetaris + Nemotron)</h3>
+      <p>msg-0148 edited in Postgres after the memory read it</p>
+      <ul><li>Round 1: <span class="mono">quote_not_in_record</span>, model note: "Sana Petrov remains the owner"</li>
+          <li>Round 2: verified on ADR-0009, the conflict named in the answer</li>
+          <li>Stored; the edit restored at the end</li></ul>
+      <p class="src">Round 1 rejected msg-0148 in 6 of 6 live runs; 4 of 6 ended verified, 2 unverified with nothing stored <!-- C-UPDATE --></p>
+    </div>
+  </div>
+  <aside class="notes">c454 misquote: docs/open-agent-runs-2026-10-24/trace-20261024T123225Z-c454.jsonl. Tamper: logs/trace-20261024T123154Z-720b.jsonl. 6-run counts: docs/OPEN-AGENT-NEW-WORK.md Measured table.</aside>
+</section>
+
+<!-- 7. Product visuals -->
+<section class="slide">
+  <div class="top"><span>Product visuals</span><span class="n">7/8</span></div>
+  <h2 style="margin-bottom:12px">The evidence is <span class="rb-hl">on screen</span> and in the trace</h2>
+  <div class="grid2" style="grid-template-columns: 1.05fr 1fr; gap: 22px">
+    <div><img class="shot" src="assets/card-after.png" alt="The answer card with the evidence the Verifier re-read at the source" style="width:100%">
+      <p class="src" style="margin:8px 0 0">The answer card, cropped from a real screenshot of the panel (sample mode). Everything below the divider is new: the Verifier's re-read of each record at its source system. Before, the card ended at the CONFIRM receipt (full screenshots: SUBMISSION/panel-before-answer-card.png, panel-after-answer-card.png).</p></div>
+<pre class="trace">logs/trace-20261024T123154Z-720b.jsonl  (live; abridged, field values verbatim)
+
+ 3 Operator     tamper_source  msg-0148  Postgres chat
+12 Verifier     reread         ADR-0009  docs REST API  0.188 s
+14 Verifier     check          ADR-0009  found=True  <span class="ok">supports</span>
+18 Verifier     reread         msg-0148  Postgres chat  0.36 s
+   SELECT * FROM (SELECT id, ts, author, title, text,
+   refs FROM WLWT_CHAT.chat) s WHERE s.id = 'msg-0148'
+20 Verifier     check          msg-0148  found=False
+   <span class="bad">contradicts · quote_not_in_record</span>
+   "The record states that Sana Petrov remains the
+    owner of billing-api until further notice..."
+22 Verifier     feedback       round 1 -> Investigator
+23 Investigator revise         round 2
+30 Verifier     check          ADR-0009  <span class="ok">supports</span>
+34 Verifier     verdict        round 2  accepted=True
+36 Investigator write_gate     <span class="ok">accepted</span>
+37 Operator     restore_source msg-0148
+38 Run          end            12.28 s  <span class="ok">verified</span></pre>
+  </div>
+  <aside class="notes">Trace lines: seq numbers and values from logs/trace-20261024T123154Z-720b.jsonl (lane A, commit 4cea9ed), model nemotron-3-nano:30b-a3b-q4_K_M on Ollama. C-UPDATE: replace with a Nightshift trace once lane C regenerates.</aside>
+</section>
+
+<!-- 8. Future enhancements -->
+<section class="slide">
+  <div class="top"><span>Future enhancements</span><span class="n">8/8</span></div>
+  <h2>Next: <span class="rb-hl">real systems</span>, same rule</h2>
+  <div class="grid2">
+    <ul>
+      <li>Refresh the memory graph when the Verifier finds a record changed at its source (today the catch is reported, the graph keeps the old copy).</li>
+      <li>Zetaris semantic layer with a read-only agent user, so the agents see only the views they need.</li>
+      <li>Case-insensitive absence checks and semantic recall in H-MEM (both lexical today).</li>
+      <li>A stronger Verifier model where Nemotron 3 Nano judged a reported conflict as a contradiction.</li>
+    </ul>
+    <ul>
+      <li>More sources behind Zetaris: meeting notes, HR system end dates, code ownership files.</li>
+      <li>A pilot on a real team's records, measured against the same benchmark questions.</li>
+      <li>Handoff cards that a successor confirms, written back through the same gate.</li>
+    </ul>
+  </div>
+  <div class="foot"><span>Repo: github.com/retailbox-automation/what-leaves-with-them-open-agent · MIT · pre-existing core declared in PRE-EXISTING.md</span><span>Limits: README section 10</span></div>
+  <aside class="notes">Limits behind each item: README section 10 and docs/OPEN-AGENT-NEW-WORK.md "Not done here, and limits".</aside>
+</section>
+
+</body>
+</html>

@@ -1,324 +1,282 @@
 # What Leaves With Them
 
-[![tests](https://github.com/retailbox-automation/what-leaves-with-them/actions/workflows/tests.yml/badge.svg)](https://github.com/retailbox-automation/what-leaves-with-them/actions/workflows/tests.yml) on FalkorDB 6.0.2 and 4.22 · MIT
+**Track:** 02, The Agent That Can Explain Why (Open Agent Hackathon 2026)
+**Sponsor technology:** Zetaris (one SQL endpoint over Postgres chat, a tickets CSV and a docs REST API) · Meterless Nightshift (primary model provider, signed receipts) and the Meterless H-MEM engine (agent memory) · NVIDIA Nemotron (one model per agent, through Nightshift)
+**Run:** `docker compose up --build`, then `curl -X POST localhost:8000/run -H 'content-type: application/json' -d @input_examples/02_tampered_source.json` (SAMPLE_MODE by default: no credentials, no network, no GPU)
 
-When someone leaves a company, the agent shows what leaves with them and builds the handoff, every line with a graph path back to its source records. It walks a company graph in FalkorDB from the person to the decisions they made, the systems those decisions constrain, the people and teams who own those systems, and the things nobody else is connected to once the person is gone.
+When a colleague leaves, a team lead has to find out who owns what now and why, from chat, tickets and documents that disagree. Two agents answer that kind of question. The Investigator answers from a memory graph and cites a record id and one quoted line for every claim. The Verifier re-reads each cited record through Zetaris, from the system it lives in, and rejects a quote that is not there any more. The Investigator then has to revise. Only an answer whose every citation survived is stored.
 
-In a 2022 survey of 1,000 IT managers at large organizations in the UK and US, 67% said they were concerned about losing knowledge and expertise when people leave, and 64% said their organization had already lost knowledge that way ([Sinequa press release, August 2022](https://www.sinequa.com/company/press/sinequa-finds-over-two-thirds-of-it-leaders-are-concerned-by-organizational-knowledge-loss-from-employee-turnover/)). We built it because people left our own team and took knowledge with them.
+In a 2022 survey of 1,000 IT managers at large organizations in the UK and US, 67% said they were concerned about losing knowledge and expertise when people leave, and 64% said their organization had already lost knowledge that way ([Sinequa press release, August 2022](https://www.sinequa.com/company/press/sinequa-finds-over-two-thirds-of-it-leaders-are-concerned-by-organizational-knowledge-loss-from-employee-turnover/)).
 
-**Try it: https://what-leaves.retailbox-automation.com**. Pick a person, move the depth slider from 1 to 4, press Remove, then Plan the handoff and answer the leaver's questions before the notice period runs out. Show Cypher lists every query the last step ran, with its time. Writes are locked on the public demo.
+**Built on a declared pre-existing core.** The memory graph, its write gate, tools, router, benchmark, red team and panel were built before the window for Graph Hacks (15 to 18 Oct 2026) and imported unchanged ([PRE-EXISTING.md](PRE-EXISTING.md)). New in the window (22 Oct onwards): the Zetaris integration, the Investigator and Verifier loop, Nightshift as the model provider, the H-MEM memory engine and this packaging ([docs/OPEN-AGENT-NEW-WORK.md](docs/OPEN-AGENT-NEW-WORK.md), [docs/METERLESS.md](docs/METERLESS.md)). Details in [section 11](#11-pre-existing-components).
 
-**Watch it (2:15): https://youtu.be/0_gOiEaffRw**
+## Claim, proof, what you will see
 
-<a href="https://what-leaves.retailbox-automation.com"><img src="docs/ui/panel-shots/05-oskar-removed.png" width="760" alt="The panel after removing Oskar Alvarez: two systems nobody is connected to, two decisions only he wrote, one bridge between teams lost"></a>
-
-Built for Graph Hacks (FalkorDB and WeMakeDevs, October 2026). Main track: **03 Company Brain**. Also entered: **02 Agent Memory and Coordination**.
-
-## What the graph does here
-
-Every step is a Cypher query or a graph algorithm on FalkorDB. A join or a text search gives the first row; the rest needs the graph. Results from the seed-42 walkthrough in [docs/DEMO-N5.md](docs/DEMO-N5.md) (FalkorDB 6.0.2), for the leaver Oskar Alvarez:
-
-| Step | What FalkorDB does | Result |
+| Claim | Proof in the repo | What you will see |
 |---|---|---|
-| Depth 1 | `(person)-[:OWNS\|LEADS\|MEMBER_OF]->(x)`: what a join would list | 3 items: fernhill-sso, oncall-runbook, team Platform |
-| Depth 4 | `(person)-[:DECIDED]->(d)-[:CONSTRAINS]->(x)`, then `(s)-[:DEPENDS_ON*0..2]->(x)` and each system's owner | 7 more systems at risk, reaching all 4 teams |
-| Remove | the graph is copied without the person into a temporary graph; `algo.WCC` finds parts that no person is connected to | 2 islands: fernhill-sso and oncall-runbook; 6.3 ms including building and dropping the copy |
-| Bridges | `algo.betweenness` over people, teams and systems | Oskar Alvarez ranks first (290.28) and is the only person linking Growth and Support |
-| Single source | for each item, the authors of every source record behind every fact about it | decisions resting only on his records: 2 the day before the handoff session, 0 after it |
-| Handoff plan | the queries above combined, with candidates and questions for the leaver | 2 handoff lines and 3 questions; one asks about promises made on calls, which no record can hold |
-
-On the same records, plain retrieval answered 0% of the benchmark's depth-4, what-if, bridge, successor and handoff-plan questions (8 questions; [bench/RESULTS.md](bench/RESULTS.md), by question type).
+| The Verifier catches a quote that changed at its source and sends the draft back | [logs/trace-20261024T123154Z-720b.jsonl](logs/trace-20261024T123154Z-720b.jsonl) (live: Zetaris + Nemotron) <!-- C-UPDATE --> and [output_examples/02_tampered_source.sample.json](output_examples/02_tampered_source.sample.json) | round 1: msg-0148 rejected with `quote_not_in_record`; round 2: verified on ADR-0009; the edit restored at the end |
+| The quote check overrules the model | [docs/open-agent-runs-2026-10-24/trace-20261024T123225Z-c454.jsonl](docs/open-agent-runs-2026-10-24/trace-20261024T123225Z-c454.jsonl) <!-- C-UPDATE --> | the Verifier's model said "supports" for a line that is not in ADR-0009; the quote check rejected it; the revision quoted the ADR's own line |
+| An absence is checked, not guessed | [output_examples/03_not_in_these_systems.live.json](output_examples/03_not_in_these_systems.live.json) | `absence_confirmed`: one `UNION ALL` over the three systems through Zetaris found no record; nothing written |
+| Nothing is stored unless every citation was accepted | [open_agent/run.py](open_agent/run.py) `write_finding`; [tests/test_open_agent.py](tests/test_open_agent.py) | `write_gate.written: false` with the reason, for example on [output_examples/04_decision_superseded.live.json](output_examples/04_decision_superseded.live.json) |
+| Every model call goes through Meterless Nightshift with a signed receipt | [logs/receipts-wlwt-proof-20261024T115709Z-c6aed4.jsonl](logs/receipts-wlwt-proof-20261024T115709Z-c6aed4.jsonl), [open_agent/nightshift.py](open_agent/nightshift.py) `check_routing`, [tests/test_nightshift.py](tests/test_nightshift.py) | 3 receipts signed Ed25519 by the Nightshift daemon, app `wlwt-investigator` and `wlwt-verifier`, cost 0 USD <!-- C-UPDATE --> |
+| H-MEM is the agents' memory across sessions | [logs/meterless-live-proof-wlwt-proof-20261024T115709Z-c6aed4.json](logs/meterless-live-proof-wlwt-proof-20261024T115709Z-c6aed4.json), [tests/test_hmem.py](tests/test_hmem.py) | process A stores a verified answer, process B gets it in front of the model, the Verifier's verdict raises its confidence 0.70 to 0.75 |
+| A judge can run it with no credentials | [SUBMISSION/FRESH-CLONE-TEST.md](SUBMISSION/FRESH-CLONE-TEST.md) | fresh clone, empty `.env`: build, up, four examples and one new question through `POST /run`, all `success` |
 
 ## Contents
 
-- [The demo story](#the-demo-story)
-- [How the memory stays honest: the write gate](#how-the-memory-stays-honest-the-write-gate)
-- [Cypher the product depends on](#cypher-the-product-depends-on)
-- [Graph data model](#graph-data-model)
-- [Benchmark](#benchmark)
-- [Red team of the write gate](#red-team-of-the-write-gate)
-- [Run it locally](#run-it-locally)
-- [Notes for the FalkorDB team](#notes-for-the-falkordb-team)
-- [How this maps to the tracks and rules](#how-this-maps-to-the-tracks-and-rules)
-- [Known limits](#known-limits)
-- [How AI was used](#how-ai-was-used)
+1. [Problem](#1-problem) · 2. [Agents](#2-agents) · 3. [What makes this an agent system](#3-what-makes-this-an-agent-system) · 4. [Tech stack and sponsor technology](#4-tech-stack-and-sponsor-technology) · 5. [Setup](#5-setup) · 6. [Usage](#6-usage) · 7. [Sample mode](#7-sample-mode) · 8. [Failure handling](#8-failure-handling) · 9. [Data and licensing](#9-data-and-licensing) · 10. [Limitations](#10-limitations) · 11. [Pre-existing components](#11-pre-existing-components) · 12. [AI and Model Usage](#12-ai-and-model-usage) · 13. [Third-party code and licences](#13-third-party-code-and-licences)
 
-## The demo story
+## 1. Problem
 
-The data is a fictional company, Quillfield Billing, generated by a seeded script ([data/MANIFEST.md](data/MANIFEST.md)). Oskar Alvarez (Platform) resigns on 2026-09-25 (DOC-15); his last day is 2026-10-09 (DOC-16). Every line below is printed by `examples/departure_demo.py` into [docs/DEMO-N5.md](docs/DEMO-N5.md); nothing is typed in by hand.
+The user is a team lead at a software company (here, the fictional Quillfield Billing) whose colleague is leaving. They ask questions like "Who owns billing-api now?" or "Who decided ADR-0014?". The answer is spread over three systems that do not agree: a chat message from last week, a ticket, a decision record. Records also change after anyone read them. An assistant that answers from what it read earlier gives a confident answer the source no longer supports.
 
-1. **Depth 1 vs depth 4.** At depth 1 he owns fernhill-sso (a customer integration) and oncall-runbook and is a member of Platform. At depth 4 the graph follows ADR-0014, ADR-0015 and ADR-0016 to 7 more systems, owned by people in Payments, Growth, Support and Platform.
-2. **Without him.** Nobody else in the graph is connected to fernhill-sso or oncall-runbook.
-3. **Bridges.** He is the only person linking Growth and Support.
-4. **Successors are candidates, not decisions.** For fernhill-sso: Lars Thorne, Pavel Hollis, Sana Petrov (by their work on auth, which fernhill-sso depends on). For oncall-runbook: no one in the graph has worked on it.
-5. **The honest not-in-graph.** "Did Oskar Alvarez promise Fernhill Outfitters anything on a phone call after resigning?" The answer is `not_in_graph`: 10 records searched, and phone calls and meetings are not channels this memory receives.
-6. **The handoff session.** Oskar writes DOC-17 and his named successor Viktor Hartwell confirms in DOC-18. Both pass through the same write gate as `CONFIRM`s that add a second author to facts the graph already holds. Decisions resting only on his records go from 2 to 0. Systems stay at 2: his notes on fernhill-sso still wait for a second person, and nobody else has touched the on-call runbook.
-7. **The last day.** DOC-16 arrives through the gate as three `CLOSE`s. Asked "who owns fernhill-sso now?", the memory answers: "fernhill-sso has no current owner. Last owner: Oskar Alvarez until 2026-10-09 (closed by GD-00225-e5a583243b, citing DOC-16). Nobody has been recorded as taking it over." It does not guess.
+What the answer here shows: the answer, every record it rests on (system, id, the quoted line), whether that line is still in the record at its source, what was dropped and why, and whether the answer was stored.
 
-The same tools work before a vacation, a parental leave or a team move. It is a handoff, not surveillance: fictional people only, and the bridge score is the only per-person number.
+## 2. Agents
 
-## How the memory stays honest: the write gate
+| Agent | Responsibility | Can block or retry? | Code |
+|---|---|---|---|
+| Investigator (`agent:investigator`) | Answers from the memory graph through a fixed catalogue of 21 graph tools; backs the answer with citations (record id, one quoted line, the claim it backs); revises from the Verifier's notes; must name a record that contradicts its answer | retries: revises up to 2 times | [open_agent/agents.py](open_agent/agents.py) |
+| Verifier (`agent:verifier`) | Re-reads every cited record by id through Zetaris, from the table of its own source system; checks that the quoted line is in it (cannot be overruled); then its own model judges whether the record as it reads now supports the claim; checks an absence across all three systems | blocks: rejects with notes and the record's current lines; a rejected answer is not stored | [open_agent/agents.py](open_agent/agents.py) |
+| Write gate (pre-existing, plain code) | Stores a Finding citing only verified records, or refuses with reasons | blocks | [honest_memory/gate.py](honest_memory/gate.py), [open_agent/run.py](open_agent/run.py) |
 
-Every candidate fact passes a gate in plain code before it is stored. A model may propose a fact; it never decides what is stored. Every attempt writes a receipt (a `GateDecision` node that `CITES` the source record), and every answer can be traced to receipts and records.
-
-| Outcome | When | What is written |
-|---|---|---|
-| `ACCEPT` | a new fact, and one line of a cited record names both ends (and, for most relations, the relation's word) | the typed edge, with `valid_at`, `source_ids`, `gate_id` |
-| `CONFIRM` | the fact is already current | the record is added as one more source |
-| `SUPERSEDE` | a newer fact replaces the current one (one owner per system, one team per person) | the new edge; the old one moves to `WAS` |
-| `CLOSE` | a fact ends without a replacement, such as on a last day | the edge moves to `WAS` with `invalid_at` and the closing receipt |
-| `REJECT` | no source, a source that does not state it, personal data, older than the current fact, and more | only the receipt, with the reasons |
-
-Replaying the seed-42 company: 403 records, 226 gate decisions: ACCEPT 108, CONFIRM 110, SUPERSEDE 1, CLOSE 3, REJECT 4 ([bench/RESULTS.md](bench/RESULTS.md)). The checks, in order, are in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md#write-gate).
-
-**History is an edge type, not a filter.** Closing a fact deletes the typed edge and writes `(s)-[:WAS {predicate, valid_at, invalid_at, source_ids, gate_id, closed_by}]->(o)`. Questions about the present never touch history. On 20k nodes, 200k edges, 30% closed, 4 hops ([docs/sponsor-feedback.md](docs/sponsor-feedback.md), item 4):
-
-| Layout | FalkorDB 6.0.2 median | FalkorDB 4.22 median |
-|---|---|---|
-| Filter over the path, `WHERE all(x IN relationships(p) WHERE x.invalid_at IS NULL)` | 15.22 ms | 9.27 ms |
-| Filter on the relationship right after `MATCH`, `WHERE r.invalid_at IS NULL` | 4.34 ms | 2.17 ms |
-| Closed facts moved to another edge type (`WAS`) | 1.48 ms | 1.32 ms |
-
-**One graph per tenant.** A tenant is a different FalkorDB graph (`hm_<tenant>`), not a `WHERE` clause ([honest_memory/schema.py](honest_memory/schema.py), `graph_name`).
-
-## Cypher the product depends on
-
-Agents never write Cypher. They pick from a fixed catalogue of 21 tools, each a human-written, parameterised query; every name in the arguments is resolved against the graph first ([docs/ARCHITECTURE.md](docs/ARCHITECTURE.md#tool-catalogue) has the whole catalogue with its queries). The same catalogue reaches the HTTP API, the MCP server and the agent. Three of the queries, copied from [honest_memory/departure.py](honest_memory/departure.py):
-
-**Run them yourself:** [queries/](queries/) holds the exact statements the departure tools run for the demo's leaver (what_leaves at depth 1 and 4, single_source, the WCC and betweenness projections, successors, promises, the handoff plan), each with its parameters in FalkorDB's `CYPHER name=value` header, so it pastes into FalkorDB Browser or `redis-cli GRAPH.QUERY`. The files are written from the tools' own traces by `scripts/export_queries.py`; `tests/test_queries.py` checks they have not drifted and runs every statement on both engines against its recorded row count.
-
-Depth 2 to 4: decisions the person made that govern systems others own, and what depends on those systems. `{k}` is depth minus 2, validated in code, because neither engine takes a variable-length bound as a parameter ([FalkorDB #3350](https://github.com/FalkorDB/FalkorDB/issues/3350)).
-
-```python
-_DECIDED_REACH = (
-    "MATCH (me:Person {{name: $person}})-[dec:DECIDED]->(d:Decision)-[c:CONSTRAINS]->(x:System) "
-    "WHERE dec.valid_at <= $t AND c.valid_at <= $t AND NOT d.id IN $replaced "
-    "MATCH up = (s:System)-[:DEPENDS_ON*0..{k}]->(x) "
-    "RETURN d.id, x.name, s.name, length(up), [n IN nodes(up) | n.name], [r IN relationships(up) | r.valid_at], "
-    "[r IN relationships(up) | r.source_ids], dec.source_ids + c.source_ids")
-```
-
-Single source: every live decision the person made, with the authors of every source record behind any fact about it. A decision whose only author is the person rests on them alone.
-
-```python
-_LONE_DECISIONS = (
-    "MATCH (me:Person {name: $person})-[mine:DECIDED]->(d:Decision) "
-    "WHERE mine.valid_at <= $t AND NOT d.id IN $replaced "
-    "MATCH (x)-[r:DECIDED|CONSTRAINS|SUPERSEDES]-(d) WHERE r.valid_at <= $t "
-    "UNWIND r.source_ids AS sid "
-    "MATCH (e:Episode {id: sid}) WHERE e.ts <= $t "
-    "RETURN d.id, d.title, collect(DISTINCT e.author), collect(DISTINCT e.id) ORDER BY d.id")
-```
-
-Islands and bridges: both run on a temporary projection graph (`hm_<tenant>__<purpose>_<random>`, always deleted). For `without`, the person is left out of the copy; for `bridges`, every link is written both ways, because `algo.betweenness` follows edge direction and has no option to ignore it.
-
-```python
-_WCC = ("CALL algo.WCC({nodeLabels: ['Person', 'Team', 'System', 'Decision'], relationshipTypes: ['LINK']}) "
-        "YIELD node, componentId RETURN labels(node)[0], node.key, componentId")
-_BETWEENNESS = ("CALL algo.betweenness({nodeLabels: ['Person', 'Team', 'System'], relationshipTypes: ['LINK'], "
-                "samplingSize: $n, samplingSeed: $seed}) YIELD node, score RETURN labels(node)[0], node.key, score")
-```
-
-## Graph data model
-
-Full model and every record edge: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md#graph-model).
+## 3. What makes this an agent system
 
 ```mermaid
-flowchart TD
-  P[Person] -- OWNS / WORKED_ON --> S[System]
-  P -- MEMBER_OF / LEADS --> T[Team]
-  P -- DECIDED --> D[Decision]
-  D -- SUPERSEDES --> D
-  D -- CONSTRAINS --> S
-  S -- DEPENDS_ON --> S
-  E[Episode: chat, ticket, doc] -- MENTIONS --> P
-  E -- MENTIONS --> S
-  G[GateDecision: receipt] -- CITES --> E
-  G -- ABOUT --> S
+flowchart LR
+  subgraph Sources["Three source systems"]
+    PG[(Postgres chat)]
+    CSV[(tickets CSV)]
+    API[(docs REST API)]
+  end
+  Z["Zetaris<br/>Lightning SQL"]
+  PG --> Z
+  CSV --> Z
+  API --> Z
+  Z -- "3 SELECTs (ingest)" --> G[("memory graph<br/>FalkorDB, write gate")]
+  NS["Meterless Nightshift<br/>Nemotron per agent, signed receipts"]
+  HM["Meterless H-MEM<br/>memories, feedback"]
+  G --> I["Investigator<br/>answer + citations"]
+  HM -- "memory context" --> I
+  I <-- "model calls" --> NS
+  I -- "draft" --> V["Verifier<br/>quote check, then model judgement"]
+  V -- "re-read by id / absence query" --> Z
+  V <-- "model calls" --> NS
+  V -- "rejected: notes + current text (max 2 revisions)" --> I
+  V -- "all citations accepted" --> W["write gate:<br/>Finding stored"]
+  W --> HM
+  V -- "verdict -> feedback" --> HM
 ```
 
-A closed fact keeps its ends and moves to a `WAS` edge. The departure tools walk `DECIDED`, `CONSTRAINS` and `DEPENDS_ON` from the person, and every answer carries the `Episode` ids on the edges it used.
+Collaboration patterns visible in the traces:
 
-| Node | Key | Holds |
+| Pattern | Where |
+|---|---|
+| Critique and revision loop | `Verifier feedback` then `Investigator revise` events; at most 2 revisions ([open_agent/run.py](open_agent/run.py) `investigate`) |
+| Role authority (an agent can block another) | the quote check cannot be overruled by either model; the write gate is skipped unless every citation is accepted |
+| Independent re-check against the source | the Verifier reads the record again through Zetaris, not from the Investigator's memory |
+| Shared state | the memory graph and H-MEM: what one run stores, a later session recalls ([docs/METERLESS.md](docs/METERLESS.md), cross-session proof) |
+| Retry and fallback | Zetaris timeout and one retry; model down falls back to the deterministic path and says so (section 8) |
+
+Every step is written to `logs/trace-<run_id>.jsonl` (one JSON object per step: timestamp, run id, agent, step, status, plus the SQL, record id, verdict, model, receipt where they apply) and echoed to stdout as a readable line ([open_agent/trace.py](open_agent/trace.py)).
+
+## 4. Tech stack and sponsor technology
+
+| Layer | What | Where |
 |---|---|---|
-| `Person`, `Team`, `System`, `Decision` | name or id | the company; a `System` can be a service, a customer integration or a runbook; a `Decision` is an ADR, accepted or superseded |
-| `Episode` | id | one source record: chat message, ticket or document, with author and time |
-| `GateDecision` | id | the receipt of every write attempt, accepted or refused |
-| `Agent`, `Finding`, `Handoff` | name or id | what agents concluded and passed to each other |
+| Data access | Zetaris 2.4.3.1 (local platform bundle, Docker), Lightning SQL through its UI proxy | [zetaris_spike/](zetaris_spike/), [open_agent/sources.py](open_agent/sources.py) |
+| Agents and loop | Python 3.12, plain code (no agent framework), OpenAI-compatible client | [open_agent/](open_agent/) |
+| Model provider | Meterless Nightshift 1.2.1, headless, `127.0.0.1:8088/v1` | [open_agent/nightshift.py](open_agent/nightshift.py), [scripts/nightshift_headless.sh](scripts/nightshift_headless.sh) |
+| Models | NVIDIA Nemotron 3.5 Lightning 30B-A3B and Nemotron 3 Nano 30B-A3B, local GGUF files served by Nightshift | [docs/METERLESS.md](docs/METERLESS.md) |
+| Agent memory | Meterless H-MEM reference engine (pinned, Node sidecar over a pipe) | [vendor/hmem/README-PIN.md](vendor/hmem/README-PIN.md), [open_agent/hmem_bridge.py](open_agent/hmem_bridge.py) |
+| Memory graph, write gate, tools (pre-existing) | FalkorDB 6.0.2, Cypher | [honest_memory/](honest_memory/) |
+| API and panel | FastAPI, uvicorn; one-page panel (Cytoscape.js) | [serve.py](serve.py), [honest_memory/api.py](honest_memory/api.py), [web/](web/) |
 
-| Edge | From -> to | Meaning |
-|---|---|---|
-| `OWNS` | Person -> System | one current owner per system |
-| `MEMBER_OF`, `LEADS` | Person -> Team | one current team per person, one lead per team |
-| `WORKED_ON` | Person -> System | with a `count` of work items |
-| `DECIDED` | Person -> Decision | who made the decision |
-| `SUPERSEDES` | Decision -> Decision | a decision replaced by a later one |
-| `CONSTRAINS` | Decision -> System | the decision governs how the system must work |
-| `DEPENDS_ON` | System -> System | a dependency |
-| `WAS` | any of the above | a closed fact, with `predicate`, `valid_at`, `invalid_at`, `source_ids`, `closed_by` |
-| `MENTIONS`, `REFERS_TO`, `CITES`, `ABOUT`, `WROTE`, `DERIVED_FROM`, `FROM`, `TO` | records and receipts | where every fact and finding came from |
+### Zetaris
 
-Current facts carry `valid_at`, `source_ids` and `gate_id`.
+The only path from the agents to the three source systems. Team chat lives in Postgres (registered over JDBC), tickets in a CSV file in the driver's data volume, documents behind our REST JSON API; all three are Zetaris objects read with one SQL dialect. The memory graph is built from three `SELECT`s through Zetaris (403 records, field for field equal to the corpus file). The Verifier re-reads each cited record by id with a point query against the table of its own system, and checks an absence with one `UNION ALL` over all three. Take Zetaris away and the Verifier has nothing to check against: in live mode the graph cannot be built (structured error) and every re-read comes back `unreadable`, so no citation is accepted and nothing is stored.
 
-## Benchmark
+Platform findings from the 22 Oct spike ([zetaris_spike/README.md](zetaris_spike/README.md), evidence [zetaris_spike/evidence/gate-20261022T153154Z.json](zetaris_spike/evidence/gate-20261022T153154Z.json)): counts 225 / 127 / 51 match; a cross-source JOIN returned 45 of 45 rows; 8 of 8 quotes found, 8 of 8 tampered quotes rejected, an unknown id returns 0 rows; point read by id p50 0.10 to 0.21 s. A CSV in `customer-data/shared/...` registers with a plain path (no S3 needed); `REGISTER DATASOURCE TABLES` imports nothing from a non-`public` Postgres schema; a REST table is fetched again on every query.
 
-82 questions about the synthetic company, seed 42, the same local model for the two systems that use one, scored by names and dates with no model as judge ([bench/RESULTS.md](bench/RESULTS.md), method and limits in [bench/README.md](bench/README.md)):
+### Meterless
 
-| System | Correct % | Stale % | Unsupported % | No answer % | Personal-data leaks | Median ms |
-|---|---|---|---|---|---|---|
-| Plain RAG (top 8 records by embedding) | 46.3 | 4.9 | 0.0 | 36.6 | 2 | 512 |
-| Graph tools, rule router (no model) | 100.0 | 0.0 | 0.0 | 0.0 | 0 | 2 |
-| Graph tools, LLM agent | 95.1 | 0.0 | 0.0 | 1.2 | 0 | 784 |
+Two separate things, both in the product:
 
-- Plain RAG's stale answers give Growth as the owner of billing-api from an unsourced chat message, list a dependency before it existed, or say Oskar Alvarez "owns fernhill-sso" after his last day. Its 2 leaks repeat a phone number and a mailing address planted in a ticket, which the gate refuses to store.
-- The agent's 95.1% comes after three general prompt rules that were written after reading its misses on this same question set (before them: 90.2%), so treat it as close to an upper bound for this corpus. Both runs are in the git history.
-- The router's rules were written against this question set, so its 100.0% says little about other phrasings. The agent, where the model picks the tool, is the fairer comparison.
-- One seed, one model, one run per setting, no confidence intervals. The strongest baseline variant tried (one line per retrieval unit, k = 16) reaches 58.5% ([bench/SENSITIVITY.md](bench/SENSITIVITY.md)).
+- **Nightshift is the primary model provider.** Every model call of the agents goes to Nightshift on the same machine. Each response carries a receipt signed Ed25519 by the Nightshift daemon. The client checks every response: `routed_model` must be the agent's model, the receipt must show the app's own lane allowlist, and the cost must be 0; otherwise it raises `RoutingMismatch` instead of falling back quietly. In Nightshift 1.2.1 an explicit model id does not pin routing, so each agent has its own app id with a one-lane allowlist (negative control in [docs/METERLESS.md](docs/METERLESS.md)).
+- **H-MEM is the agents' memory.** An answer that passed the Verifier and the write gate is stored as a long-term memory; before answering, matching memories are put in front of the model; the Verifier's verdict on an answer that drew on a memory becomes feedback (`helpful` +0.05, `not_helpful` -0.03, `wrong` -0.20). The engine is the Meterless reference implementation, pinned and unchanged in [vendor/hmem/](vendor/hmem/).
 
-## Red team of the write gate
+<!-- C-UPDATE: confirm that the open_agent loop's committed live runs go through Nightshift (lane C); until then the loop's committed live runs used Nemotron 3 Nano on Ollama (docs/OPEN-AGENT-NEW-WORK.md, Measured) and the Nightshift path is proven by the smoke runs and the cross-session proof. -->
 
-36 attacks on the gate: missing or forged sources, backdated and future-dated claims, personal data in many forms, Cypher and homoglyphs in names, memory poisoning, forged last-day records ([redteam/REPORT.md](redteam/REPORT.md)). The expected outcome of each of the 30 original attacks was written before the first run and never changed.
+### NVIDIA
 
-| Run | FalkorDB 4.22.0 | FalkorDB 6.0.2 |
-|---|---|---|
-| First run, gate as found | 13/36 (11 of the 30 original, 2 of the 6 on the last-day path) | 13/36 |
-| After 11 fixes | 36/36 | 36/36 |
+| Agent | Nemotron model | Through | Why this model |
+|---|---|---|---|
+| Investigator | Nemotron 3.5 Lightning 30B-A3B (`local-runtime/nemotron-3.5-lightning-30b-a3b`) | Nightshift app `wlwt-investigator`, lane `nemotron-lightning` | native OpenAI tool calls for the graph tools |
+| Verifier | Nemotron 3 Nano 30B-A3B (`local-runtime/nemotron-3-nano-30b-a3b`) | Nightshift app `wlwt-verifier`, lane `nemotron-nano` | short JSON verdicts; a different model from the one it checks |
 
-Found, then fixed (each fix has its commit in the report):
+Receipt log: [logs/receipts-wlwt-proof-20261024T115709Z-c6aed4.jsonl](logs/receipts-wlwt-proof-20261024T115709Z-c6aed4.jsonl) <!-- C-UPDATE: add the receipt log of the final live runs -->. Per-call blocks: [logs/nightshift-smoke-investigator.json](logs/nightshift-smoke-investigator.json), [logs/nightshift-smoke-verifier.json](logs/nightshift-smoke-verifier.json).
 
-- A card number written with dots, an email spelled `name [at] host [dot] tld`, and a phone number used as an agent name were stored. The patterns now cover those forms, and agent, session and party names are scanned too.
-- A record titled "Last day: Pavel Hollis" whose only line was about Lars Thorne ended Pavel's ownership. An end now needs one line that names both ends and says "no longer".
-- An episode dated 2030 was stored and would have won every later "newer than the current fact" test. Episodes more than an hour ahead of the clock are now refused.
-- 50 identical claims wrote 50 receipts. An exact repeat now bumps a counter on the first receipt.
+### Cursor
 
-## Run it locally
+Not used for this build. The organizer said on 23 Oct 2026 that Cursor is optional and has no separate prize. The code was written with other AI coding assistants under the author's direction (section 12).
 
-Needs Python 3.12 and Docker. Everything below was run from a clean clone on FalkorDB 6.0.2 and 4.22.0.
+### What was unique
+
+The Verifier does not trust the Investigator's memory or its own model: it goes back to the source through Zetaris and re-reads the cited line by id, in the system that owns the record. A quote that is not there any more is rejected even when a model says it supports the claim, and only an answer that survived that check reaches the memory, Nightshift-signed receipts and all.
+
+## 5. Setup
+
+**Docker (recommended).** Needs Docker with Compose v2.
 
 ```bash
-git clone https://github.com/retailbox-automation/what-leaves-with-them.git
-cd what-leaves-with-them
+git clone https://github.com/retailbox-automation/what-leaves-with-them-open-agent.git
+cd what-leaves-with-them-open-agent
+docker compose up --build          # FalkorDB 6.0.2 + the app on 127.0.0.1:8000; SAMPLE_MODE=true
+```
+
+If port 8000 or 6379 is taken: `APP_HOST_PORT=28000 FALKORDB_HOST_PORT=16379 docker compose up --build`. Stop with `docker compose down`. Both ports are published on 127.0.0.1 only. `serve.py` binds 127.0.0.1 unless `HOST` is set; compose sets `HOST=0.0.0.0` inside the container, behind the loopback port mapping.
+
+**Without Docker.** Python 3.12, Node 20 or newer (for the H-MEM sidecar; without Node the memory falls back to the graph and says so), a FalkorDB:
+
+```bash
 python3.12 -m venv .venv && . .venv/bin/activate
-pip install -e '.[api,mcp,agent]'
-
-# FalkorDB 6.0.2, or falkordb/falkordb:v4.22.0 (the version FalkorDB Cloud free runs); both are tested
-docker run -d --rm --name falkordb -p 6379:6379 falkordb/falkordb:6.0.2
-export FALKORDB_PORT=6379            # the host port you mapped
-
-# the synthetic company (seed 42) through the write gate into tenant "quillfield"
-python -m honest_memory.corpus --seed 42 --out data/corpus
-python -m honest_memory.ingest --corpus data/corpus/42 --tenant quillfield --reset
-
-# HTTP API and the panel
-uvicorn honest_memory.api:app --port 8080
+pip install -e '.[api,agent]'
+docker run -d --rm -p 6379:6379 falkordb/falkordb:6.0.2
+python -m open_agent.run --sample --input input_examples/02_tampered_source.json
 ```
 
-Open http://localhost:8080 for the panel, or call a tool from another shell:
+**Live mode** (Zetaris and Nightshift on the same machine): register the three sources in a local Zetaris as in [zetaris_spike/README.md](zetaris_spike/README.md), start Nightshift headless as in [docs/METERLESS.md](docs/METERLESS.md), copy `.env.example` to `.env`, uncomment the live lines and run `python -m open_agent.run --ingest --input input_examples/01_current_owner.json`. <!-- C-UPDATE: the exact live environment for the loop through Nightshift -->
+
+## 6. Usage
 
 ```bash
-curl -s -X POST localhost:8080/v1/quillfield/tools/what_leaves \
-  -H 'content-type: application/json' -d '{"person": "Oskar Alvarez", "depth": 4}'
-curl -s -X POST localhost:8080/v1/quillfield/ask \
-  -H 'content-type: application/json' -d '{"question": "Who owns fernhill-sso now?"}'
+curl -s -X POST localhost:8000/run -H 'content-type: application/json' -d @input_examples/01_current_owner.json
+curl -s -X POST localhost:8000/run -H 'content-type: application/json' \
+  -d '{"run_id":"demo-001","input":{"query":"Who owns oncall-runbook now?"},"options":{"sample_mode":true}}'
+curl -s localhost:8000/run/<trace_id>/trace      # the run's JSONL trace
+docker compose logs app                            # the readable trace lines
 ```
 
-Endpoints: `GET /health`, `GET /v1/{tenant}/tools`, `POST /v1/{tenant}/tools/{name}`, `POST /v1/{tenant}/ask`, `GET /v1/{tenant}/graph`, `GET /v1/{tenant}/receipts`, `POST /v1/{tenant}/episodes`, `GET /v1/{tenant}/episodes/{id}` ([honest_memory/api.py](honest_memory/api.py)). Locally, writes are open unless `HM_WRITE_TOKEN` is set; the public demo locks them ([docs/DEPLOY.md](docs/DEPLOY.md)).
-
-**MCP server.** Any MCP client (a code editor or an agent) can use the same 21 tools over stdio. Example client configuration; more in [docs/MCP.md](docs/MCP.md):
+Request: the input example shape (`question`, optional `tamper` record id and `tamper_text`) or `{"run_id", "input": {"query"}, "options": {"sample_mode"}}`. Response, abridged from the fresh-clone run of example 02:
 
 ```json
 {
-  "mcpServers": {
-    "what-leaves": {
-      "command": "/absolute/path/to/what-leaves-with-them/.venv/bin/python",
-      "args": ["-m", "honest_memory.mcp_server"],
-      "env": { "HM_TENANT": "quillfield", "HM_AGENT": "agent:editor", "FALKORDB_HOST": "localhost", "FALKORDB_PORT": "6379" }
-    }
-  }
+  "run_id": "20261024T125241Z-026d",
+  "status": "success",
+  "mode": "sample",
+  "output": {
+    "status": "verified",
+    "answer": "...",
+    "citations": [{"id": "ADR-0009", "source": "docs REST API (wlwt_docs.docs_raw)", "quote": "...", "accepted": true}],
+    "dropped_citations": [{"id": "msg-0148", "round": 1, "reason": "quote_not_in_record", "text_at_source_now": "..."}],
+    "rounds": 2,
+    "write_gate": {"written": true},
+    "tamper": {"record_id": "msg-0148", "restored": true}
+  },
+  "trace_id": "20261024T125241Z-026d",
+  "log_file": "logs/trace-20261024T125241Z-026d.jsonl",
+  "execution_time_seconds": 0.45
 }
 ```
 
-**The agent** runs on a local open model through [Ollama](https://ollama.com); no paid API and no key. The default model is `DEFAULT_MODEL` in [honest_memory/agent.py](honest_memory/agent.py). With Ollama running:
+Command line, same loop: `python -m open_agent.run --sample --input <file>` or `--question "..."` (prints the JSON; `--out` writes it). Statuses: `verified`, `absence_confirmed`, `no_claim`, `partially_verified`, `unverified`, `contradicted`. Examples: [input_examples/](input_examples/), their outputs from real runs in [output_examples/](output_examples/) (`*.live.json` and `*.sample.json`) with the traces in [logs/](logs/).
 
-```bash
-MODEL="$(python -c 'from honest_memory.agent import DEFAULT_MODEL; print(DEFAULT_MODEL)')"
-ollama pull "$MODEL"
-HM_LLM_MODEL="$MODEL" HM_LLM_REASONING=none python -m honest_memory.agent ask "Which decisions of Oskar Alvarez govern systems that other teams own?" --tenant quillfield
-```
+**Panel.** Open http://127.0.0.1:8000, pick a person, Remove, Plan the handoff, and answer a question card: the card now shows what the Verifier re-read at the source for that item (record id, system, quoted line, verdict, round), from `POST /run`. Before and after: [SUBMISSION/panel-before-answer-card.png](SUBMISSION/panel-before-answer-card.png), [SUBMISSION/panel-after-answer-card.png](SUBMISSION/panel-after-answer-card.png). The rest of the panel asks the graph API live; it reads the recorded answers in [web/fixtures/](web/fixtures/) only with `?data=fixtures` or when the API does not answer.
 
-Start the API with `HM_LLM_MODEL` set and `POST /ask` uses the model too; without it, the rule router answers. The model picks a tool and fills its arguments; the sentence it writes is checked against the rows, and a sentence built from the rows replaces it when the check fails.
+## 7. Sample mode
 
-**Examples and tests:**
+`SAMPLE_MODE=true` (the default in `docker compose`, or `--sample`) runs the whole loop with no live credentials and no network:
 
-```bash
-python examples/two_agents.py --tenant two-agents --ingest --drop   # two agents, one memory, a fact that changes
-python examples/departure_demo.py --ports 6379                     # the walkthrough in docs/DEMO-N5.md; two ports compare engines
+- the three source tables are loaded from [sample_data/sources/](sample_data/sources/) (the same files that load Postgres, the CSV table and the docs API) into an in-process SQLite, and the same SQL text runs against them (one rewrite: SQLite has no `LATERAL VIEW explode`);
+- the memory graph is built from those rows by the real ingest and write gate;
+- no model is called: the Investigator uses the deterministic router of the core; the Verifier's re-read and quote check run as in live mode, and its model judgement is reported as `skipped: no model in SAMPLE_MODE`;
+- a tamper edits the in-memory copy and is restored.
 
-pip install -e '.[dev]'
-HM_TEST_PORTS=6379 python -m pytest -q    # comma-separated ports run every test on each engine; leave HM_LLM_MODEL unset
-```
+Nothing in sample mode reads `output_examples/` or replays a recorded answer; a new question gets a new answer (see the `oncall-runbook` run in [SUBMISSION/FRESH-CLONE-TEST.md](SUBMISSION/FRESH-CLONE-TEST.md)). Sample mode still needs FalkorDB, which `docker compose` starts. Example 04 is worded for a model; without one the router has no rule for it and says so (`no_claim`).
 
-The benchmark needs Ollama with two models ([bench/README.md](bench/README.md#reproduce)); the red team reproduces with `python redteam/run.py --ports <ports>` ([redteam/REPORT.md](redteam/REPORT.md#reproduce)). The public demo is two containers, FalkorDB v4.22.0 and the API, described in [docs/DEPLOY.md](docs/DEPLOY.md).
+## 8. Failure handling
 
-## Notes for the FalkorDB team
-
-Eight things we ran into, each with a reproduction (scripts in [spike/](spike/)), in [docs/sponsor-feedback.md](docs/sponsor-feedback.md):
-
-1. A variable-length bound cannot be a query parameter (`*1..$depth`), and the error points elsewhere. Filed as [#3350](https://github.com/FalkorDB/FalkorDB/issues/3350).
-2. Cloud free runs 4.22, Docker `latest` is 6.0.x, and code written for one does not always run on the other.
-3. Cloud free speaks plain RESP only; with `ssl=True` the client waits forever, with no error.
-4. Keeping history as an edge type beats filtering on a timestamp (the table above).
-5. A third-party agent-memory library's FalkorDB driver hit errors on both engines (index tasks failing silently on 6.0.2, connection limits, a label expression both parsers reject); we went with direct Cypher.
-6. `algo.betweenness` follows edge direction and has no option to ignore it.
-7. `algo.betweenness` samples sources: exact on 6.0.2 only with `samplingSize` at least the node count, never exact on 4.22.
-8. On 6.0.2, a filter after `OPTIONAL MATCH ... WITH x, count(...) AS c WHERE ...` sees the next `MATCH`'s node as null. Filed as [#3351](https://github.com/FalkorDB/FalkorDB/issues/3351).
-
-## How this maps to the tracks and rules
-
-| Track or rule | Where in the repo | Evidence |
-|---|---|---|
-| 03: knowledge from docs, tickets and chats in one graph | [honest_memory/ingest.py](honest_memory/ingest.py), [data/MANIFEST.md](data/MANIFEST.md) | 225 chat messages, 127 tickets and 51 documents become `Episode` nodes that `MENTIONS` the people, teams, systems and decisions they name |
-| 03: who owns what, and who knows what | `current_owner`, `who_knows`, `what_leaves` in [honest_memory/tools.py](honest_memory/tools.py) and [honest_memory/departure.py](honest_memory/departure.py) | on the 10 `who_knows` questions: router and agent 100.0%, plain RAG 0.0% ([bench/RESULTS.md](bench/RESULTS.md)) |
-| 03: tracing decisions back to their source | `decision_trail`, `why`, `single_source`; `GateDecision -CITES-> Episode` | every answer returns paths, sources and receipts ([docs/ARCHITECTURE.md](docs/ARCHITECTURE.md#answers)) |
-| 03: keeping knowledge current as things change | the write gate ([honest_memory/gate.py](honest_memory/gate.py)): `SUPERSEDE`, `CLOSE`, `WAS` | 0.0% stale for router and agent, 4.9% for plain RAG ([bench/RESULTS.md](bench/RESULTS.md)); after the last day, "no current owner" instead of a guess ([docs/DEMO-N5.md](docs/DEMO-N5.md), section 9c) |
-| 03: answers with clear sources | four answer outcomes: `answered_with_path`, `answered_from_memory`, `not_in_graph`, `unknown_entity` | the model's sentence is checked against the rows ([honest_memory/answer.py](honest_memory/answer.py)); 0.0% unsupported for all three systems |
-| 03: "gets work done" | `handoff_plan` in [honest_memory/departure.py](honest_memory/departure.py) | a plan with candidates and questions; `propose=true` writes each line as a proposed `Handoff` through the gate, for a person to approve |
-| 02: memory that persists across sessions | `remember`, `recall`; `Finding` nodes | [examples/two_agents.py](examples/two_agents.py): a new session of `agent:ops` recalls what `agent:support` left, `answered_from_memory` with the date |
-| 02: memory that updates over time | the gate, `WAS` edges | same example: an ownership change arrives, both agents' answers change, the old finding is flagged as older than the change |
-| 02: shared state and handoffs between agents | `handoff`; `Handoff -FROM-> Agent`, `-TO-> Agent` | same example; [tests/test_two_agents.py](tests/test_two_agents.py) |
-| 02: separate memory per user or tenant | one FalkorDB graph per tenant ([honest_memory/schema.py](honest_memory/schema.py)) | `test_tenants_are_isolated` in [tests/test_store.py](tests/test_store.py) |
-| 02: high-concurrency reads and writes | | not measured |
-| Rules 2 and 3: FalkorDB is the primary database and does real work | every tool is Cypher or a graph algorithm on FalkorDB; there is no other store | without FalkorDB there is no answer; the panel can only replay answers recorded from it ([web/fixtures/](web/fixtures/)) |
-| Rule 6: allowed data | [data/MANIFEST.md](data/MANIFEST.md) | synthetic only, generated by a seeded script with no network |
-| Rule 8: work starts after the opening | `git log --reverse`, [docs/design-sketch.md](docs/design-sketch.md) | first commit 2026-10-14 14:31 -04:00 (18:31 UTC, the opening); the pre-start design sketch has no code |
-| Rule 10: setup, data model, Cypher, live deployment, track | this README, [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), https://what-leaves.retailbox-automation.com | tracks 03 and 02; demo video https://youtu.be/0_gOiEaffRw |
-| Rule 11: AI disclosure | [How AI was used](#how-ai-was-used) | |
-
-## Known limits
-
-- **Synthetic, single-domain corpus.** One fictional company of 403 records, written by a seeded script with the failure modes (rumour, stale runbook, personal data, ownership transfer, a person leaving) put in on purpose. It shows the mechanism works where it should; it does not predict a rate on real data ([bench/README.md](bench/README.md#limits)).
-- **The router's rules were written for this question set.** The agent is the fair comparison, and its prompt rules were also tuned after reading its misses (see [Benchmark](#benchmark)).
-- **Who may write a last-day record is not checked.** The gate checks that the record says the fact ended and that the date fits, not that the author is the person, their lead or HR. The public demo has writes locked ([redteam/REPORT.md](redteam/REPORT.md#known-limits)).
-- **Personal-data detection is a heuristic.** It stops the obvious and accidental forms; some spellings still pass, listed in [redteam/REPORT.md](redteam/REPORT.md#known-limits).
-- **The demo does not run on FalkorDB Cloud free.** Free instances that are not used for 1 day are stopped ([FalkorDB docs](https://docs.falkordb.com/cloud/tiers/free)), so the demo runs FalkorDB v4.22.0, the Cloud free version, in a container ([docs/DEPLOY.md](docs/DEPLOY.md)).
-
-## How AI was used
-
-The code, tests and docs in this repository were written with AI coding assistants under the author's direction. The design decisions, the choice of concept and the acceptance of each change are the author's. The demo agent itself runs on a local open model, with no paid API. The narration of the demo video is an AI clone of the author's own voice.
-
-## Repository
-
-| Path | What |
+| Failure | Behaviour |
 |---|---|
-| [honest_memory/](honest_memory/) | the memory: write gate, ingest, tool catalogue, departure tools, agent, HTTP API, MCP server |
-| [web/](web/) | the one-page panel, static files over the HTTP API |
-| [queries/](queries/) | the departure tools' Cypher with parameters, generated from their traces and run by the tests |
-| [bench/](bench/) | the benchmark against plain retrieval |
-| [redteam/](redteam/) | the 36 attacks on the write gate and their report |
-| [examples/](examples/) | the departure walkthrough and the two-agent memory demo |
-| [spike/](spike/) | reproductions for the notes to the FalkorDB team |
-| [docs/](docs/) | architecture, demo walkthrough, deploy, MCP, notes for FalkorDB, panel screenshots |
+| Zetaris does not answer | each statement has a timeout (`OA_ZETARIS_TIMEOUT`, 30 s) and one retry; on ingest the run stops with `SourceUnavailable` and a hint to use sample mode; on a re-read the citation is `unreadable`, not accepted, and no revision is asked |
+| No Zetaris credentials | `status: error`, `SourceUnavailable: set ZETARIS_USERNAME/ZETARIS_PASSWORD or ZETARIS_BUNDLE_ENV` (seen in the fresh-clone test) |
+| Model down | tool loop: the router answers; citing or revising: the deterministic path; judging: the quote check alone decides and the verdict says `skipped: model unavailable (...)` |
+| Nightshift routed to another model, wrong lane, or non-zero cost | `RoutingMismatch` is raised; the agent does not fall back to the router to hide it |
+| Nightshift down | the agent falls back to the router and the run lists the error |
+| H-MEM engine fails or Node is missing | recall answers from the graph and the answer's note says so |
+| FalkorDB not reachable | `GraphUnavailable` structured error with the hint to start it |
+| Verifier keeps rejecting | at most 2 revisions (3 rounds), then the status says what was verified and nothing is written |
+| `POST /run` takes too long | `OA_RUN_TIMEOUT` (240 s) -> `RunTimeout` error object; one run at a time, a second caller gets `Busy` |
+| Bad request | 422 with what to send |
 
-## License and team
+## 9. Data and licensing
 
-MIT ([LICENSE](LICENSE)). Built by [RetailBox Automation](https://retailbox-automation.com).
+All data is synthetic: a fictional company, Quillfield Billing, generated by a seeded script with no network (`python -m honest_memory.corpus --seed 42`; [data/MANIFEST.md](data/MANIFEST.md)): 225 chat messages, 127 tickets, 51 documents. Failure modes (a rumour, a stale runbook, personal data, an ownership transfer, a person leaving) were put in on purpose. Fictional people only. The tamper text in example 02 is labelled as an edit. No real personal, financial or customer data.
+
+## 10. Limitations
+
+- **Synthetic, single-domain corpus.** It shows the mechanism works where it should; it does not predict a rate on real data.
+- **Measured on one shared Mac.** The loop's live numbers (24 Oct): example 01 verified in 6 of 6 runs, example 02 (tampered) verified in 4 of 6 and unverified in 2, example 03 absence confirmed 6 of 6, example 04 partially verified 6 of 6 and never stored; p50 wall time 12.0 s, 12.2 s, 1.7 s, 15.4 s. Those runs used Nemotron 3 Nano on Ollama for both agents ([docs/OPEN-AGENT-NEW-WORK.md](docs/OPEN-AGENT-NEW-WORK.md), Measured). <!-- C-UPDATE: replace with the Nightshift runs -->
+- **Answer quality is bounded by the model.** The superseded-decision example never reached `verified`. The loop guarantees what gets stored, not that every question is answered.
+- **Zetaris runs locally under emulation** (amd64 images on Apple silicon); a judge without the bundle uses sample mode.
+- **Tamper works on chat records only**, and the memory graph is not refreshed after an edit: the catch is reported, the graph keeps the old copy.
+- **The absence query is case-sensitive** (`instr`); a name written in another case is not found.
+- **H-MEM recall is lexical** (the engine's deterministic hash embedder), not semantic.
+- **Nightshift memory:** both lanes did not fit next to other models on the shared Mac; the cross-session proof ran one lane at a time. Nightshift 1.2.1 is ad-hoc signed; we only run its headless daemon on loopback.
+- **Pre-existing benchmark numbers** (section 11) were measured on another model before the window and are not re-measured on Nemotron.
+
+## 11. Pre-existing components
+
+Built before 22 Oct 2026 00:00 UTC, for Graph Hacks 2026 (FalkorDB, 15 to 18 Oct), public at https://github.com/retailbox-automation/what-leaves-with-them under MIT, and imported **unchanged** at upstream commit `a2cca9b` as the first commit of this repository (verify recipe and SHA-256 manifest in [PRE-EXISTING.md](PRE-EXISTING.md)):
+
+- `honest_memory/`: the memory graph on FalkorDB, the write gate (ACCEPT, CONFIRM, SUPERSEDE, CLOSE, REJECT with receipts), the 21-tool catalogue, the departure tools, the deterministic router, the agent, the HTTP API and MCP server;
+- `web/` (the panel), `bench/` (82 questions against plain retrieval), `redteam/` (36 attacks on the write gate), `queries/`, `examples/`, `spike/`, `docs/` of that event, the synthetic corpus generator.
+
+Numbers from that work, unchanged: on 82 questions, plain retrieval 46.3% correct, graph tools with the rule router 100.0% (rules written against this set), graph tools with an LLM agent 95.1% (on `gemma4:26b-a4b-it-qat`, not Nemotron) ([bench/RESULTS.md](bench/RESULTS.md)); red team 36 of 36 after 11 fixes ([redteam/REPORT.md](redteam/REPORT.md)). Notes we sent to FalkorDB: [docs/sponsor-feedback.md](docs/sponsor-feedback.md).
+
+Built in the window (commits after the import):
+
+| When | What | Where |
+|---|---|---|
+| 22 Oct | Zetaris spike: three sources behind one SQL endpoint, quote re-read by id | [zetaris_spike/](zetaris_spike/) |
+| 24 Oct | Investigator and Verifier loop, sample mode, traces, examples, `ingest_episodes()` in the core | [open_agent/](open_agent/), [docs/OPEN-AGENT-NEW-WORK.md](docs/OPEN-AGENT-NEW-WORK.md) |
+| 24 Oct | Nightshift provider, receipts, H-MEM engine behind `remember`/`recall` | [open_agent/nightshift.py](open_agent/nightshift.py), [open_agent/hmem_bridge.py](open_agent/hmem_bridge.py), [vendor/hmem/](vendor/hmem/), [docs/METERLESS.md](docs/METERLESS.md) |
+| 24 Oct | `docker compose`, `POST /run`, panel evidence in the answer card, this README, deck | [serve.py](serve.py), [docker-compose.yml](docker-compose.yml), [web/app.js](web/app.js), [deck/](deck/), [SUBMISSION/](SUBMISSION/) |
+
+`git log --reverse --format='%h %ad %s' --date=iso` shows the import and every later commit with its date.
+
+## 12. AI and Model Usage
+
+Models:
+- NVIDIA Nemotron 3.5 Lightning 30B-A3B through Meterless Nightshift for the Investigator (tool selection, citing, revising).
+- NVIDIA Nemotron 3 Nano 30B-A3B through Meterless Nightshift for the Verifier (judging a quoted record against a claim).
+- The loop's committed live runs of 24 Oct used Nemotron 3 Nano 30B-A3B on local Ollama for both agents <!-- C-UPDATE -->. No hosted model API and no embedding model are used; H-MEM uses its own deterministic hash embedder.
+
+Agent frameworks: none. The loop, the agents and the gate are plain Python; the model client is the OpenAI Python library against an OpenAI-compatible endpoint.
+
+Sponsor technology:
+- Zetaris: the agents' only path to the three source systems; ingest, re-read by id, absence query (section 4).
+- Meterless: Nightshift is the primary provider of every model call, with signed receipts; H-MEM is the agents' memory (section 4).
+- Cursor: not used for this build (optional per the organizer, 23 Oct).
+- NVIDIA: Nemotron models, one per agent, through Nightshift (section 4).
+
+External tools and libraries: FastAPI, uvicorn, pydantic, falkordb (Python client), openai (Python client), Node 22 for the H-MEM sidecar, SQLite (Python standard library) in sample mode, Cytoscape.js in the panel, Docker.
+
+Data: synthetic only (section 9).
+
+Adapted open-source code: the Meterless H-MEM reference engine, vendored unchanged and bundled to plain ESM (`vendor/hmem/README-PIN.md`). Nothing else copied.
+
+Development tools: the code, tests and docs were written with AI coding assistants under the author's direction. The design decisions, the choice of concept and the acceptance of each change are the author's; the changes are covered by the test suite in [tests/](tests/). Cursor was not used.
+
+Known limitations: section 10. Fallback and sample mode: sections 7 and 8. The narration of the demo video, if any, is disclosed in the video description. <!-- C-UPDATE: voice and music disclosure once the video exists -->
+
+## 13. Third-party code and licences
+
+- This repository: MIT ([LICENSE](LICENSE)).
+- Meterless H-MEM reference engine: Apache-2.0 ([vendor/hmem/LICENSE](vendor/hmem/LICENSE)), vendored unchanged.
+- Cytoscape.js 3.34.3: MIT ([web/vendor/LICENSE-cytoscape.txt](web/vendor/LICENSE-cytoscape.txt)).
+- FastAPI (MIT), uvicorn (BSD-3-Clause), pydantic (MIT), falkordb Python client (MIT) and redis (MIT), openai Python library (Apache-2.0), installed from PyPI at the versions pinned in [pyproject.toml](pyproject.toml).
+- Runtime images: FalkorDB 6.0.2 (FalkorDB's licence, server-side, not redistributed in this repo), python:3.12-slim and node:22.23.3-bookworm-slim (official images), all pinned by digest.
+- Zetaris platform and Meterless Nightshift are used as installed products and are not part of this repository.
+
+Built by [RetailBox Automation](https://retailbox-automation.com).

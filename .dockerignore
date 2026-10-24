@@ -1,11 +1,18 @@
-# Allow-list: only what the demo image needs. The Dockerfile itself must stay in the upload.
+# Allow-list: only what the judge image needs. The Dockerfile itself must stay in the upload.
 *
 !Dockerfile
 !.dockerignore
 !pyproject.toml
 !README.md
 !LICENSE
+!serve.py
 !honest_memory/
+!open_agent/
+!zetaris_spike/*.py
+!sample_data/
+!input_examples/
+!vendor/hmem/dist/
+!vendor/hmem/LICENSE
 !deploy/
 !web/
 **/__pycache__
