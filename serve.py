@@ -12,7 +12,7 @@ answers a question by itself: the loop, the SQL, the Verifier and the write gate
 GET /run/{run_id}/trace returns the JSONL trace of a run made by this server (logs/trace-<run_id>.jsonl).
 Everything else (GET /health, /v1/..., the panel at /) is honest_memory.api, unchanged.
 
-Env: SAMPLE_MODE (default true here: no Zetaris, no model, no credentials), OA_RUN_TIMEOUT (seconds, default 240),
+Env: SAMPLE_MODE (default true here: no Zetaris, no model, no credentials), OA_RUN_TIMEOUT (seconds, default 600),
 HOST (default 127.0.0.1: loopback only; docker-compose.yml sets 0.0.0.0 inside the container, published only on
 127.0.0.1 of the host), PORT (default 8000), FALKORDB_HOST/FALKORDB_PORT, HM_DEMO_TENANT (the panel's tenant, default quillfield),
 and everything open_agent.run reads (OA_LLM_*, ZETARIS_*, NIGHTSHIFT_*) for a live run.
@@ -113,7 +113,7 @@ def add_routes(app) -> None:
         opt = (body.options or {}).get("sample_mode")
         sample = env_sample() if opt is None else bool(opt)
         client_id = body.run_id if body.run_id and RUN_ID.match(body.run_id) else None
-        timeout = float(os.environ.get("OA_RUN_TIMEOUT", "240"))
+        timeout = float(os.environ.get("OA_RUN_TIMEOUT", "600"))
         if not _one_run.acquire(timeout=timeout):
             return JSONResponse({"status": "error", "error": {"type": "Busy", "recoverable": True,
                                  "message": "another run is in progress; try again"}}, 429)

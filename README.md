@@ -14,12 +14,12 @@ In a 2022 survey of 1,000 IT managers at large organizations in the UK and US, 6
 
 | Claim | Proof in the repo | What you will see |
 |---|---|---|
-| The Verifier catches a quote that changed at its source and sends the draft back | [logs/trace-20261024T123154Z-720b.jsonl](logs/trace-20261024T123154Z-720b.jsonl) (live: Zetaris + Nemotron) <!-- C-UPDATE --> and [output_examples/02_tampered_source.sample.json](output_examples/02_tampered_source.sample.json) | round 1: msg-0148 rejected with `quote_not_in_record`; round 2: verified on ADR-0009; the edit restored at the end |
-| The quote check overrules the model | [docs/open-agent-runs-2026-10-24/trace-20261024T123225Z-c454.jsonl](docs/open-agent-runs-2026-10-24/trace-20261024T123225Z-c454.jsonl) <!-- C-UPDATE --> | the Verifier's model said "supports" for a line that is not in ADR-0009; the quote check rejected it; the revision quoted the ADR's own line |
+| The Verifier catches a quote that changed at its source and sends the draft back | [output_examples/02_tampered_source.live.json](output_examples/02_tampered_source.live.json) and its trace [logs/trace-20261024T133813Z-5253.jsonl](logs/trace-20261024T133813Z-5253.jsonl) (live: Zetaris, Nightshift, H-MEM); runs 2 to 5 in [docs/open-agent-runs-2026-10-24-nightshift/](docs/open-agent-runs-2026-10-24-nightshift/); sample: [output_examples/02_tampered_source.sample.json](output_examples/02_tampered_source.sample.json) | in 5 of 5 live runs round 1 rejects msg-0148 (`quote_not_in_record`), round 2 verifies on ADR-0009, the answer flags the edited record on its own conflict line, the edit is restored |
+| The quote check overrules the model | [docs/open-agent-runs-2026-10-24/trace-20261024T123225Z-c454.jsonl](docs/open-agent-runs-2026-10-24/trace-20261024T123225Z-c454.jsonl) (an earlier run, Nemotron 3 Nano on Ollama for both agents) | the Verifier's model said "supports" for a line that is not in ADR-0009; the quote check rejected it; the revision quoted the ADR's own line. In the 20 Nightshift runs every rejected quote was also judged `contradicts`, so no overrule was needed there |
 | An absence is checked, not guessed | [output_examples/03_not_in_these_systems.live.json](output_examples/03_not_in_these_systems.live.json) | `absence_confirmed`: one `UNION ALL` over the three systems through Zetaris found no record; nothing written |
-| Nothing is stored unless every citation was accepted | [open_agent/run.py](open_agent/run.py) `write_finding`; [tests/test_open_agent.py](tests/test_open_agent.py) | `write_gate.written: false` with the reason, for example on [output_examples/04_decision_superseded.live.json](output_examples/04_decision_superseded.live.json) |
-| Every model call goes through Meterless Nightshift with a signed receipt | [logs/receipts-wlwt-proof-20261024T115709Z-c6aed4.jsonl](logs/receipts-wlwt-proof-20261024T115709Z-c6aed4.jsonl), [open_agent/nightshift.py](open_agent/nightshift.py) `check_routing`, [tests/test_nightshift.py](tests/test_nightshift.py) | 3 receipts signed Ed25519 by the Nightshift daemon, app `wlwt-investigator` and `wlwt-verifier`, cost 0 USD <!-- C-UPDATE --> |
-| H-MEM is the agents' memory across sessions | [logs/meterless-live-proof-wlwt-proof-20261024T115709Z-c6aed4.json](logs/meterless-live-proof-wlwt-proof-20261024T115709Z-c6aed4.json), [tests/test_hmem.py](tests/test_hmem.py) | process A stores a verified answer, process B gets it in front of the model, the Verifier's verdict raises its confidence 0.70 to 0.75 |
+| Nothing is stored unless every citation was accepted | [open_agent/run.py](open_agent/run.py) `write_finding`; [tests/test_open_agent.py](tests/test_open_agent.py) | `write_gate.written: false` with the reason, for example on [output_examples/03_not_in_these_systems.live.json](output_examples/03_not_in_these_systems.live.json) |
+| Every model call goes through Meterless Nightshift with a signed receipt | [logs/receipts-20261024T133813Z-5253.jsonl](logs/receipts-20261024T133813Z-5253.jsonl) (the tamper run: 6 receipts), one receipt file per run in [logs/](logs/) and [docs/open-agent-runs-2026-10-24-nightshift/](docs/open-agent-runs-2026-10-24-nightshift/), [open_agent/nightshift.py](open_agent/nightshift.py) `check_routing`, [tests/test_nightshift.py](tests/test_nightshift.py) | 20 live runs: 95 model calls, 95 receipts signed Ed25519 by the Nightshift daemon, cost 0 USD on every one, Investigator routed to Lightning 59 of 59, Verifier to Nano 36 of 36, 0 routing mismatches |
+| H-MEM is the agents' memory across sessions | [output_examples/05_cross_session_recall.live.json](output_examples/05_cross_session_recall.live.json), ledger [logs/hmem-ledger-oa_xs_live_20261024T140313Z.jsonl](logs/hmem-ledger-oa_xs_live_20261024T140313Z.jsonl), [tests/test_hmem.py](tests/test_hmem.py) | process A answers 01 and the verified answer is stored as `mem-1`; process B, a new process, asks a paraphrase, H-MEM puts `mem-1` in front of the Investigator's model, B is verified through Zetaris and the verdict raises `mem-1` from 0.70 to 0.75 (ledger: create, read, feedback) |
 | A judge can run it with no credentials | [SUBMISSION/FRESH-CLONE-TEST.md](SUBMISSION/FRESH-CLONE-TEST.md) | fresh clone, empty `.env`: build, up, four examples and one new question through `POST /run`, all `success` |
 
 ## Contents
@@ -105,7 +105,7 @@ Two separate things, both in the product:
 - **Nightshift is the primary model provider.** Every model call of the agents goes to Nightshift on the same machine. Each response carries a receipt signed Ed25519 by the Nightshift daemon. The client checks every response: `routed_model` must be the agent's model, the receipt must show the app's own lane allowlist, and the cost must be 0; otherwise it raises `RoutingMismatch` instead of falling back quietly. In Nightshift 1.2.1 an explicit model id does not pin routing, so each agent has its own app id with a one-lane allowlist (negative control in [docs/METERLESS.md](docs/METERLESS.md)).
 - **H-MEM is the agents' memory.** An answer that passed the Verifier and the write gate is stored as a long-term memory; before answering, matching memories are put in front of the model; the Verifier's verdict on an answer that drew on a memory becomes feedback (`helpful` +0.05, `not_helpful` -0.03, `wrong` -0.20). The engine is the Meterless reference implementation, pinned and unchanged in [vendor/hmem/](vendor/hmem/).
 
-<!-- C-UPDATE: confirm that the open_agent loop's committed live runs go through Nightshift (lane C); until then the loop's committed live runs used Nemotron 3 Nano on Ollama (docs/OPEN-AGENT-NEW-WORK.md, Measured) and the Nightshift path is proven by the smoke runs and the cross-session proof. -->
+Measured on the 20 live runs of 24 Oct ([docs/OPEN-AGENT-NEW-WORK.md](docs/OPEN-AGENT-NEW-WORK.md), Measured): 95 model calls, 95 signed receipts, `cost_usd` 0 on every one, none from cache, 0 routing mismatches; H-MEM stored 15 verified answers, 12 of 20 recalls put an earlier answer in front of the model, 9 verdicts went back as `helpful`.
 
 ### NVIDIA
 
@@ -114,11 +114,11 @@ Two separate things, both in the product:
 | Investigator | Nemotron 3.5 Lightning 30B-A3B (`local-runtime/nemotron-3.5-lightning-30b-a3b`) | Nightshift app `wlwt-investigator`, lane `nemotron-lightning` | native OpenAI tool calls for the graph tools |
 | Verifier | Nemotron 3 Nano 30B-A3B (`local-runtime/nemotron-3-nano-30b-a3b`) | Nightshift app `wlwt-verifier`, lane `nemotron-nano` | short JSON verdicts; a different model from the one it checks |
 
-Receipt log: [logs/receipts-wlwt-proof-20261024T115709Z-c6aed4.jsonl](logs/receipts-wlwt-proof-20261024T115709Z-c6aed4.jsonl) <!-- C-UPDATE: add the receipt log of the final live runs -->. Per-call blocks: [logs/nightshift-smoke-investigator.json](logs/nightshift-smoke-investigator.json), [logs/nightshift-smoke-verifier.json](logs/nightshift-smoke-verifier.json).
+In the 20 live runs the Investigator's calls were routed to Lightning 59 of 59 times and the Verifier's to Nano 36 of 36 (from the receipts). Receipt log: [logs/receipts-20261024T133813Z-5253.jsonl](logs/receipts-20261024T133813Z-5253.jsonl) (the tamper run: 3 receipts on Lightning, 3 on Nano), with one receipt file per run next to each trace. The pre-existing 82-question benchmark was also run through Nightshift on Lightning: 171 model calls, all routed to Lightning, cost 0 ([bench/results/nightshift-nemotron-3.5-lightning-30b-a3b/README.md](bench/results/nightshift-nemotron-3.5-lightning-30b-a3b/README.md)).
 
 ### Cursor
 
-Not used for this build. The organizer said on 23 Oct 2026 that Cursor is optional and has no separate prize. The code was written with other AI coding assistants under the author's direction (section 12).
+Not used; the organizer says it is optional (23 Oct 2026). The code was written with other AI coding assistants under the author's direction (section 12).
 
 ### What was unique
 
@@ -145,7 +145,19 @@ docker run -d --rm -p 6379:6379 falkordb/falkordb:6.0.2
 python -m open_agent.run --sample --input input_examples/02_tampered_source.json
 ```
 
-**Live mode** (Zetaris and Nightshift on the same machine): register the three sources in a local Zetaris as in [zetaris_spike/README.md](zetaris_spike/README.md), start Nightshift headless as in [docs/METERLESS.md](docs/METERLESS.md), copy `.env.example` to `.env`, uncomment the live lines and run `python -m open_agent.run --ingest --input input_examples/01_current_owner.json`. <!-- C-UPDATE: the exact live environment for the loop through Nightshift -->
+**Live mode** (Zetaris and Nightshift on the same machine): register the three sources in a local Zetaris as in [zetaris_spike/README.md](zetaris_spike/README.md), install Nightshift as in [docs/METERLESS.md](docs/METERLESS.md), then:
+
+```bash
+scripts/nightshift_headless.sh start                 # daemon, engine, app policies, both Nemotron lanes
+export ZETARIS_BUNDLE_ENV=/path/to/zetaris-platform/.env
+export NIGHTSHIFT_SWAP=1                             # optional: one lane loaded at a time (a Mac short on memory)
+python -m open_agent.run --ingest --input input_examples/01_current_owner.json
+python -m open_agent.run --input input_examples/02_tampered_source.json   # edits msg-0148 in Postgres, restores it
+python scripts/cross_session_proof.py                 # process A answers 01, process B the paraphrase (example 05)
+scripts/nightshift_headless.sh stop
+```
+
+Nightshift is the default provider; nothing else needs setting. Other settings are in [docs/OPEN-AGENT-NEW-WORK.md](docs/OPEN-AGENT-NEW-WORK.md) (Run it).
 
 ## 6. Usage
 
@@ -192,7 +204,7 @@ Command line, same loop: `python -m open_agent.run --sample --input <file>` or `
 - no model is called: the Investigator uses the deterministic router of the core; the Verifier's re-read and quote check run as in live mode, and its model judgement is reported as `skipped: no model in SAMPLE_MODE`;
 - a tamper edits the in-memory copy and is restored.
 
-Nothing in sample mode reads `output_examples/` or replays a recorded answer; a new question gets a new answer (see the `oncall-runbook` run in [SUBMISSION/FRESH-CLONE-TEST.md](SUBMISSION/FRESH-CLONE-TEST.md)). Sample mode still needs FalkorDB, which `docker compose` starts. Example 04 is worded for a model; without one the router has no rule for it and says so (`no_claim`).
+Nothing in sample mode reads `output_examples/` or replays a recorded answer; a new question gets a new answer (see the `oncall-runbook` run in [SUBMISSION/FRESH-CLONE-TEST.md](SUBMISSION/FRESH-CLONE-TEST.md)). Sample mode still needs FalkorDB, which `docker compose` starts. Example 04 is worded for a model; without one the router has no rule for it and says so (`no_claim`). The two-process memory example 05 runs with `python scripts/cross_session_proof.py --sample`: B recalls A's memory from H-MEM (ledger create and read), and since the router answers B with `no_claim`, no feedback is given, which the output says.
 
 ## 8. Failure handling
 
@@ -200,13 +212,14 @@ Nothing in sample mode reads `output_examples/` or replays a recorded answer; a 
 |---|---|
 | Zetaris does not answer | each statement has a timeout (`OA_ZETARIS_TIMEOUT`, 30 s) and one retry; on ingest the run stops with `SourceUnavailable` and a hint to use sample mode; on a re-read the citation is `unreadable`, not accepted, and no revision is asked |
 | No Zetaris credentials | `status: error`, `SourceUnavailable: set ZETARIS_USERNAME/ZETARIS_PASSWORD or ZETARIS_BUNDLE_ENV` (seen in the fresh-clone test) |
-| Model down | tool loop: the router answers; citing or revising: the deterministic path; judging: the quote check alone decides and the verdict says `skipped: model unavailable (...)` |
-| Nightshift routed to another model, wrong lane, or non-zero cost | `RoutingMismatch` is raised; the agent does not fall back to the router to hide it |
-| Nightshift down | the agent falls back to the router and the run lists the error |
+| Nightshift down, or a Nemotron lane not admitted after the warming wait | the run stops with exit code 4 and `error.type` `ProviderDown`, naming the agent, app, lane and model; no other model is called; a tampered record is restored either way |
+| A reply from a model, route or lane other than the agent's, or a non-zero cost | `RoutingMismatch`, the run stops (it fired for real on 24 Oct 13:09Z under memory pressure: [docs/METERLESS.md](docs/METERLESS.md)) |
+| An empty model reply | not treated as down: the trace marks it and the deterministic path takes that step (1 of the 5 live tamper runs) |
+| No model at all (SAMPLE_MODE, or `OA_LLM_PROVIDER=none`) | the router answers, citing and revising take the deterministic path, the Verifier's judgement is reported as skipped and the quote check decides |
 | H-MEM engine fails or Node is missing | recall answers from the graph and the answer's note says so |
 | FalkorDB not reachable | `GraphUnavailable` structured error with the hint to start it |
 | Verifier keeps rejecting | at most 2 revisions (3 rounds), then the status says what was verified and nothing is written |
-| `POST /run` takes too long | `OA_RUN_TIMEOUT` (240 s) -> `RunTimeout` error object; one run at a time, a second caller gets `Busy` |
+| `POST /run` takes too long | `OA_RUN_TIMEOUT` (600 s; a live tamper run took up to 326 s) -> `RunTimeout` error object; one run at a time, a second caller gets `Busy` |
 | Bad request | 422 with what to send |
 
 ## 9. Data and licensing
@@ -216,7 +229,9 @@ All data is synthetic: a fictional company, Quillfield Billing, generated by a s
 ## 10. Limitations
 
 - **Synthetic, single-domain corpus.** It shows the mechanism works where it should; it does not predict a rate on real data.
-- **Measured on one shared Mac.** The loop's live numbers (24 Oct): example 01 verified in 6 of 6 runs, example 02 (tampered) verified in 4 of 6 and unverified in 2, example 03 absence confirmed 6 of 6, example 04 partially verified 6 of 6 and never stored; p50 wall time 12.0 s, 12.2 s, 1.7 s, 15.4 s. Those runs used Nemotron 3 Nano on Ollama for both agents ([docs/OPEN-AGENT-NEW-WORK.md](docs/OPEN-AGENT-NEW-WORK.md), Measured). <!-- C-UPDATE: replace with the Nightshift runs -->
+- **Live runs are slow.** On the 24 Oct series (5 runs per example through Zetaris, Nightshift and H-MEM, code `9b6f7a7`, a Mac Studio shared with other work): example 01 verified 5 of 5 in 1 round, p50 45.9 s; 02 (tampered) verified 5 of 5 in 2 rounds, p50 164.5 s, max 326.2 s, edit restored 5 of 5; 03 absence confirmed 5 of 5, p50 18.4 s; 04 verified 5 of 5, p50 54.7 s. Nightshift 1.2.1 cannot switch the Nemotron lanes' thinking off from outside, so each call carries a token budget (the Investigator's revise call p50 44.1 s), and the two lanes did not fit next to other work, so one lane was loaded at a time (40 switches, p50 5.5 s each). In 1 of the 5 tamper runs Lightning's revise reply came back empty and the deterministic revision took that step ([docs/OPEN-AGENT-NEW-WORK.md](docs/OPEN-AGENT-NEW-WORK.md), Measured).
+- **The earlier provider was faster and verified less.** Before the integration the loop ran on Nemotron 3 Nano on Ollama for both agents (24 runs, [docs/open-agent-runs-2026-10-24/](docs/open-agent-runs-2026-10-24/)): 02 verified 4 of 6, 04 partially verified 6 of 6, p50 12 to 15 s. Model, thinking, the conflict line and the evidence rules changed together, so the difference is not attributable to any one of them.
+- **Example 04's answers name both decision records with their dates, but none says in words that ADR-0011 replaced ADR-0004.**
 - **Answer quality is bounded by the model.** The superseded-decision example never reached `verified`. The loop guarantees what gets stored, not that every question is answered.
 - **Zetaris runs locally under emulation** (amd64 images on Apple silicon); a judge without the bundle uses sample mode.
 - **Tamper works on chat records only**, and the memory graph is not refreshed after an edit: the catch is reported, the graph keeps the old copy.
@@ -232,7 +247,7 @@ Built before 22 Oct 2026 00:00 UTC, for Graph Hacks 2026 (FalkorDB, 15 to 18 Oct
 - `honest_memory/`: the memory graph on FalkorDB, the write gate (ACCEPT, CONFIRM, SUPERSEDE, CLOSE, REJECT with receipts), the 21-tool catalogue, the departure tools, the deterministic router, the agent, the HTTP API and MCP server;
 - `web/` (the panel), `bench/` (82 questions against plain retrieval), `redteam/` (36 attacks on the write gate), `queries/`, `examples/`, `spike/`, `docs/` of that event, the synthetic corpus generator.
 
-Numbers from that work, unchanged: on 82 questions, plain retrieval 46.3% correct, graph tools with the rule router 100.0% (rules written against this set), graph tools with an LLM agent 95.1% (on `gemma4:26b-a4b-it-qat`, not Nemotron) ([bench/RESULTS.md](bench/RESULTS.md)); red team 36 of 36 after 11 fixes ([redteam/REPORT.md](redteam/REPORT.md)). Notes we sent to FalkorDB: [docs/sponsor-feedback.md](docs/sponsor-feedback.md).
+Numbers from that work, unchanged: on 82 questions, plain retrieval 46.3% correct, graph tools with the rule router 100.0% (rules written against this set), graph tools with an LLM agent 95.1% (on `gemma4:26b-a4b-it-qat` through Ollama, thinking off) ([bench/RESULTS.md](bench/RESULTS.md)). Re-run in the window through Meterless Nightshift on Nemotron 3.5 Lightning (thinking on, one run): 97.6% correct (80 of 82), 0.0% stale, 0.0% unsupported, 0 personal-data leaks, median 10.4 s ([bench/results/nightshift-nemotron-3.5-lightning-30b-a3b/README.md](bench/results/nightshift-nemotron-3.5-lightning-30b-a3b/README.md)); different models on different days, one run each, so the 2-question difference is not a finding; red team 36 of 36 after 11 fixes ([redteam/REPORT.md](redteam/REPORT.md)). Notes we sent to FalkorDB: [docs/sponsor-feedback.md](docs/sponsor-feedback.md).
 
 Built in the window (commits after the import):
 
@@ -250,14 +265,14 @@ Built in the window (commits after the import):
 Models:
 - NVIDIA Nemotron 3.5 Lightning 30B-A3B through Meterless Nightshift for the Investigator (tool selection, citing, revising).
 - NVIDIA Nemotron 3 Nano 30B-A3B through Meterless Nightshift for the Verifier (judging a quoted record against a claim).
-- The loop's committed live runs of 24 Oct used Nemotron 3 Nano 30B-A3B on local Ollama for both agents <!-- C-UPDATE -->. No hosted model API and no embedding model are used; H-MEM uses its own deterministic hash embedder.
+- The 20 live runs of 24 Oct and the benchmark re-run went through Nightshift as above. Earlier development runs (`docs/open-agent-runs-2026-10-24/`) used Nemotron 3 Nano 30B-A3B on local Ollama for both agents; Ollama stays available as a development provider (`OA_LLM_PROVIDER=ollama`). The pre-existing benchmark of 15 Oct used gemma4:26b-a4b-it-qat on Ollama. No hosted model API and no embedding model are used; H-MEM uses its own deterministic hash embedder.
 
 Agent frameworks: none. The loop, the agents and the gate are plain Python; the model client is the OpenAI Python library against an OpenAI-compatible endpoint.
 
 Sponsor technology:
 - Zetaris: the agents' only path to the three source systems; ingest, re-read by id, absence query (section 4).
 - Meterless: Nightshift is the primary provider of every model call, with signed receipts; H-MEM is the agents' memory (section 4).
-- Cursor: not used for this build (optional per the organizer, 23 Oct).
+- Cursor: not used; the organizer says it is optional.
 - NVIDIA: Nemotron models, one per agent, through Nightshift (section 4).
 
 External tools and libraries: FastAPI, uvicorn, pydantic, falkordb (Python client), openai (Python client), Node 22 for the H-MEM sidecar, SQLite (Python standard library) in sample mode, Cytoscape.js in the panel, Docker.
@@ -266,9 +281,9 @@ Data: synthetic only (section 9).
 
 Adapted open-source code: the Meterless H-MEM reference engine, vendored unchanged and bundled to plain ESM (`vendor/hmem/README-PIN.md`). Nothing else copied.
 
-Development tools: the code, tests and docs were written with AI coding assistants under the author's direction. The design decisions, the choice of concept and the acceptance of each change are the author's; the changes are covered by the test suite in [tests/](tests/). Cursor was not used.
+Development tools: the code, tests and docs were written with AI coding assistants under the author's direction. The design decisions, the choice of concept and the acceptance of each change are the author's; the changes are covered by the test suite in [tests/](tests/). Cursor was not used; the organizer says it is optional.
 
-Known limitations: section 10. Fallback and sample mode: sections 7 and 8. The narration of the demo video, if any, is disclosed in the video description. <!-- C-UPDATE: voice and music disclosure once the video exists -->
+Known limitations: section 10. Fallback and sample mode: sections 7 and 8. The demo video's narration and music, if any, are disclosed in the video's description.
 
 ## 13. Third-party code and licences
 
