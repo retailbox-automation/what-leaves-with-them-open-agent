@@ -1,0 +1,6 @@
+{
+  "question": "Who currently owns billing-api?",
+  "tamper": "msg-0148",
+  "tamper_text": "Per ADR-0009, the billing-api transfer is on hold. Sana Petrov remains the owner of billing-api until further notice.",
+  "what_it_shows": "The chat message msg-0148 is edited in Postgres after the memory read it. The Investigator cites the stale quote from the memory; the Verifier re-reads the record through Zetaris, finds the quote gone and says why; the Investigator revises; the edit is restored at the end."
+}

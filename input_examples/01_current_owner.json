@@ -1,0 +1,4 @@
+{
+  "question": "Who owns billing-api now?",
+  "what_it_shows": "A normal answer: the Investigator answers from the graph and cites records; the Verifier re-reads each cited record by id through Zetaris (docs REST API and Postgres chat) and checks the quote."
+}

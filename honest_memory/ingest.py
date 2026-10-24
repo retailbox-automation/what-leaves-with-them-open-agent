@@ -92,6 +92,14 @@ def ingest_corpus(store: Store, corpus_dir: str | Path, reset: bool = False,
         episodes = [e for e in episodes if epoch(e["ts"]) < _instant(until)]
     if start:
         episodes = [e for e in episodes if epoch(e["ts"]) >= _instant(start)]
+    return ingest_episodes(store, episodes, reset=reset, extractor=extractor)
+
+
+def ingest_episodes(store: Store, episodes: list[dict], reset: bool = False,
+                    extractor: RuleExtractor | None = None) -> dict:
+    """Replay episodes read from anywhere (the corpus file, or the source systems through Zetaris) in time order.
+    Same counts as ingest_corpus."""
+    episodes = sorted(episodes, key=lambda e: (e["ts"], e["id"]))
     if reset:
         store.drop()
     store.ensure_schema()

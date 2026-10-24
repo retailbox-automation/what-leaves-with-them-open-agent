@@ -1,0 +1,225 @@
+msg-0001	2026-08-17T14:02:00Z	Zara Lowell	#growth	Reminder: timesheets are due Friday.	
+msg-0002	2026-08-17T16:34:00Z	Omar Fenwick	#general	Great work this week, Zara.	
+msg-0003	2026-08-17T17:28:00Z	Aiko Rademacher	#platform	Wrapped up tests for bounce handling in notifications, merging after lunch.	
+msg-0004	2026-08-17T17:29:00Z	Zara Lowell	#growth	Kudos to Yuki for staying late on the release.	
+msg-0005	2026-08-17T18:53:00Z	Viktor Hartwell	#payments	Deployed the backup verification change in ledger-db to staging, looks good.	
+msg-0006	2026-08-17T19:08:00Z	Yuki Moreau	#payments	Kudos to Yuki for staying late on the release.	
+msg-0007	2026-08-18T13:25:00Z	Oskar Alvarez	#payments	Thanks Oskar for the quick review.	
+msg-0008	2026-08-18T16:15:00Z	Mateo Sandoval	#payments	ADR-0001 accepted: Idempotency keys on billing-api writes. Please read it before your next change.	ADR-0001
+msg-0009	2026-08-18T16:21:00Z	Mateo Sandoval	#payments	ADR-0002 accepted: Append-only ledger entries. Please read it before your next change.	ADR-0002
+msg-0010	2026-08-18T17:02:00Z	Selma Marsh	#payments	Welcome back Tomas!	
+msg-0011	2026-08-19T11:23:00Z	Lars Thorne	#payments	Marked TCK-0007 as resolved.	TCK-0007
+msg-0012	2026-08-19T13:31:00Z	Sana Petrov	#payments	Reminder: timesheets are due Thursday.	
+msg-0013	2026-08-19T17:22:00Z	Priya Farrow	#support	Pushed a fix for history view in status-page; the cause was a config value that differed between environments.	
+msg-0014	2026-08-19T18:44:00Z	Viktor Hartwell	#general	Quick poll: should we move the weekly sync to Wednesday?	
+msg-0015	2026-08-19T19:55:00Z	Tomas Kessler	#support	Quick poll: should we move the weekly sync to Tuesday?	
+msg-0016	2026-08-19T21:04:00Z	Lars Thorne	#payments	Deployed the tax summary block change in invoice-renderer to staging, looks good.	
+msg-0017	2026-08-20T07:11:00Z	Priya Farrow	#support	TCK-0010 is done and waiting for review.	TCK-0010
+msg-0018	2026-08-20T08:13:00Z	Aiko Rademacher	#growth	Marked TCK-0011 as resolved.	TCK-0011
+msg-0019	2026-08-20T12:08:00Z	Lars Thorne	#payments	Closed TCK-0008, it goes out with the next release.	TCK-0008
+msg-0020	2026-08-20T15:32:00Z	Pavel Hollis	#support	Lunch order closes in ten minutes.	
+msg-0021	2026-08-20T16:20:00Z	Lars Thorne	#platform	Rolled out the rate limit on login fix in auth to all tenants.	
+msg-0022	2026-08-20T21:18:00Z	Zara Lowell	#platform	Can someone cover the support queue for an hour at 14:00 UTC?	
+msg-0023	2026-08-21T17:01:00Z	Lars Thorne	#platform	Finished the dead letter queue cleanup in webhooks, pull request is up.	
+msg-0024	2026-08-21T19:05:00Z	Pavel Hollis	#platform	Closed TCK-0013, it goes out with the next release.	TCK-0013
+msg-0025	2026-08-21T20:16:00Z	Zara Lowell	#growth	New laptops arrive Wednesday; ping me if yours is on the list.	
+msg-0026	2026-08-21T21:12:00Z	Tomas Kessler	#growth	I pushed the slide deck to the shared drive.	
+msg-0027	2026-08-22T03:53:00Z	Luca Ostrander	#platform	Marked TCK-0016 as resolved.	TCK-0016
+msg-0028	2026-08-24T13:19:00Z	Oskar Alvarez	#platform	I'm out on Wednesday, back the day after.	
+msg-0029	2026-08-24T14:27:00Z	Viktor Hartwell	#growth	Pushed a fix for cohort query in reporting; the cause was a slow query on a large tenant.	
+msg-0030	2026-08-25T13:28:00Z	Luca Ostrander	#support	Fire drill at 14:00 UTC, please ignore the alarm.	
+msg-0031	2026-08-25T16:37:00Z	Luca Ostrander	#platform	ADR-0003 accepted: Signed webhooks with retry backoff. Please read it before your next change.	ADR-0003
+msg-0032	2026-08-25T18:04:00Z	Mateo Sandoval	#payments	ADR-0004 accepted: Render invoices synchronously. Please read it before your next change.	ADR-0004
+msg-0033	2026-08-25T20:29:00Z	Luca Ostrander	#support	Rolled out the bulk actions fix in admin-console to all tenants.	
+msg-0034	2026-08-26T13:51:00Z	Omar Fenwick	#general	Thanks Luca for the quick review.	
+msg-0035	2026-08-26T16:29:00Z	Lars Thorne	#platform	Fire drill at 14:00 UTC, please ignore the alarm.	
+msg-0036	2026-08-26T16:40:00Z	Priya Farrow	#platform	I pushed the slide deck to the shared drive.	
+msg-0037	2026-08-26T17:29:00Z	Zara Lowell	#growth	Does anyone have the link to the onboarding checklist?	
+msg-0038	2026-08-26T20:41:00Z	Selma Marsh	#support	Great work this week, Omar.	
+msg-0039	2026-08-27T13:07:00Z	Yuki Moreau	#payments	Welcome back Mateo!	
+msg-0040	2026-08-27T15:28:00Z	Luca Ostrander	#platform	Postmortem PM-01 is published. Action items are listed at the bottom.	PM-01
+msg-0221	2026-08-27T16:38:00Z	Oskar Alvarez	#growth	Rolled out the cohort query fix in reporting to all tenants.	
+msg-0041	2026-08-27T16:44:00Z	Tomas Kessler	#payments	Standup moves to 14:00 UTC today.	
+msg-0042	2026-08-27T20:40:00Z	Luca Ostrander	#support	Deployed the maintenance schedule change in status-page to staging, looks good.	
+msg-0043	2026-08-27T20:43:00Z	Priya Farrow	#platform	Lunch order closes in ten minutes.	
+msg-0044	2026-08-27T21:29:00Z	Viktor Hartwell	#payments	Welcome back Mateo!	
+msg-0045	2026-08-28T15:23:00Z	Luca Ostrander	#payments	Happy Monday, everyone!	
+msg-0046	2026-08-28T15:37:00Z	Tomas Kessler	#payments	I'm out on Friday, back the day after.	
+msg-0047	2026-08-28T19:13:00Z	Pavel Hollis	#payments	Lunch order closes in ten minutes.	
+msg-0048	2026-08-28T21:24:00Z	Sana Petrov	#platform	Wrapped up tests for token signing in auth, merging after lunch.	
+msg-0049	2026-08-29T03:01:00Z	Zara Lowell	#support	Marked TCK-0028 as resolved.	TCK-0028
+msg-0050	2026-08-31T16:45:00Z	Viktor Hartwell	#payments	Wrapped up tests for line item layout in invoice-renderer, merging after lunch.	
+msg-0051	2026-08-31T18:50:00Z	Selma Marsh	#growth	Reminder: timesheets are due Wednesday.	
+msg-0052	2026-08-31T19:23:00Z	Aiko Rademacher	#platform	Can someone cover the support queue for an hour at 17:30 UTC?	
+msg-0053	2026-08-31T20:06:00Z	Lars Thorne	#payments	Deployed the page break logic change in invoice-renderer to staging, looks good.	
+msg-0054	2026-09-01T16:14:00Z	Selma Marsh	#platform	ADR-0005 accepted: SSO required for admin-console. Please read it before your next change.	ADR-0005
+msg-0055	2026-09-01T17:55:00Z	Priya Farrow	#support	ADR-0006 accepted: Status page updates come from on-call. Please read it before your next change.	ADR-0006
+msg-0056	2026-09-01T18:59:00Z	Omar Fenwick	#payments	Thanks Selma for the quick review.	
+msg-0057	2026-09-01T19:15:00Z	Oskar Alvarez	#platform	Marked TCK-0033 as resolved.	TCK-0033
+msg-0058	2026-09-01T19:23:00Z	Pavel Hollis	#support	Welcome back Pavel!	
+msg-0059	2026-09-01T19:34:00Z	Aiko Rademacher	#platform	Finished the unsubscribe links cleanup in notifications, pull request is up.	
+msg-0060	2026-09-01T21:11:00Z	Priya Farrow	#payments	Standup moves to 15:30 UTC today.	
+msg-0061	2026-09-02T14:11:00Z	Priya Farrow	#support	Fire drill at 16:00 UTC, please ignore the alarm.	
+msg-0062	2026-09-02T14:15:00Z	Selma Marsh	#general	I'll be online a bit later than usual today.	
+msg-0063	2026-09-02T14:26:00Z	Viktor Hartwell	#payments	TCK-0037 is done and waiting for review.	TCK-0037
+msg-0064	2026-09-02T16:11:00Z	Selma Marsh	#payments	Rolled out the proration rounding fix in billing-api to all tenants.	
+msg-0065	2026-09-02T16:47:00Z	Sana Petrov	#payments	Closed TCK-0036, it goes out with the next release.	TCK-0036
+msg-0066	2026-09-02T17:17:00Z	Oskar Alvarez	#payments	Kudos to Sana for staying late on the release.	
+msg-0067	2026-09-02T18:46:00Z	Yuki Moreau	#platform	Welcome back Luca!	
+msg-0068	2026-09-02T18:58:00Z	Selma Marsh	#support	Deployed the impersonation banner change in admin-console to staging, looks good.	
+msg-0069	2026-09-02T19:11:00Z	Aiko Rademacher	#growth	Kudos to Pavel for staying late on the release.	
+msg-0070	2026-09-03T13:35:00Z	Pavel Hollis	#support	Welcome back Selma!	
+msg-0071	2026-09-03T15:17:00Z	Aiko Rademacher	#growth	Postmortem PM-02 is published. Action items are listed at the bottom.	PM-02
+msg-0072	2026-09-03T15:29:00Z	Omar Fenwick	#growth	I pushed the slide deck to the shared drive.	
+msg-0073	2026-09-03T18:57:00Z	Zara Lowell	#support	TCK-0041 is done and waiting for review.	TCK-0041
+msg-0074	2026-09-03T20:30:00Z	Zara Lowell	#payments	Welcome back Mateo!	
+msg-0075	2026-09-03T20:35:00Z	Priya Farrow	#growth	Can someone cover the support queue for an hour at 13:30 UTC?	
+msg-0076	2026-09-03T21:24:00Z	Priya Farrow	#general	Can someone cover the support queue for an hour at 14:00 UTC?	
+msg-0077	2026-09-03T21:58:00Z	Yuki Moreau	#general	I'm out on Friday, back the day after.	
+msg-0078	2026-09-04T13:46:00Z	Oskar Alvarez	#payments	I pushed the slide deck to the shared drive.	
+msg-0079	2026-09-04T15:31:00Z	Selma Marsh	#payments	Reminder: timesheets are due Friday.	
+msg-0080	2026-09-04T20:11:00Z	Priya Farrow	#general	Quick poll: should we move the weekly sync to Wednesday?	
+msg-0081	2026-09-04T21:08:00Z	Luca Ostrander	#growth	Is the retro still on for Friday?	
+msg-0082	2026-09-05T01:03:00Z	Viktor Hartwell	#payments	Closed TCK-0051, it goes out with the next release.	TCK-0051
+msg-0083	2026-09-05T13:19:00Z	Zara Lowell	#support	TCK-0048 is done and waiting for review.	TCK-0048
+msg-0084	2026-09-07T14:17:00Z	Sana Petrov	#support	Lunch order closes in ten minutes.	
+msg-0085	2026-09-07T17:24:00Z	Zara Lowell	#growth	Quick poll: should we move the weekly sync to Monday?	
+msg-0086	2026-09-08T12:13:00Z	Viktor Hartwell	#payments	TCK-0055 is done and waiting for review.	TCK-0055
+msg-0087	2026-09-08T13:06:00Z	Pavel Hollis	#platform	The coffee machine on the second floor is fixed.	
+msg-0088	2026-09-08T13:36:00Z	Luca Ostrander	#growth	New laptops arrive Friday; ping me if yours is on the list.	
+msg-0089	2026-09-08T14:33:00Z	Oskar Alvarez	#growth	I pushed the slide deck to the shared drive.	
+msg-0090	2026-09-08T16:32:00Z	Selma Marsh	#platform	ADR-0007 accepted: Per-tenant rate limits in notifications. Please read it before your next change.	ADR-0007
+msg-0091	2026-09-08T17:10:00Z	Yuki Moreau	#platform	Quick poll: should we move the weekly sync to Monday?	
+msg-0092	2026-09-08T17:15:00Z	Viktor Hartwell	#payments	ADR-0011 accepted: Render invoices asynchronously through invoice-renderer. Please read it before your next change.	ADR-0011
+msg-0093	2026-09-08T17:43:00Z	Yuki Moreau	#general	I pushed the slide deck to the shared drive.	
+msg-0094	2026-09-08T17:54:00Z	Oskar Alvarez	#platform	TCK-0053 is done and waiting for review.	TCK-0053
+msg-0095	2026-09-08T18:55:00Z	Omar Fenwick	#growth	Lunch order closes in ten minutes.	
+msg-0096	2026-09-08T20:14:00Z	Lars Thorne	#payments	Pushed a fix for page break logic in invoice-renderer; the cause was an off-by-one in the date window.	
+msg-0097	2026-09-08T20:22:00Z	Sana Petrov	#platform	New laptops arrive Thursday; ping me if yours is on the list.	
+msg-0098	2026-09-09T13:28:00Z	Selma Marsh	#platform	VPN is flaky for me this morning, anyone else?	
+msg-0099	2026-09-09T15:04:00Z	Viktor Hartwell	#payments	Rolled out the month-end close query fix in ledger-db to all tenants.	
+msg-0100	2026-09-09T15:39:00Z	Luca Ostrander	#platform	TCK-0056 is done and waiting for review.	TCK-0056
+msg-0101	2026-09-09T15:41:00Z	Tomas Kessler	#general	I'll be online a bit later than usual today.	
+msg-0102	2026-09-09T16:21:00Z	Zara Lowell	#general	VPN is flaky for me this morning, anyone else?	
+msg-0103	2026-09-09T16:49:00Z	Pavel Hollis	#payments	Finished the entry partitioning cleanup in ledger-db, pull request is up.	
+msg-0104	2026-09-09T18:46:00Z	Luca Ostrander	#support	Finished the incident banner cleanup in status-page, pull request is up.	
+msg-0105	2026-09-09T19:17:00Z	Yuki Moreau	#support	Great work this week, Aiko.	
+msg-0106	2026-09-10T01:57:00Z	Priya Farrow	#support	Marked TCK-0063 as resolved.	TCK-0063
+msg-0107	2026-09-10T14:08:00Z	Selma Marsh	#general	Can someone cover the support queue for an hour at 14:00 UTC?	
+msg-0222	2026-09-10T14:40:00Z	Oskar Alvarez	#platform	Pushed a fix for paging policy in oncall-runbook; the cause was a retry that fired twice.	
+msg-0108	2026-09-10T15:11:00Z	Zara Lowell	#support	Is the retro still on for Thursday?	
+msg-0109	2026-09-10T16:55:00Z	Luca Ostrander	#platform	I'll be online a bit later than usual today.	
+msg-0110	2026-09-10T17:17:00Z	Mateo Sandoval	#growth	The coffee machine on the second floor is fixed.	
+msg-0111	2026-09-10T17:28:00Z	Mateo Sandoval	#payments	Postmortem PM-03 is published. Action items are listed at the bottom.	PM-03
+msg-0112	2026-09-10T18:11:00Z	Pavel Hollis	#platform	I'm out on Wednesday, back the day after.	
+msg-0113	2026-09-10T18:25:00Z	Oskar Alvarez	#growth	Kudos to Tomas for staying late on the release.	
+msg-0114	2026-09-10T18:30:00Z	Luca Ostrander	#growth	The coffee machine on the second floor is fixed.	
+msg-0115	2026-09-10T19:29:00Z	Lars Thorne	#platform	Deployed the replay tool change in webhooks to staging, looks good.	
+msg-0116	2026-09-10T23:04:00Z	Sana Petrov	#payments	Marked TCK-0061 as resolved.	TCK-0061
+msg-0223	2026-09-11T19:04:00Z	Oskar Alvarez	#platform	Rolled out the severity table fix in oncall-runbook to all tenants.	
+msg-0117	2026-09-11T19:43:00Z	Priya Farrow	#platform	Lunch order closes in ten minutes.	
+msg-0118	2026-09-14T14:43:00Z	Selma Marsh	#growth	The coffee machine on the second floor is fixed.	
+msg-0119	2026-09-14T16:25:00Z	Pavel Hollis	#platform	Rolled out the batch sender fix in notifications to all tenants.	
+msg-0120	2026-09-14T19:16:00Z	Yuki Moreau	#general	Reminder to update your out-of-office calendar.	
+msg-0121	2026-09-14T19:32:00Z	Oskar Alvarez	#growth	Reminder to update your out-of-office calendar.	
+msg-0122	2026-09-14T20:18:00Z	Luca Ostrander	#platform	Marked TCK-0074 as resolved.	TCK-0074
+msg-0224	2026-09-14T20:38:00Z	Oskar Alvarez	#platform	Deployed the certificate rollover change in fernhill-sso to staging, looks good.	
+msg-0123	2026-09-15T14:39:00Z	Omar Fenwick	#growth	Happy Friday, everyone!	
+msg-0124	2026-09-15T15:15:00Z	Sana Petrov	#platform	Thanks Mateo for the quick review.	
+msg-0125	2026-09-15T16:34:00Z	Luca Ostrander	#platform	ADR-0010 accepted: Audit logs kept for 400 days. Please read it before your next change.	ADR-0010
+msg-0126	2026-09-15T16:44:00Z	Priya Farrow	#platform	Selma Marsh, the handoff ticket TCK-0077 is yours.	TCK-0077
+msg-0127	2026-09-15T17:42:00Z	Aiko Rademacher	#growth	ADR-0008 accepted: Reporting reads from a replica. Please read it before your next change.	ADR-0008
+msg-0128	2026-09-15T18:36:00Z	Tomas Kessler	#platform	VPN is flaky for me this morning, anyone else?	
+msg-0129	2026-09-16T14:00:00Z	Pavel Hollis	#platform	Wrapped up tests for event ordering in webhooks, merging after lunch.	
+msg-0130	2026-09-16T14:56:00Z	Luca Ostrander	#payments	Pushed a fix for idempotency key lookup in billing-api; the cause was a stale cache entry.	
+msg-0131	2026-09-16T17:50:00Z	Pavel Hollis	#general	I'm out on Tuesday, back the day after.	
+msg-0132	2026-09-16T18:00:00Z	Priya Farrow	#support	Finished the bulk actions cleanup in admin-console, pull request is up.	
+msg-0133	2026-09-16T21:36:00Z	Sana Petrov	#growth	Welcome back Yuki!	
+msg-0134	2026-09-17T16:07:00Z	Sana Petrov	#general	Can someone cover the support queue for an hour at 15:30 UTC?	
+msg-0135	2026-09-17T19:28:00Z	Lars Thorne	#general	The coffee machine on the second floor is fixed.	
+msg-0136	2026-09-17T20:18:00Z	Priya Farrow	#general	Reminder to update your out-of-office calendar.	
+msg-0137	2026-09-17T20:34:00Z	Zara Lowell	#platform	Fire drill at 14:00 UTC, please ignore the alarm.	
+msg-0138	2026-09-18T15:34:00Z	Selma Marsh	#platform	Postmortem PM-04 is published. Action items are listed at the bottom.	PM-04
+msg-0139	2026-09-18T18:32:00Z	Yuki Moreau	#growth	Is the retro still on for Thursday?	
+msg-0140	2026-09-21T14:27:00Z	Viktor Hartwell	#general	Fire drill at 14:00 UTC, please ignore the alarm.	
+msg-0141	2026-09-21T16:37:00Z	Sana Petrov	#support	Reminder to update your out-of-office calendar.	
+msg-0142	2026-09-21T17:36:00Z	Lars Thorne	#payments	Finished the page break logic cleanup in invoice-renderer, pull request is up.	
+msg-0143	2026-09-21T19:22:00Z	Lars Thorne	#payments	Wrapped up tests for page break logic in invoice-renderer, merging after lunch.	
+msg-0144	2026-09-21T19:55:00Z	Priya Farrow	#support	Pushed a fix for impersonation banner in admin-console; the cause was a retry that fired twice.	
+msg-0145	2026-09-22T13:16:00Z	Pavel Hollis	#payments	Thanks Oskar for the quick review.	
+msg-0146	2026-09-22T13:25:00Z	Zara Lowell	#platform	Lunch order closes in ten minutes.	
+msg-0147	2026-09-22T15:31:00Z	Priya Farrow	#support	The coffee machine on the second floor is fixed.	
+msg-0148	2026-09-22T17:31:00Z	Luca Ostrander	#platform	Per ADR-0009, I am now the owner of billing-api. Sana Petrov stays on as backup for 30 days. Send billing-api escalations to me.	ADR-0009
+msg-0149	2026-09-22T20:58:00Z	Priya Farrow	#platform	Is the retro still on for Friday?	
+msg-0150	2026-09-22T21:03:00Z	Omar Fenwick	#growth	Rolled out the revenue rollup fix in reporting to all tenants.	
+msg-0151	2026-09-23T14:35:00Z	Priya Farrow	#platform	Quick poll: should we move the weekly sync to Thursday?	
+msg-0152	2026-09-23T17:36:00Z	Selma Marsh	#growth	Can someone cover the support queue for an hour at 17:30 UTC?	
+msg-0153	2026-09-23T20:46:00Z	Zara Lowell	#support	Fire drill at 17:30 UTC, please ignore the alarm.	
+msg-0154	2026-09-24T15:52:00Z	Zara Lowell	#platform	Fire drill at 17:30 UTC, please ignore the alarm.	
+msg-0155	2026-09-24T16:10:00Z	Pavel Hollis	#platform	Postmortem PM-05 is published. Action items are listed at the bottom.	PM-05
+msg-0156	2026-09-24T18:02:00Z	Pavel Hollis	#general	Thanks Selma for the quick review.	
+msg-0157	2026-09-24T18:27:00Z	Yuki Moreau	#growth	Fire drill at 15:30 UTC, please ignore the alarm.	
+msg-0158	2026-09-24T20:20:00Z	Tomas Kessler	#general	Fire drill at 17:30 UTC, please ignore the alarm.	
+msg-0159	2026-09-24T21:08:00Z	Tomas Kessler	#general	The coffee machine on the second floor is fixed.	
+msg-0160	2026-09-25T08:18:00Z	Viktor Hartwell	#payments	Marked TCK-0088 as resolved.	TCK-0088
+msg-0161	2026-09-25T13:48:00Z	Omar Fenwick	#support	Reminder to update your out-of-office calendar.	
+msg-0162	2026-09-25T13:50:00Z	Luca Ostrander	#payments	Deployed the invoice list pagination change in billing-api to staging, looks good.	
+msg-0163	2026-09-25T14:38:00Z	Tomas Kessler	#platform	New laptops arrive Monday; ping me if yours is on the list.	
+msg-0164	2026-09-25T16:07:00Z	Viktor Hartwell	#payments	Great work this week, Aiko.	
+msg-0165	2026-09-28T13:06:00Z	Selma Marsh	#payments	Reminder to update your out-of-office calendar.	
+msg-0166	2026-09-28T13:33:00Z	Omar Fenwick	#platform	Welcome back Mateo!	
+msg-0167	2026-09-28T15:47:00Z	Aiko Rademacher	#platform	Pushed a fix for bounce handling in notifications; the cause was a missing null check.	
+msg-0168	2026-09-28T16:47:00Z	Sana Petrov	#general	Is the retro still on for Wednesday?	
+msg-0169	2026-09-28T17:43:00Z	Aiko Rademacher	#growth	Rolled out the timezone handling fix in reporting to all tenants.	
+msg-0170	2026-09-28T20:38:00Z	Oskar Alvarez	#growth	Can someone cover the support queue for an hour at 14:00 UTC?	
+msg-0171	2026-09-28T21:57:00Z	Viktor Hartwell	#growth	Fire drill at 13:30 UTC, please ignore the alarm.	
+msg-0172	2026-09-29T14:58:00Z	Lars Thorne	#growth	VPN is flaky for me this morning, anyone else?	
+msg-0225	2026-09-29T15:25:00Z	Oskar Alvarez	#platform	Writing handover notes for fernhill-sso and oncall-runbook this week.	
+msg-0173	2026-09-29T16:12:00Z	Viktor Hartwell	#payments	ADR-0012 accepted: Schema freeze on ledger-db during month-end close. Please read it before your next change.	ADR-0012
+msg-0174	2026-09-29T16:27:00Z	Yuki Moreau	#general	Heads up: billing-api is owned by Growth now, so route billing-api questions to us.	
+msg-0175	2026-09-30T13:40:00Z	Selma Marsh	#support	Is the retro still on for Friday?	
+msg-0176	2026-09-30T14:25:00Z	Sana Petrov	#payments	Pushed a fix for logo scaling in invoice-renderer; the cause was an off-by-one in the date window.	
+msg-0177	2026-09-30T14:34:00Z	Mateo Sandoval	#general	Happy Monday, everyone!	
+msg-0178	2026-09-30T14:57:00Z	Priya Farrow	#general	Reminder: timesheets are due Thursday.	
+msg-0179	2026-09-30T15:12:00Z	Luca Ostrander	#payments	Can someone cover the support queue for an hour at 17:30 UTC?	
+msg-0180	2026-09-30T20:50:00Z	Lars Thorne	#platform	Lunch order closes in ten minutes.	
+msg-0181	2026-10-01T14:27:00Z	Tomas Kessler	#support	Adding the billing-api runbook (RB-05) to the help center index. It lists Sana Petrov as the owner of billing-api, so I am updating the escalation sheet to match.	RB-05
+msg-0182	2026-10-01T15:36:00Z	Pavel Hollis	#support	Reminder: timesheets are due Tuesday.	
+msg-0183	2026-10-01T15:40:00Z	Selma Marsh	#payments	Quick poll: should we move the weekly sync to Monday?	
+msg-0184	2026-10-01T15:43:00Z	Tomas Kessler	#support	Welcome back Priya!	
+msg-0185	2026-10-01T15:59:00Z	Omar Fenwick	#platform	Reminder: timesheets are due Tuesday.	
+msg-0186	2026-10-01T18:49:00Z	Aiko Rademacher	#payments	Can someone cover the support queue for an hour at 15:30 UTC?	
+msg-0187	2026-10-01T21:20:00Z	Lars Thorne	#support	Happy Friday, everyone!	
+msg-0188	2026-10-02T13:02:00Z	Mateo Sandoval	#payments	VPN is flaky for me this morning, anyone else?	
+msg-0189	2026-10-02T13:15:00Z	Viktor Hartwell	#general	Happy Monday, everyone!	
+msg-0190	2026-10-02T13:50:00Z	Luca Ostrander	#growth	Fire drill at 17:30 UTC, please ignore the alarm.	
+msg-0191	2026-10-02T14:25:00Z	Sana Petrov	#payments	Deployed the backup verification change in ledger-db to staging, looks good.	
+msg-0192	2026-10-02T17:44:00Z	Lars Thorne	#platform	Thanks Sana for the quick review.	
+msg-0193	2026-10-02T20:03:00Z	Zara Lowell	#general	Does anyone have the link to the onboarding checklist?	
+msg-0194	2026-10-02T22:36:00Z	Luca Ostrander	#platform	Closed TCK-0103, it goes out with the next release.	TCK-0103
+msg-0195	2026-10-05T13:10:00Z	Oskar Alvarez	#support	Welcome back Selma!	
+msg-0196	2026-10-05T15:33:00Z	Viktor Hartwell	#growth	I'm out on Tuesday, back the day after.	
+msg-0197	2026-10-05T16:45:00Z	Tomas Kessler	#support	I'm out on Wednesday, back the day after.	
+msg-0198	2026-10-05T17:26:00Z	Lars Thorne	#general	Kudos to Mateo for staying late on the release.	
+msg-0199	2026-10-05T18:21:00Z	Zara Lowell	#general	VPN is flaky for me this morning, anyone else?	
+msg-0200	2026-10-05T18:36:00Z	Lars Thorne	#platform	Wrapped up tests for session expiry in auth, merging after lunch.	
+msg-0201	2026-10-05T18:41:00Z	Zara Lowell	#support	Reminder to update your out-of-office calendar.	
+msg-0202	2026-10-06T16:17:00Z	Priya Farrow	#platform	VPN is flaky for me this morning, anyone else?	
+msg-0203	2026-10-06T21:30:00Z	Luca Ostrander	#support	I'm out on Wednesday, back the day after.	
+msg-0204	2026-10-06T21:40:00Z	Omar Fenwick	#growth	Reminder to update your out-of-office calendar.	
+msg-0205	2026-10-07T13:39:00Z	Zara Lowell	#growth	Lunch order closes in ten minutes.	
+msg-0206	2026-10-07T14:27:00Z	Pavel Hollis	#payments	Pushed a fix for reversal entry index in ledger-db; the cause was a stale cache entry.	
+msg-0207	2026-10-07T16:51:00Z	Lars Thorne	#platform	Kudos to Yuki for staying late on the release.	
+msg-0208	2026-10-08T00:36:00Z	Sana Petrov	#payments	Closed TCK-0111, it goes out with the next release.	TCK-0111
+msg-0209	2026-10-08T12:16:00Z	Omar Fenwick	#growth	TCK-0112 is done and waiting for review.	TCK-0112
+msg-0210	2026-10-08T14:51:00Z	Omar Fenwick	#support	Great work this week, Priya.	
+msg-0211	2026-10-08T15:13:00Z	Mateo Sandoval	#payments	Postmortem PM-06 is published. Action items are listed at the bottom.	PM-06
+msg-0212	2026-10-08T17:13:00Z	Lars Thorne	#platform	Rolled out the endpoint health check fix in webhooks to all tenants.	
+msg-0213	2026-10-08T20:26:00Z	Omar Fenwick	#support	Fire drill at 17:30 UTC, please ignore the alarm.	
+msg-0214	2026-10-09T04:38:00Z	Oskar Alvarez	#platform	TCK-0115 is done and waiting for review.	TCK-0115
+msg-0215	2026-10-09T18:38:00Z	Pavel Hollis	#growth	Quick poll: should we move the weekly sync to Wednesday?	
+msg-0216	2026-10-09T18:55:00Z	Sana Petrov	#payments	Deployed the connection pool limits change in ledger-db to staging, looks good.	
+msg-0217	2026-10-09T19:24:00Z	Mateo Sandoval	#payments	Fire drill at 13:30 UTC, please ignore the alarm.	
+msg-0218	2026-10-09T19:49:00Z	Pavel Hollis	#growth	Lunch order closes in ten minutes.	
+msg-0219	2026-10-09T20:35:00Z	Priya Farrow	#general	VPN is flaky for me this morning, anyone else?	
+msg-0220	2026-10-10T20:48:00Z	Zara Lowell	#support	Closed TCK-0119, it goes out with the next release.	TCK-0119
