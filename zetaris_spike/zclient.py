@@ -40,9 +40,10 @@ def _call(path, body=None, headers=None, timeout=300):
 
 
 class Zetaris:
-    def __init__(self):
+    def __init__(self, timeout=300):
         user, pw = _credentials()
-        login = _call("/api/auth/login", {"username": user, "password": pw}) or {}
+        self.timeout = timeout
+        login = _call("/api/auth/login", {"username": user, "password": pw}, timeout=timeout) or {}
         text = json.dumps(login)
         token = re.search(r"[A-Za-z0-9_-]{8,}\.[A-Za-z0-9_-]{8,}\.[A-Za-z0-9_-]{8,}", text)
         org = os.environ.get("ZETARIS_ORG_ID") or (re.search(r'"orgId"\s*:\s*"?(\d+)', text) or [None, None])[1]
@@ -54,13 +55,13 @@ class Zetaris:
     def sql(self, statement, limit=1000):
         """Run one Lightning SQL statement; returns (rows, seconds, raw response)."""
         t0 = time.perf_counter()
-        out = _call("/api/proxy/query/sql/start", {"select": statement, "pageLimit": limit}, self.headers)
+        out = _call("/api/proxy/query/sql/start", {"select": statement, "pageLimit": limit}, self.headers, self.timeout)
         return rows_of(out), time.perf_counter() - t0, out
 
     def run(self, statement, limit=1000):
         """Run any statement (DDL, SHOW, SELECT) through the SQL editor route."""
         t0 = time.perf_counter()
-        out = _call("/api/proxy/sql-editor/sqls/run-query", {"sql": statement, "limit": limit}, self.headers)
+        out = _call("/api/proxy/sql-editor/sqls/run-query", {"sql": statement, "limit": limit}, self.headers, self.timeout)
         return rows_of(out), time.perf_counter() - t0, out
 
 
