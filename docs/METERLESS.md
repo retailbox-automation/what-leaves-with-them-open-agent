@@ -133,11 +133,18 @@ Receipt logs in this repo:
   old path. If the engine fails, recall answers from the graph and the answer's `note` says so.
   `HM_MEMORY_CONTEXT=off` stops the injection before answering.
 
-Wiring for the Investigator ↔ Verifier loop, three calls:
+Wiring for the Investigator ↔ Verifier loop:
 
-1. `T.call(store, "remember", {...}, ctx)` on an approved answer;
-2. `Agent.ask` already injects the memory;
-3. `verdict_feedback(store, run.memory_ids, verdict)` after the Verifier.
+```python
+from open_agent import nightshift as N
+from open_agent.hmem_bridge import verdict_feedback
+
+# Investigator: the honest_memory agent, with AgentConfig(provider="nightshift", model=N.LIGHTNING) or
+# HM_LLM_PROVIDER=nightshift. Agent.ask already puts matching memories in front of the model (run.memory_ids).
+reply = N.chat(messages, agent="verifier", scope=run_scope, max_tokens=600)   # Verifier on Nano, JSON in text
+verdict_feedback(store, run.memory_ids, verdict)                              # verdict -> H-MEM feedback
+T.call(store, "remember", {"text": answer, "about": [...], "source_ids": cited}, ctx)  # approved: gate, then H-MEM
+```
 
 ## Measured (2026-10-24)
 
