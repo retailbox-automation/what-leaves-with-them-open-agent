@@ -371,6 +371,18 @@ def test_a_contradicting_record_cannot_be_dropped_silently(graph, trace):
     assert note and note[0]["current_lines"] == AG.quotable(EDITED) and note[0]["verdict"] == "contradicts"
 
 
+def test_the_judge_sees_the_claim_each_citation_backs(graph, trace):
+    claims = []
+    cite = lambda u: {"answer": "Luca Ostrander owns billing-api since 2026-09-22.",
+                      "citations": [{"id": "ADR-0009", "quote": ADR_LINE, "claim": "the transfer to Luca Ostrander"},
+                                    {"id": "msg-0148", "quote": STALE}]}
+    judge = lambda u: claims.append(u["claim"]) or {"verdict": "supports", "note": ""}
+    out = R.investigate(QUESTION, graph, LocalSample(), trace, model_cfg(), sample=False,
+                        investigator_client=FakeOpenAI(cite), verifier_client=FakeOpenAI(None, judge=judge))
+    assert claims == ["the transfer to Luca Ostrander", "Luca Ostrander owns billing-api since 2026-09-22."]
+    assert out["status"] == "verified"
+
+
 def judge_by_answer(user):
     """Judges the record against the answer: the edited chat backs "Sana Petrov remains", the ADR backs Luca."""
     text, answer = user["record"]["current_text"], user["answer"]

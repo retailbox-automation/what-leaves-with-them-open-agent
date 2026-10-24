@@ -35,7 +35,8 @@ its lines, copied exactly. Never join lines, never quote a whole record, never p
 - Write the answer as one or two plain sentences that use only names, dates and ids found in the tool rows or the \
 records. Keep what the draft answer says unless a record contradicts it.
 - Cite at most 4 records, the ones that support the answer.
-Reply with JSON only: {"answer": "...", "citations": [{"id": "...", "quote": "..."}]}"""
+- For each citation give claim: the part of your answer that this line backs, in a few words.
+Reply with JSON only: {"answer": "...", "citations": [{"id": "...", "quote": "...", "claim": "..."}]}"""
 
 REVISE_PROMPT = """You are agent:investigator. agent:verifier re-read every record you cited in its source system \
 and rejected some of your citations. Revise your answer from its notes.
@@ -45,11 +46,14 @@ citation is a record id and ONE of its current_lines, copied exactly. Never join
 - must_address lists the records the Verifier found contradicting your answer. Each must not just disappear: \
 change the answer to what the records say now, or name that record id in the answer and say what it says now.
 - Keep citations the Verifier accepted. Cite only records you were given.
-Reply with JSON only: {"answer": "...", "citations": [{"id": "...", "quote": "..."}]}"""
+- For each citation give claim: the part of your answer that this line backs, in a few words.
+Reply with JSON only: {"answer": "...", "citations": [{"id": "...", "quote": "...", "claim": "..."}]}"""
 
 JUDGE_PROMPT = """You are agent:verifier. You check one citation in another agent's answer against the record as \
 its source system holds it right now. You did not write the answer and you do not trust it.
-Decide whether the record, as it reads now, supports the part of the answer the citation backs:
+Decide whether the record, as it reads now, supports the claim: the part of the answer this citation is meant to \
+back (the whole answer when no claim is given). Judge that claim only; other parts of the answer are checked \
+against other records.
 - "supports": the record states it.
 - "contradicts": the record states something that conflicts with it.
 - "unrelated": the record does not speak to it.
@@ -73,6 +77,7 @@ class Citation:
     id: str
     channel: str
     quote: str
+    claim: str = ""     # the part of the answer this quote backs (from the model; empty means the whole answer)
 
 
 @dataclass
@@ -103,6 +108,7 @@ class Check:
     accepted: bool = False
     reason: str = ""
     current_text: str | None = None
+    claim: str = ""
 
 
 @dataclass
@@ -243,8 +249,9 @@ class Investigator:
         for c in obj.get("citations") or []:
             cid = str((c or {}).get("id") or "").strip() if isinstance(c, dict) else ""
             quote = str((c or {}).get("quote") or "").strip() if isinstance(c, dict) else ""
+            claim = str((c or {}).get("claim") or "").strip()[:300] if isinstance(c, dict) else ""
             if cid in draft.records and quote and not any(x.id == cid and x.quote == quote for x in cites):
-                cites.append(Citation(cid, draft.records[cid]["channel"], quote))
+                cites.append(Citation(cid, draft.records[cid]["channel"], quote, claim))
             else:
                 dropped.append(cid or repr(c)[:60])
         if dropped:
@@ -280,7 +287,9 @@ class Investigator:
     def _address_contradictions(self, new: Draft, review: Review) -> None:
         """Like the sentence check on the model's sentence: a record that contradicted the answer is never dropped
         without a word. If the revision neither cites nor names it, say what it reads now at its source."""
-        current = {c.id: c.current_text for c in review.checks + review.ignored_checks if c.current_text}
+        # what to show: the line it was quoted for when that line is still there, else the record as it reads now
+        current = {c.id: c.quote if c.quote_found else c.current_text
+                   for c in review.checks + review.ignored_checks if c.current_text}
         cited = {c.id for c in new.citations}
         silent = [i for i in review.contradicted if i not in cited and not _mentions(new.answer, i)]
         for i in silent:
@@ -292,7 +301,7 @@ class Investigator:
 
     def _revise_from_rows(self, draft: Draft, review: Review) -> Draft:
         """No model: keep the accepted citations, drop the rejected ones and say why in the answer."""
-        kept = [Citation(c.id, c.channel, c.quote) for c in review.checks if c.accepted]
+        kept = [Citation(c.id, c.channel, c.quote, c.claim) for c in review.checks if c.accepted]
         gone = [c for c in review.checks if not c.accepted]
         answer = draft.answer
         if gone and not kept:
@@ -371,7 +380,7 @@ class Verifier:
                                                False, "contradiction_dropped", old.current_text)
 
     def _check(self, draft: Draft, c: Citation) -> Check:
-        chk = Check(c.id, c.channel, c.quote)
+        chk = Check(c.id, c.channel, c.quote, claim=c.claim)
         sql = by_id(c.channel, c.id) if c.channel in SYSTEM_OF else None
         if sql is None:
             chk.reason = "record_missing"
@@ -399,7 +408,7 @@ class Verifier:
         chk.accepted = chk.quote_found and not shape and model_ok
         chk.reason = ("ok" if chk.accepted else "quote_not_in_record" if not chk.quote_found
                       else shape or f"model_{chk.verdict}")
-        self.trace.event("Verifier", "check", round=draft.round, record_id=c.id, quote=c.quote,
+        self.trace.event("Verifier", "check", round=draft.round, record_id=c.id, quote=c.quote, claim=c.claim,
                          found=chk.quote_found, verdict=chk.verdict, note=chk.note, accepted=chk.accepted,
                          reason=chk.reason)
         return chk
@@ -408,7 +417,7 @@ class Verifier:
         if self.client is None:
             return ("skipped: no model in SAMPLE_MODE" if self.sample else "skipped: no model configured"), ""
         obj, why = self.client.ask_json("judge", JUDGE_PROMPT, {
-            "answer": draft.answer, "question": draft.question,
+            "answer": draft.answer, "claim": c.claim or draft.answer, "question": draft.question,
             "record": {"id": c.id, "source": SYSTEM_OF[c.channel], "current_text": text}, "quote": c.quote})
         if obj is None:
             return f"skipped: {why}", ""
