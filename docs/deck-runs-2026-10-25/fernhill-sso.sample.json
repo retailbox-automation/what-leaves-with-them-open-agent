@@ -1,0 +1,123 @@
+{
+  "run_id": "20261025T135528Z-6fd1",
+  "mode": "sample",
+  "endpoint": "local-sample",
+  "question": "Who owns fernhill-sso now?",
+  "tenant": "oa_deck_20261025",
+  "llm": null,
+  "sample_mode_note": "SAMPLE_MODE: the three sources are read from sample_data/sources/ by an in-process SQLite (endpoint local-sample) with the same SQL text, not through Zetaris; no model is called: the Investigator uses the deterministic router and the Verifier's model judgement is skipped. The agent loop, the quote re-reads, the write gate and the H-MEM memory (recall, store, feedback; no model needed) are the real code on this cached data.",
+  "status": "verified",
+  "answer": "fernhill-sso has no current owner. Last owner: Oskar Alvarez until 2026-10-09 (closed by GD-00225-e5a583243b, citing DOC-16). Nobody has been recorded as taking it over.",
+  "answer_author": "template",
+  "citations": [
+    {
+      "id": "DOC-14",
+      "source": "docs REST API (wlwt_docs.docs_raw)",
+      "quote": "Integration: fernhill-sso (single sign-on for the customer Fernhill Outfitters).",
+      "quote_found": true,
+      "verdict": "skipped: no model in SAMPLE_MODE",
+      "note": "",
+      "accepted": true,
+      "reason": "ok"
+    },
+    {
+      "id": "DOC-16",
+      "source": "docs REST API (wlwt_docs.docs_raw)",
+      "quote": "- Oskar Alvarez no longer owns fernhill-sso.",
+      "quote_found": true,
+      "verdict": "skipped: no model in SAMPLE_MODE",
+      "note": "",
+      "accepted": true,
+      "reason": "ok"
+    }
+  ],
+  "dropped_citations": [],
+  "conflicts": [],
+  "notices": [],
+  "absence_checks": [],
+  "contradictions_unaddressed": [],
+  "rounds": 1,
+  "revisions": 0,
+  "rounds_detail": [
+    {
+      "round": 1,
+      "accepted": true,
+      "notes": [],
+      "ignored": [],
+      "checks": [
+        {
+          "id": "DOC-14",
+          "accepted": true,
+          "reason": "ok",
+          "verdict": "skipped: no model in SAMPLE_MODE"
+        },
+        {
+          "id": "DOC-16",
+          "accepted": true,
+          "reason": "ok",
+          "verdict": "skipped: no model in SAMPLE_MODE"
+        }
+      ]
+    }
+  ],
+  "verdict_counts": {
+    "skipped": 2
+  },
+  "quote_checks": {
+    "total": 2,
+    "found": 2
+  },
+  "write_gate": {
+    "written": true,
+    "outcome": "accepted",
+    "receipt": "GD-00227-cd086953ac",
+    "reasons": [
+      "new_finding"
+    ],
+    "finding": "FND-00001",
+    "source_ids": [
+      "DOC-14",
+      "DOC-16"
+    ],
+    "about": [
+      "Oskar Alvarez",
+      "fernhill-sso"
+    ],
+    "memory": {
+      "memory_id": "mem-1",
+      "backend": "hmem"
+    },
+    "conflicts_not_written": []
+  },
+  "memory": {
+    "engine": "Meterless H-MEM (vendor/hmem)",
+    "recall": {
+      "status": "ok",
+      "ids": [],
+      "memories": []
+    },
+    "stored": {
+      "memory_id": "mem-1",
+      "backend": "hmem"
+    },
+    "feedback": {
+      "given": false,
+      "reason": "no memory was recalled for this question"
+    }
+  },
+  "investigator_path": "router",
+  "agents": [
+    {
+      "name": "Investigator",
+      "id": "agent:investigator",
+      "role": "answers from the memory graph with cited records; revises on the Verifier's notes"
+    },
+    {
+      "name": "Verifier",
+      "id": "agent:verifier",
+      "role": "re-reads each cited record by id at its source; quote check, then a model judgement"
+    }
+  ],
+  "execution_time_seconds": 1.34,
+  "trace_file": "docs/deck-runs-2026-10-25/trace-20261025T135528Z-6fd1.jsonl"
+}

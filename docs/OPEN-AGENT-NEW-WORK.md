@@ -218,7 +218,8 @@ Model-call times are the answered request (the receipt's `latency_ms`). Where a 
 Zetaris; 01 has 22.5 s in model calls and about 20 s for its 2 lane switches. With both lanes resident (a Mac with
 room for them) that switching time goes away.
 
-Nightshift receipts: 95 model calls, 95 signed receipts, `cost_usd` 0 on every one, 0 from cache; every call routed
+Nightshift receipts: 95 answered model calls, 95 signed receipts, `cost_usd` 0 on every one, 0 from cache (the 96th call,
+run 1 of 02, came back empty without a receipt: `logs/trace-20261024T133813Z-5253.jsonl` seq 30); every answered call routed
 to its agent's model (Investigator to Lightning 59, Verifier to Nano 36), 0 routing mismatches in the series. 20
 receipt files, each holding exactly the run's receipts (0 missing, 0 redacted).
 
