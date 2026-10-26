@@ -67,6 +67,24 @@
   table.times td { font-size: 18px; font-weight: 600; color: var(--ink); }
   .close { margin-top: 18px; font-size: 26px; font-weight: 700; color: var(--ink); }
   aside.notes { display: none; }
+/* Theme A (light, as the film): Mikhail 26.10.2026 via orchestrator; Archivo font is SIL OFL */
+@font-face{font-family:Arch;src:url(assets/archivo-x125-700.ttf);font-weight:700}
+@font-face{font-family:Arch;src:url(assets/archivo-x125-500.ttf);font-weight:500}
+h1,h2,h3,.big,.close,.card h3,.box b{font-family:Arch,Arial,sans-serif;font-weight:700;letter-spacing:-0.2px}
+
+:root{--bg:#f4f1ea;--panel:#ffffff;--ink:#0b1030;--muted:#5c6588;--line:rgba(11,16,48,.18);--rb-ink:#0b1030;--rb-muted:#5c6588}
+html,body{background:#f4f1ea;color:#0b1030}
+.slide{background:#f4f1ea;background-image:linear-gradient(rgba(11,16,48,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(11,16,48,.05) 1px,transparent 1px);background-size:48px 48px}
+p,li,.why,.legend div{color:#1d2547}
+.card,.box{background:#fff;border-color:rgba(11,16,48,.16);box-shadow:0 2px 0 rgba(11,16,48,.05)}
+.box.z{border-color:#4a9fd8}.box.v{border-color:#e5484d}.box.g{border-color:#30a46c}
+.loop{color:#a3262b;border-color:rgba(229,72,77,.7);background:rgba(255,255,255,.6)}
+.shot{border:10px solid #fff;box-shadow:0 0 0 1px rgba(11,16,48,.18);border-radius:12px}
+pre.trace{border:10px solid #fff;box-shadow:0 0 0 1px rgba(11,16,48,.18)}
+.mark{box-shadow:0 0 0 2px #fff}
+table.times td{color:#0b1030}
+h2{font-size:31px;letter-spacing:-0.4px}
+
 </style>
 </head>
 <body>
@@ -74,7 +92,7 @@
 <!-- 1. The problem and target users -->
 <section class="slide">
   <div class="top">
-    <div class="rb-brandline"><span class="rb-logo" role="img" aria-label="RetailBox"><img src="assets/retailbox-w1-color-dark.svg" alt="RetailBox"></span>
+    <div class="rb-brandline"><span class="rb-logo" role="img" aria-label="RetailBox"><img src="assets/retailbox-w1-color.svg" alt="RetailBox"></span>
       <span class="rb-prep">prepared by <span class="rb-who">Mikh<span class="rb-ai">ai</span>l Oskola</span></span></div>
     <div>Open Agent Hackathon 2026 · Track 02 · The Agent That Can Explain Why <span class="n">· 1/8</span></div>
   </div>

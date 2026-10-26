@@ -1,6 +1,6 @@
 # Demo video: what the live shots show
 
-The demo video (3:20) has 8 illustrated cards and 6 live shots. The live shots are screen recordings of real runs of
+The demo video (3:11) has 8 illustrated cards and 6 live shots. The live shots are screen recordings of real runs of
 this repository on 24 October 2026, 14:33 to 14:44 UTC: Zetaris 2.4.3.1 local, Meterless Nightshift 1.2.1 headless
 (Investigator on Nemotron 3.5 Lightning 30B-A3B, Verifier on Nemotron 3 Nano 30B-A3B), H-MEM memory. Synthetic company
 data (Quillfield Billing). The files each shot shows are committed here.
