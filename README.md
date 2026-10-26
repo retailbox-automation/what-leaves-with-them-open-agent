@@ -2,6 +2,7 @@
 
 **Track:** 02, The Agent That Can Explain Why (Open Agent Hackathon 2026)
 **Sponsor technology:** Zetaris (one SQL endpoint over Postgres chat, a tickets CSV and a docs REST API) · Meterless Nightshift (primary model provider, signed receipts) and the Meterless H-MEM engine (agent memory) · NVIDIA Nemotron (one model per agent, through Nightshift)
+**Demo video (3:11):** https://youtu.be/YdO_G3ogGzs · **Slides:** [deck/what-leaves-with-them-deck.pdf](deck/what-leaves-with-them-deck.pdf)
 **Run:** `docker compose up --build`, then `curl -X POST localhost:8000/run -H 'content-type: application/json' -d @input_examples/02_tampered_source.json` (SAMPLE_MODE by default: no credentials, no network, no GPU)
 
 When a colleague leaves, a team lead has to find out who owns what now and why, from chat, tickets and documents that disagree. Two agents answer that kind of question. The Investigator answers from a memory graph and cites a record id and one quoted line for every claim. The Verifier re-reads each cited record through Zetaris, from the system it lives in, and rejects a quote that is not there any more. The Investigator then has to revise. Only an answer whose every citation survived is stored.

@@ -1,5 +1,7 @@
 # HackOS submission form: draft (worksheet of the Submission Form Preview, section 4)
 
+**Submitted on HackOS 26 Oct 2026 ≈21:32Z** (Submission Hub: #1 The Agent That Can Explain Why, Submitted 1/1). The live form has five fields: track, Description (max 2000 characters), video link, GitHub link, deck link; there is no separate sponsor field, so the Description carries a short sponsor paragraph. Text as submitted: the Description below plus that paragraph (1,925 characters); video https://youtu.be/YdO_G3ogGzs; deck link to deck/what-leaves-with-them-deck.pdf on GitHub.
+
 Draft only. Nothing here has been entered into HackOS. Field texts are plain text, ready to paste; each claim is
 listed with the file that proves it in the evidence table under the field. Live numbers are from the 20 runs of
 24 Oct through Zetaris, Nightshift and H-MEM (docs/OPEN-AGENT-NEW-WORK.md, Measured).
