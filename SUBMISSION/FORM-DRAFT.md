@@ -57,8 +57,8 @@ Role: Everything: product, agents, Zetaris and Meterless integration, packaging
 Primary contact: Yes
 ```
 
-Open before Submit: the HackOS profile and this field say Michael Oskola; the deck and the video say "prepared by Mikh[ai]l
-Oskola" (the RetailBox brand line). One spelling is Mikhail's choice; nothing here changes until he picks.
+Name decided 26 Oct (Mikhail, "as now"): this field and the HackOS profile say Michael Oskola; the deck and the video keep
+"prepared by Mikh[ai]l Oskola" (the RetailBox brand line).
 
 ## GitHub repository URL
 
