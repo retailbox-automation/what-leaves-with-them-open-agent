@@ -1,0 +1,141 @@
+{
+ "n": 6,
+ "statement": "SELECT id, ts, author, title FROM wlwt_tickets.tickets WHERE instr(title, 'billing-api') > 0 ORDER BY ts",
+ "ok": true,
+ "rows": 10,
+ "seconds": 0.808,
+ "sample": [
+  {
+   "id": "TCK-0002",
+   "ts": "2026-08-17 17:31:00.0",
+   "author": "Lars Thorne",
+   "title": "Fix plan upgrade endpoint in billing-api"
+  },
+  {
+   "id": "TCK-0025",
+   "ts": "2026-08-26 21:24:00.0",
+   "author": "Luca Ostrander",
+   "title": "Tidy up currency conversion in billing-api"
+  },
+  {
+   "id": "TCK-0038",
+   "ts": "2026-09-02 13:02:00.0",
+   "author": "Selma Marsh",
+   "title": "Tidy up invoice list pagination in billing-api"
+  },
+  {
+   "id": "TCK-0072",
+   "ts": "2026-09-14 13:59:00.0",
+   "author": "Selma Marsh",
+   "title": "Tidy up plan upgrade endpoint in billing-api"
+  },
+  {
+   "id": "TCK-0073",
+   "ts": "2026-09-14 16:07:00.0",
+   "author": "Lars Thorne",
+   "title": "Harden plan upgrade endpoint in billing-api"
+  },
+  {
+   "id": "TCK-0078",
+   "ts": "2026-09-16 14:29:00.0",
+   "author": "Luca Ostrander",
+   "title": "Fix invoice list pagination in billing-api"
+  },
+  {
+   "id": "TCK-0085",
+   "ts": "2026-09-21 19:00:00.0",
+   "author": "Luca Ostrander",
+   "title": "Tidy up coupon validation in billing-api"
+  },
+  {
+   "id": "TCK-0095",
+   "ts": "2026-09-30 20:45:00.0",
+   "author": "Oskar Alvarez",
+   "title": "Investigate proration rounding regression in billing-api"
+  },
+  {
+   "id": "TCK-0113",
+   "ts": "2026-10-07 21:26:00.0",
+   "author": "Selma Marsh",
+   "title": "Harden invoice list pagination in billing-api"
+  },
+  {
+   "id": "TCK-0117",
+   "ts": "2026-10-08 19:52:00.0",
+   "author": "Luca Ostrander",
+   "title": "Document coupon validation for billing-api"
+  }
+ ],
+ "raw": {
+  "headers": [
+   "id",
+   "ts",
+   "author",
+   "title"
+  ],
+  "data": [
+   [
+    "TCK-0002",
+    "2026-08-17 17:31:00.0",
+    "Lars Thorne",
+    "Fix plan upgrade endpoint in billing-api"
+   ],
+   [
+    "TCK-0025",
+    "2026-08-26 21:24:00.0",
+    "Luca Ostrander",
+    "Tidy up currency conversion in billing-api"
+   ],
+   [
+    "TCK-0038",
+    "2026-09-02 13:02:00.0",
+    "Selma Marsh",
+    "Tidy up invoice list pagination in billing-api"
+   ],
+   [
+    "TCK-0072",
+    "2026-09-14 13:59:00.0",
+    "Selma Marsh",
+    "Tidy up plan upgrade endpoint in billing-api"
+   ],
+   [
+    "TCK-0073",
+    "2026-09-14 16:07:00.0",
+    "Lars Thorne",
+    "Harden plan upgrade endpoint in billing-api"
+   ],
+   [
+    "TCK-0078",
+    "2026-09-16 14:29:00.0",
+    "Luca Ostrander",
+    "Fix invoice list pagination in billing-api"
+   ],
+   [
+    "TCK-0085",
+    "2026-09-21 19:00:00.0",
+    "Luca Ostrander",
+    "Tidy up coupon validation in billing-api"
+   ],
+   [
+    "TCK-0095",
+    "2026-09-30 20:45:00.0",
+    "Oskar Alvarez",
+    "Investigate proration rounding regression in billing-api"
+   ],
+   [
+    "TCK-0113",
+    "2026-10-07 21:26:00.0",
+    "Selma Marsh",
+    "Harden invoice list pagination in billing-api"
+   ],
+   [
+    "TCK-0117",
+    "2026-10-08 19:52:00.0",
+    "Luca Ostrander",
+    "Document coupon validation for billing-api"
+   ]
+  ],
+  "total": 10,
+  "timeUsed": 773
+ }
+}

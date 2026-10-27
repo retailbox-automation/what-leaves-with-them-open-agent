@@ -1,0 +1,24 @@
+{
+ "n": 3,
+ "statement": "COMPILE USL IF NOT EXISTS wlwt_usl DEPLOY NAMESPACE lightning.metastore.wlwt DDL\nCREATE TABLE record (\n    record_id varchar(32) NOT NULL PRIMARY KEY,\n    system varchar(8) NOT NULL,\n    ts varchar(32),\n    author varchar(120),\n    title varchar(400),\n    body varchar(8000),\n    refs varchar(2000),\n    content_hash varchar(64)\n)",
+ "ok": true,
+ "rows": 1,
+ "seconds": 0.252,
+ "sample": [
+  {
+   "json": "{\"namespace\":[\"metastore\",\"wlwt\"],\"name\":\"wlwt_usl\",\"tables\":[{\"name\":\"record\",\"columnSpecs\":[{\"name\":\"record_id\",\"dataType\":\"\\\"varchar(32)\\\"\",\"primaryKey\":{\"columns\":[]},\"notNull\":{\"columns\":[]},\"dqAnnotations\":[],\"acAnnotations\":[]},{\"name\":\"system\",\"dataType\":\"\\\"varchar(8)\\\"\",\"notNull\":{\"columns\":[]},\"dqAnnotations\":[],\"acAnnotations\":[]},{\"name\":\"ts\",\"dataType\":\"\\\"varchar(32)\\\"\",\"dqAnnotations\":[],\"acAnnotations\":[]},{\"name\":\"author\",\"dataType\":\"\\\"varchar(120)\\\"\",\"dqAnnotations\":[],\"acAnnotations\":[]},{\"name\":\"title\",\"dataType\":\"\\\"varchar(400)\\\"\",\"dqAnnotations\":[],\"acAnnotations\":[]},{\"name\":\"body\",\"dataType\":\"\\\"varchar(8000)\\\"\",\"dqAnnotations\":[],\"acAnnotations\":[]},{\"name\":\"refs\",\"dataType\":\"\\\"varchar(2000)\\\"\",\"dqAnnotations\":[],\"acAnnotations\":[]},{\"name\":\"content_hash\",\"dataType\":\"\\\"varchar(64)\\\"\",\"dqAnnotations\":[],\"acAnnotations\":[]}],\"unique\":[],\"foreignKeys\":[],\"checks\":[],\"ifNotExit\":false,\"namespace\":[\"lightning\",\"metastore\",\"wlwt\",\"wlwt_usl\"],\"dqAnnotations\":[],\"acAnnotations\":[]}]}"
+  }
+ ],
+ "raw": {
+  "headers": [
+   "json"
+  ],
+  "data": [
+   [
+    "{\"namespace\":[\"metastore\",\"wlwt\"],\"name\":\"wlwt_usl\",\"tables\":[{\"name\":\"record\",\"columnSpecs\":[{\"name\":\"record_id\",\"dataType\":\"\\\"varchar(32)\\\"\",\"primaryKey\":{\"columns\":[]},\"notNull\":{\"columns\":[]},\"dqAnnotations\":[],\"acAnnotations\":[]},{\"name\":\"system\",\"dataType\":\"\\\"varchar(8)\\\"\",\"notNull\":{\"columns\":[]},\"dqAnnotations\":[],\"acAnnotations\":[]},{\"name\":\"ts\",\"dataType\":\"\\\"varchar(32)\\\"\",\"dqAnnotations\":[],\"acAnnotations\":[]},{\"name\":\"author\",\"dataType\":\"\\\"varchar(120)\\\"\",\"dqAnnotations\":[],\"acAnnotations\":[]},{\"name\":\"title\",\"dataType\":\"\\\"varchar(400)\\\"\",\"dqAnnotations\":[],\"acAnnotations\":[]},{\"name\":\"body\",\"dataType\":\"\\\"varchar(8000)\\\"\",\"dqAnnotations\":[],\"acAnnotations\":[]},{\"name\":\"refs\",\"dataType\":\"\\\"varchar(2000)\\\"\",\"dqAnnotations\":[],\"acAnnotations\":[]},{\"name\":\"content_hash\",\"dataType\":\"\\\"varchar(64)\\\"\",\"dqAnnotations\":[],\"acAnnotations\":[]}],\"unique\":[],\"foreignKeys\":[],\"checks\":[],\"ifNotExit\":false,\"namespace\":[\"lightning\",\"metastore\",\"wlwt\",\"wlwt_usl\"],\"dqAnnotations\":[],\"acAnnotations\":[]}]}"
+   ]
+  ],
+  "total": 1,
+  "timeUsed": 194
+ }
+}

@@ -1,0 +1,59 @@
+{
+ "n": 2,
+ "statement": "SELECT title AS channel, count(*) AS messages FROM WLWT_CHAT.chat GROUP BY title ORDER BY messages DESC",
+ "ok": true,
+ "rows": 5,
+ "seconds": 0.406,
+ "sample": [
+  {
+   "channel": "#platform",
+   "messages": "60"
+  },
+  {
+   "channel": "#payments",
+   "messages": "56"
+  },
+  {
+   "channel": "#growth",
+   "messages": "41"
+  },
+  {
+   "channel": "#support",
+   "messages": "39"
+  },
+  {
+   "channel": "#general",
+   "messages": "29"
+  }
+ ],
+ "raw": {
+  "headers": [
+   "channel",
+   "messages"
+  ],
+  "data": [
+   [
+    "#platform",
+    "60"
+   ],
+   [
+    "#payments",
+    "56"
+   ],
+   [
+    "#growth",
+    "41"
+   ],
+   [
+    "#support",
+    "39"
+   ],
+   [
+    "#general",
+    "29"
+   ]
+  ],
+  "total": 5,
+  "timeUsed": 367
+ }
+}

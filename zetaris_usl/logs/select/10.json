@@ -1,0 +1,43 @@
+{
+ "n": 10,
+ "statement": "SELECT system, count(*) AS records FROM lightning.metastore.wlwt.wlwt_usl.record GROUP BY system ORDER BY system",
+ "ok": true,
+ "rows": 3,
+ "seconds": 0.73,
+ "sample": [
+  {
+   "system": "chat",
+   "records": "225"
+  },
+  {
+   "system": "doc",
+   "records": "51"
+  },
+  {
+   "system": "ticket",
+   "records": "127"
+  }
+ ],
+ "raw": {
+  "headers": [
+   "system",
+   "records"
+  ],
+  "data": [
+   [
+    "chat",
+    "225"
+   ],
+   [
+    "doc",
+    "51"
+   ],
+   [
+    "ticket",
+    "127"
+   ]
+  ],
+  "total": 3,
+  "timeUsed": 700
+ }
+}

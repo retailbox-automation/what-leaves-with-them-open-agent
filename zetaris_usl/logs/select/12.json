@@ -1,0 +1,358 @@
+{
+ "n": 12,
+ "statement": "SELECT system, record_id, ts, author, title\nFROM lightning.metastore.wlwt.wlwt_usl.record\nWHERE instr(body, 'billing-api') > 0\nORDER BY ts DESC",
+ "ok": true,
+ "rows": 28,
+ "seconds": 0.807,
+ "sample": [
+  {
+   "system": "ticket",
+   "record_id": "TCK-0117",
+   "ts": "2026-10-08 19:52:00",
+   "author": "Luca Ostrander",
+   "title": "Document coupon validation for billing-api"
+  },
+  {
+   "system": "ticket",
+   "record_id": "TCK-0113",
+   "ts": "2026-10-07 21:26:00",
+   "author": "Selma Marsh",
+   "title": "Harden invoice list pagination in billing-api"
+  },
+  {
+   "system": "chat",
+   "record_id": "msg-0181",
+   "ts": "2026-10-01T14:27:00Z",
+   "author": "Tomas Kessler",
+   "title": "#support"
+  },
+  {
+   "system": "ticket",
+   "record_id": "TCK-0095",
+   "ts": "2026-09-30 20:45:00",
+   "author": "Oskar Alvarez",
+   "title": "Investigate proration rounding regression in billing-api"
+  },
+  {
+   "system": "chat",
+   "record_id": "msg-0174",
+   "ts": "2026-09-29T16:27:00Z",
+   "author": "Yuki Moreau",
+   "title": "#general"
+  },
+  {
+   "system": "chat",
+   "record_id": "msg-0162",
+   "ts": "2026-09-25T13:50:00Z",
+   "author": "Luca Ostrander",
+   "title": "#payments"
+  },
+  {
+   "system": "chat",
+   "record_id": "msg-0148",
+   "ts": "2026-09-22T17:31:00Z",
+   "author": "Luca Ostrander",
+   "title": "#platform"
+  },
+  {
+   "system": "doc",
+   "record_id": "ADR-0009",
+   "ts": "2026-09-22T15:28:00Z",
+   "author": "Selma Marsh",
+   "title": "ADR-0009: Transfer billing-api ownership from Sana Petrov to Luca Ostrander"
+  },
+  {
+   "system": "ticket",
+   "record_id": "TCK-0085",
+   "ts": "2026-09-21 19:00:00",
+   "author": "Luca Ostrander",
+   "title": "Tidy up coupon validation in billing-api"
+  },
+  {
+   "system": "doc",
+   "record_id": "ADR-0013",
+   "ts": "2026-09-17T15:50:00Z",
+   "author": "Yuki Moreau",
+   "title": "ADR-0013: Revenue rollups read invoice state through billing-api"
+  },
+  {
+   "system": "chat",
+   "record_id": "msg-0130",
+   "ts": "2026-09-16T14:56:00Z",
+   "author": "Luca Ostrander",
+   "title": "#payments"
+  },
+  {
+   "system": "ticket",
+   "record_id": "TCK-0078",
+   "ts": "2026-09-16 14:29:00",
+   "author": "Luca Ostrander",
+   "title": "Fix invoice list pagination in billing-api"
+  },
+  {
+   "system": "ticket",
+   "record_id": "TCK-0073",
+   "ts": "2026-09-14 16:07:00",
+   "author": "Lars Thorne",
+   "title": "Harden plan upgrade endpoint in billing-api"
+  },
+  {
+   "system": "ticket",
+   "record_id": "TCK-0072",
+   "ts": "2026-09-14 13:59:00",
+   "author": "Selma Marsh",
+   "title": "Tidy up plan upgrade endpoint in billing-api"
+  },
+  {
+   "system": "doc",
+   "record_id": "PM-03",
+   "ts": "2026-09-10T14:28:00Z",
+   "author": "Mateo Sandoval",
+   "title": "Postmortem: Invoice rendering timeouts"
+  },
+  {
+   "system": "doc",
+   "record_id": "ADR-0011",
+   "ts": "2026-09-08T15:15:00Z",
+   "author": "Viktor Hartwell",
+   "title": "ADR-0011: Render invoices asynchronously through invoice-renderer"
+  },
+  {
+   "system": "chat",
+   "record_id": "msg-0064",
+   "ts": "2026-09-02T16:11:00Z",
+   "author": "Selma Marsh",
+   "title": "#payments"
+  },
+  {
+   "system": "ticket",
+   "record_id": "TCK-0038",
+   "ts": "2026-09-02 13:02:00",
+   "author": "Selma Marsh",
+   "title": "Tidy up invoice list pagination in billing-api"
+  },
+  {
+   "system": "doc",
+   "record_id": "RB-05",
+   "ts": "2026-08-27T20:09:00Z",
+   "author": "Sana Petrov",
+   "title": "Runbook: billing-api"
+  },
+  {
+   "system": "ticket",
+   "record_id": "TCK-0025",
+   "ts": "2026-08-26 21:24:00",
+   "author": "Luca Ostrander",
+   "title": "Tidy up currency conversion in billing-api"
+  }
+ ],
+ "raw": {
+  "headers": [
+   "system",
+   "record_id",
+   "ts",
+   "author",
+   "title"
+  ],
+  "data": [
+   [
+    "ticket",
+    "TCK-0117",
+    "2026-10-08 19:52:00",
+    "Luca Ostrander",
+    "Document coupon validation for billing-api"
+   ],
+   [
+    "ticket",
+    "TCK-0113",
+    "2026-10-07 21:26:00",
+    "Selma Marsh",
+    "Harden invoice list pagination in billing-api"
+   ],
+   [
+    "chat",
+    "msg-0181",
+    "2026-10-01T14:27:00Z",
+    "Tomas Kessler",
+    "#support"
+   ],
+   [
+    "ticket",
+    "TCK-0095",
+    "2026-09-30 20:45:00",
+    "Oskar Alvarez",
+    "Investigate proration rounding regression in billing-api"
+   ],
+   [
+    "chat",
+    "msg-0174",
+    "2026-09-29T16:27:00Z",
+    "Yuki Moreau",
+    "#general"
+   ],
+   [
+    "chat",
+    "msg-0162",
+    "2026-09-25T13:50:00Z",
+    "Luca Ostrander",
+    "#payments"
+   ],
+   [
+    "chat",
+    "msg-0148",
+    "2026-09-22T17:31:00Z",
+    "Luca Ostrander",
+    "#platform"
+   ],
+   [
+    "doc",
+    "ADR-0009",
+    "2026-09-22T15:28:00Z",
+    "Selma Marsh",
+    "ADR-0009: Transfer billing-api ownership from Sana Petrov to Luca Ostrander"
+   ],
+   [
+    "ticket",
+    "TCK-0085",
+    "2026-09-21 19:00:00",
+    "Luca Ostrander",
+    "Tidy up coupon validation in billing-api"
+   ],
+   [
+    "doc",
+    "ADR-0013",
+    "2026-09-17T15:50:00Z",
+    "Yuki Moreau",
+    "ADR-0013: Revenue rollups read invoice state through billing-api"
+   ],
+   [
+    "chat",
+    "msg-0130",
+    "2026-09-16T14:56:00Z",
+    "Luca Ostrander",
+    "#payments"
+   ],
+   [
+    "ticket",
+    "TCK-0078",
+    "2026-09-16 14:29:00",
+    "Luca Ostrander",
+    "Fix invoice list pagination in billing-api"
+   ],
+   [
+    "ticket",
+    "TCK-0073",
+    "2026-09-14 16:07:00",
+    "Lars Thorne",
+    "Harden plan upgrade endpoint in billing-api"
+   ],
+   [
+    "ticket",
+    "TCK-0072",
+    "2026-09-14 13:59:00",
+    "Selma Marsh",
+    "Tidy up plan upgrade endpoint in billing-api"
+   ],
+   [
+    "doc",
+    "PM-03",
+    "2026-09-10T14:28:00Z",
+    "Mateo Sandoval",
+    "Postmortem: Invoice rendering timeouts"
+   ],
+   [
+    "doc",
+    "ADR-0011",
+    "2026-09-08T15:15:00Z",
+    "Viktor Hartwell",
+    "ADR-0011: Render invoices asynchronously through invoice-renderer"
+   ],
+   [
+    "chat",
+    "msg-0064",
+    "2026-09-02T16:11:00Z",
+    "Selma Marsh",
+    "#payments"
+   ],
+   [
+    "ticket",
+    "TCK-0038",
+    "2026-09-02 13:02:00",
+    "Selma Marsh",
+    "Tidy up invoice list pagination in billing-api"
+   ],
+   [
+    "doc",
+    "RB-05",
+    "2026-08-27T20:09:00Z",
+    "Sana Petrov",
+    "Runbook: billing-api"
+   ],
+   [
+    "ticket",
+    "TCK-0025",
+    "2026-08-26 21:24:00",
+    "Luca Ostrander",
+    "Tidy up currency conversion in billing-api"
+   ],
+   [
+    "doc",
+    "ADR-0004",
+    "2026-08-25T15:04:00Z",
+    "Mateo Sandoval",
+    "ADR-0004: Render invoices synchronously"
+   ],
+   [
+    "chat",
+    "msg-0008",
+    "2026-08-18T16:15:00Z",
+    "Mateo Sandoval",
+    "#payments"
+   ],
+   [
+    "doc",
+    "ADR-0001",
+    "2026-08-18T15:15:00Z",
+    "Mateo Sandoval",
+    "ADR-0001: Idempotency keys on billing-api writes"
+   ],
+   [
+    "doc",
+    "DOC-07",
+    "2026-08-18T14:58:00Z",
+    "Omar Fenwick",
+    "Project charter: Self-Serve Onboarding"
+   ],
+   [
+    "doc",
+    "DOC-05",
+    "2026-08-18T14:25:00Z",
+    "Sana Petrov",
+    "Project charter: Invoice Reliability"
+   ],
+   [
+    "doc",
+    "ARCH-01",
+    "2026-08-17T12:45:00Z",
+    "Selma Marsh",
+    "Architecture overview"
+   ],
+   [
+    "doc",
+    "DOC-01",
+    "2026-08-17T12:00:00Z",
+    "Selma Marsh",
+    "Service catalog"
+   ],
+   [
+    "ticket",
+    "TCK-0002",
+    "2026-08-17 17:31:00",
+    "Lars Thorne",
+    "Fix plan upgrade endpoint in billing-api"
+   ]
+  ],
+  "total": 28,
+  "timeUsed": 773
+ }
+}

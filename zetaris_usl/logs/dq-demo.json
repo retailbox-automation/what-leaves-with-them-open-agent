@@ -1,0 +1,151 @@
+{
+ "started": "2026-10-27T17:38:17Z",
+ "steps": [
+  {
+   "step": "dq_before",
+   "sql": "RUN DQ TABLE lightning.metastore.wlwt.wlwt_usl.record",
+   "rows": [
+    {
+     "name": "quotable",
+     "table": "record",
+     "type": "Custom Data Quality",
+     "total_record": "403",
+     "valid_record": "403",
+     "invalid_record": "0"
+    },
+    {
+     "name": "id_matches_system",
+     "table": "record",
+     "type": "Custom Data Quality",
+     "total_record": "403",
+     "valid_record": "403",
+     "invalid_record": "0"
+    },
+    {
+     "name": "record_id",
+     "table": "record",
+     "type": "Primary Key Constraint",
+     "total_record": "403",
+     "valid_record": "403",
+     "invalid_record": "0"
+    }
+   ],
+   "seconds": 5.308
+  },
+  {
+   "step": "dq_with_blank",
+   "sql": "RUN DQ TABLE lightning.metastore.wlwt.wlwt_usl.record",
+   "rows": [
+    {
+     "name": "quotable",
+     "table": "record",
+     "type": "Custom Data Quality",
+     "total_record": "403",
+     "valid_record": "402",
+     "invalid_record": "1"
+    },
+    {
+     "name": "id_matches_system",
+     "table": "record",
+     "type": "Custom Data Quality",
+     "total_record": "403",
+     "valid_record": "403",
+     "invalid_record": "0"
+    },
+    {
+     "name": "record_id",
+     "table": "record",
+     "type": "Primary Key Constraint",
+     "total_record": "403",
+     "valid_record": "403",
+     "invalid_record": "0"
+    }
+   ],
+   "seconds": 4.504
+  },
+  {
+   "step": "invalid_records",
+   "sql": "SHOW DQ INVALID RECORD quotable TABLE lightning.metastore.wlwt.wlwt_usl.record",
+   "rows": [
+    {
+     "record_id": "msg-0002",
+     "system": "chat",
+     "ts": "2026-08-17T16:34:00Z",
+     "author": "Omar Fenwick",
+     "title": "#general",
+     "body": "",
+     "refs": "",
+     "content_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+   ],
+   "seconds": 0.532
+  },
+  {
+   "step": "dq_after_restore",
+   "sql": "RUN DQ TABLE lightning.metastore.wlwt.wlwt_usl.record",
+   "rows": [
+    {
+     "name": "quotable",
+     "table": "record",
+     "type": "Custom Data Quality",
+     "total_record": "403",
+     "valid_record": "403",
+     "invalid_record": "0"
+    },
+    {
+     "name": "id_matches_system",
+     "table": "record",
+     "type": "Custom Data Quality",
+     "total_record": "403",
+     "valid_record": "403",
+     "invalid_record": "0"
+    },
+    {
+     "name": "record_id",
+     "table": "record",
+     "type": "Primary Key Constraint",
+     "total_record": "403",
+     "valid_record": "403",
+     "invalid_record": "0"
+    }
+   ],
+   "seconds": 3.601
+  },
+  {
+   "step": "hash_before",
+   "sql": "SELECT record_id, content_hash FROM lightning.metastore.wlwt.wlwt_usl.record WHERE record_id = 'msg-0148'",
+   "rows": [
+    {
+     "record_id": "msg-0148",
+     "content_hash": "2f0a8504a086427fc1968fcdf7a78ea3456135a675483d1ece9f50e053de53b4"
+    }
+   ],
+   "seconds": 0.864
+  },
+  {
+   "step": "hash_after_edit",
+   "sql": "SELECT record_id, content_hash FROM lightning.metastore.wlwt.wlwt_usl.record WHERE record_id = 'msg-0148'",
+   "rows": [
+    {
+     "record_id": "msg-0148",
+     "content_hash": "644048b5fee7c764a0c5ba85fe1861fc12e6e60fe1d6e58916a28cfec1cfb6d4"
+    }
+   ],
+   "seconds": 1.095
+  },
+  {
+   "step": "hash_after_restore",
+   "sql": "SELECT record_id, content_hash FROM lightning.metastore.wlwt.wlwt_usl.record WHERE record_id = 'msg-0148'",
+   "rows": [
+    {
+     "record_id": "msg-0148",
+     "content_hash": "2f0a8504a086427fc1968fcdf7a78ea3456135a675483d1ece9f50e053de53b4"
+    }
+   ],
+   "seconds": 0.598
+  }
+ ],
+ "blank_restored": true,
+ "tamper_restored": true,
+ "finished": "2026-10-27T17:38:34Z"
+}

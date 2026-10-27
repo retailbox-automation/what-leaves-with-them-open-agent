@@ -1,0 +1,16 @@
+{
+ "n": 16,
+ "statement": "SHOW DQ ALL INVALID TABLE lightning.metastore.wlwt.wlwt_usl.record",
+ "ok": true,
+ "rows": 0,
+ "seconds": 6.463,
+ "sample": [],
+ "raw": {
+  "headers": [
+   "records"
+  ],
+  "data": [],
+  "total": 0,
+  "timeUsed": 6388
+ }
+}

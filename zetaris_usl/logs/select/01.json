@@ -1,0 +1,30 @@
+{
+ "n": 1,
+ "statement": "SELECT count(*) AS messages, min(ts) AS first, max(ts) AS last FROM WLWT_CHAT.chat",
+ "ok": true,
+ "rows": 1,
+ "seconds": 0.265,
+ "sample": [
+  {
+   "messages": "225",
+   "first": "2026-08-17T14:02:00Z",
+   "last": "2026-10-10T20:48:00Z"
+  }
+ ],
+ "raw": {
+  "headers": [
+   "messages",
+   "first",
+   "last"
+  ],
+  "data": [
+   [
+    "225",
+    "2026-08-17T14:02:00Z",
+    "2026-10-10T20:48:00Z"
+   ]
+  ],
+  "total": 1,
+  "timeUsed": 228
+ }
+}

@@ -1,0 +1,24 @@
+{
+ "n": 7,
+ "statement": "SELECT count(*) AS docs FROM wlwt_docs.docs_raw LATERAL VIEW explode(docs) x AS d",
+ "ok": true,
+ "rows": 1,
+ "seconds": 0.545,
+ "sample": [
+  {
+   "docs": "51"
+  }
+ ],
+ "raw": {
+  "headers": [
+   "docs"
+  ],
+  "data": [
+   [
+    "51"
+   ]
+  ],
+  "total": 1,
+  "timeUsed": 512
+ }
+}

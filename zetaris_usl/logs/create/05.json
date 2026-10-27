@@ -1,0 +1,24 @@
+{
+ "n": 5,
+ "statement": "ACTIVATE USL TABLE lightning.metastore.wlwt.wlwt_usl.record AS\nSELECT COALESCE(record_id, '') AS record_id, system, ts, author, title, body, refs, content_hash FROM (\nSELECT id AS record_id, 'chat' AS system, CAST(ts AS STRING) AS ts, author, title, text AS body, CAST(refs AS STRING) AS refs, sha2(text, 256) AS content_hash\nFROM WLWT_CHAT.chat\nUNION ALL\nSELECT id, 'ticket', CAST(ts AS STRING), author, title, text, CAST(refs AS STRING), sha2(text, 256)\nFROM wlwt_tickets.tickets\nUNION ALL\nSELECT d.id, 'doc', CAST(d.ts AS STRING), d.author, d.title, d.text, CAST(d.refs AS STRING), sha2(d.text, 256)\nFROM wlwt_docs.docs_raw LATERAL VIEW explode(docs) x AS d\n) u",
+ "ok": true,
+ "rows": 1,
+ "seconds": 0.416,
+ "sample": [
+  {
+   "registered": "{\"name\":\"record\",\"query\":\"SELECT COALESCE(record_id, '') AS record_id, system, ts, author, title, body, refs, content_hash FROM (\\nSELECT id AS record_id, 'chat' AS system, CAST(ts AS STRING) AS ts, author, title, text AS body, CAST(refs AS STRING) AS refs, sha2(text, 256) AS content_hash\\nFROM WLWT_CHAT.chat\\nUNION ALL\\nSELECT id, 'ticket', CAST(ts AS STRING), author, title, text, CAST(refs AS STRING), sha2(text, 256)\\nFROM wlwt_tickets.tickets\\nUNION ALL\\nSELECT d.id, 'doc', CAST(d.ts AS STRING), d.author, d.title, d.text, CAST(d.refs AS STRING), sha2(d.text, 256)\\nFROM wlwt_docs.docs_raw LATERAL VIEW explode(docs) x AS d\\n) u\"}"
+  }
+ ],
+ "raw": {
+  "headers": [
+   "registered"
+  ],
+  "data": [
+   [
+    "{\"name\":\"record\",\"query\":\"SELECT COALESCE(record_id, '') AS record_id, system, ts, author, title, body, refs, content_hash FROM (\\nSELECT id AS record_id, 'chat' AS system, CAST(ts AS STRING) AS ts, author, title, text AS body, CAST(refs AS STRING) AS refs, sha2(text, 256) AS content_hash\\nFROM WLWT_CHAT.chat\\nUNION ALL\\nSELECT id, 'ticket', CAST(ts AS STRING), author, title, text, CAST(refs AS STRING), sha2(text, 256)\\nFROM wlwt_tickets.tickets\\nUNION ALL\\nSELECT d.id, 'doc', CAST(d.ts AS STRING), d.author, d.title, d.text, CAST(d.refs AS STRING), sha2(d.text, 256)\\nFROM wlwt_docs.docs_raw LATERAL VIEW explode(docs) x AS d\\n) u\"}"
+   ]
+  ],
+  "total": 1,
+  "timeUsed": 373
+ }
+}

@@ -1,0 +1,105 @@
+{
+ "n": 3,
+ "statement": "SELECT id, ts, author, text FROM WLWT_CHAT.chat WHERE instr(text, 'billing-api') > 0 ORDER BY ts",
+ "ok": true,
+ "rows": 7,
+ "seconds": 0.266,
+ "sample": [
+  {
+   "id": "msg-0008",
+   "ts": "2026-08-18T16:15:00Z",
+   "author": "Mateo Sandoval",
+   "text": "ADR-0001 accepted: Idempotency keys on billing-api writes. Please read it before your next change."
+  },
+  {
+   "id": "msg-0064",
+   "ts": "2026-09-02T16:11:00Z",
+   "author": "Selma Marsh",
+   "text": "Rolled out the proration rounding fix in billing-api to all tenants."
+  },
+  {
+   "id": "msg-0130",
+   "ts": "2026-09-16T14:56:00Z",
+   "author": "Luca Ostrander",
+   "text": "Pushed a fix for idempotency key lookup in billing-api; the cause was a stale cache entry."
+  },
+  {
+   "id": "msg-0148",
+   "ts": "2026-09-22T17:31:00Z",
+   "author": "Luca Ostrander",
+   "text": "Per ADR-0009, I am now the owner of billing-api. Sana Petrov stays on as backup for 30 days. Send billing-api escalations to me."
+  },
+  {
+   "id": "msg-0162",
+   "ts": "2026-09-25T13:50:00Z",
+   "author": "Luca Ostrander",
+   "text": "Deployed the invoice list pagination change in billing-api to staging, looks good."
+  },
+  {
+   "id": "msg-0174",
+   "ts": "2026-09-29T16:27:00Z",
+   "author": "Yuki Moreau",
+   "text": "Heads up: billing-api is owned by Growth now, so route billing-api questions to us."
+  },
+  {
+   "id": "msg-0181",
+   "ts": "2026-10-01T14:27:00Z",
+   "author": "Tomas Kessler",
+   "text": "Adding the billing-api runbook (RB-05) to the help center index. It lists Sana Petrov as the owner of billing-api, so I am updating the escalation sheet to match."
+  }
+ ],
+ "raw": {
+  "headers": [
+   "id",
+   "ts",
+   "author",
+   "text"
+  ],
+  "data": [
+   [
+    "msg-0008",
+    "2026-08-18T16:15:00Z",
+    "Mateo Sandoval",
+    "ADR-0001 accepted: Idempotency keys on billing-api writes. Please read it before your next change."
+   ],
+   [
+    "msg-0064",
+    "2026-09-02T16:11:00Z",
+    "Selma Marsh",
+    "Rolled out the proration rounding fix in billing-api to all tenants."
+   ],
+   [
+    "msg-0130",
+    "2026-09-16T14:56:00Z",
+    "Luca Ostrander",
+    "Pushed a fix for idempotency key lookup in billing-api; the cause was a stale cache entry."
+   ],
+   [
+    "msg-0148",
+    "2026-09-22T17:31:00Z",
+    "Luca Ostrander",
+    "Per ADR-0009, I am now the owner of billing-api. Sana Petrov stays on as backup for 30 days. Send billing-api escalations to me."
+   ],
+   [
+    "msg-0162",
+    "2026-09-25T13:50:00Z",
+    "Luca Ostrander",
+    "Deployed the invoice list pagination change in billing-api to staging, looks good."
+   ],
+   [
+    "msg-0174",
+    "2026-09-29T16:27:00Z",
+    "Yuki Moreau",
+    "Heads up: billing-api is owned by Growth now, so route billing-api questions to us."
+   ],
+   [
+    "msg-0181",
+    "2026-10-01T14:27:00Z",
+    "Tomas Kessler",
+    "Adding the billing-api runbook (RB-05) to the help center index. It lists Sana Petrov as the owner of billing-api, so I am updating the escalation sheet to match."
+   ]
+  ],
+  "total": 7,
+  "timeUsed": 234
+ }
+}

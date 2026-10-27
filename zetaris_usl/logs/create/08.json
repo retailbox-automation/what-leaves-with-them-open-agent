@@ -1,0 +1,57 @@
+{
+ "n": 8,
+ "statement": "LIST DQ USL lightning.metastore.wlwt.wlwt_usl",
+ "ok": true,
+ "rows": 3,
+ "seconds": 0.102,
+ "sample": [
+  {
+   "name": "record_id",
+   "table": "record",
+   "type": "Primary key constraints",
+   "expression": ""
+  },
+  {
+   "name": "quotable",
+   "table": "record",
+   "type": "Custom Data Quality",
+   "expression": "body IS NOT NULL AND length(trim(body)) > 0 AND to_timestamp(ts) IS NOT NULL"
+  },
+  {
+   "name": "id_matches_system",
+   "table": "record",
+   "type": "Custom Data Quality",
+   "expression": "(system = 'chat' AND record_id LIKE 'msg-%')\nOR (system = 'ticket' AND record_id LIKE 'TCK-%')\nOR (system = 'doc' AND (record_id LIKE 'DOC-%' OR record_id LIKE 'ADR-%' OR record_id LIKE 'RB-%' OR record_id LIKE 'PM-%' OR record_id LIKE 'ARCH-%'))"
+  }
+ ],
+ "raw": {
+  "headers": [
+   "name",
+   "table",
+   "type",
+   "expression"
+  ],
+  "data": [
+   [
+    "record_id",
+    "record",
+    "Primary key constraints",
+    ""
+   ],
+   [
+    "quotable",
+    "record",
+    "Custom Data Quality",
+    "body IS NOT NULL AND length(trim(body)) > 0 AND to_timestamp(ts) IS NOT NULL"
+   ],
+   [
+    "id_matches_system",
+    "record",
+    "Custom Data Quality",
+    "(system = 'chat' AND record_id LIKE 'msg-%')\nOR (system = 'ticket' AND record_id LIKE 'TCK-%')\nOR (system = 'doc' AND (record_id LIKE 'DOC-%' OR record_id LIKE 'ADR-%' OR record_id LIKE 'RB-%' OR record_id LIKE 'PM-%' OR record_id LIKE 'ARCH-%'))"
+   ]
+  ],
+  "total": 3,
+  "timeUsed": 69
+ }
+}

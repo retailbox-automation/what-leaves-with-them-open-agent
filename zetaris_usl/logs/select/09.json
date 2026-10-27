@@ -1,0 +1,213 @@
+{
+ "n": 9,
+ "statement": "SELECT d.id, d.ts, d.author, d.title FROM wlwt_docs.docs_raw LATERAL VIEW explode(docs) x AS d WHERE d.id LIKE 'ADR-%' ORDER BY d.ts",
+ "ok": true,
+ "rows": 16,
+ "seconds": 0.569,
+ "sample": [
+  {
+   "id": "ADR-0001",
+   "ts": "2026-08-18T15:15:00Z",
+   "author": "Mateo Sandoval",
+   "title": "ADR-0001: Idempotency keys on billing-api writes"
+  },
+  {
+   "id": "ADR-0002",
+   "ts": "2026-08-18T15:21:00Z",
+   "author": "Mateo Sandoval",
+   "title": "ADR-0002: Append-only ledger entries"
+  },
+  {
+   "id": "ADR-0004",
+   "ts": "2026-08-25T15:04:00Z",
+   "author": "Mateo Sandoval",
+   "title": "ADR-0004: Render invoices synchronously"
+  },
+  {
+   "id": "ADR-0003",
+   "ts": "2026-08-25T15:37:00Z",
+   "author": "Luca Ostrander",
+   "title": "ADR-0003: Signed webhooks with retry backoff"
+  },
+  {
+   "id": "ADR-0005",
+   "ts": "2026-09-01T15:14:00Z",
+   "author": "Selma Marsh",
+   "title": "ADR-0005: SSO required for admin-console"
+  },
+  {
+   "id": "ADR-0006",
+   "ts": "2026-09-01T15:55:00Z",
+   "author": "Priya Farrow",
+   "title": "ADR-0006: Status page updates come from on-call"
+  },
+  {
+   "id": "ADR-0014",
+   "ts": "2026-09-02T15:17:00Z",
+   "author": "Oskar Alvarez",
+   "title": "ADR-0014: Encrypt ledger-db backups with rotating keys"
+  },
+  {
+   "id": "ADR-0011",
+   "ts": "2026-09-08T15:15:00Z",
+   "author": "Viktor Hartwell",
+   "title": "ADR-0011: Render invoices asynchronously through invoice-renderer"
+  },
+  {
+   "id": "ADR-0007",
+   "ts": "2026-09-08T15:32:00Z",
+   "author": "Selma Marsh",
+   "title": "ADR-0007: Per-tenant rate limits in notifications"
+  },
+  {
+   "id": "ADR-0016",
+   "ts": "2026-09-09T15:44:00Z",
+   "author": "Pavel Hollis",
+   "title": "ADR-0016: Rotate auth signing keys every 30 days"
+  },
+  {
+   "id": "ADR-0010",
+   "ts": "2026-09-15T15:34:00Z",
+   "author": "Luca Ostrander",
+   "title": "ADR-0010: Audit logs kept for 400 days"
+  },
+  {
+   "id": "ADR-0008",
+   "ts": "2026-09-15T15:42:00Z",
+   "author": "Aiko Rademacher",
+   "title": "ADR-0008: Reporting reads from a replica"
+  },
+  {
+   "id": "ADR-0015",
+   "ts": "2026-09-16T15:11:00Z",
+   "author": "Oskar Alvarez",
+   "title": "ADR-0015: Mask customer names in reporting exports"
+  },
+  {
+   "id": "ADR-0013",
+   "ts": "2026-09-17T15:50:00Z",
+   "author": "Yuki Moreau",
+   "title": "ADR-0013: Revenue rollups read invoice state through billing-api"
+  },
+  {
+   "id": "ADR-0009",
+   "ts": "2026-09-22T15:28:00Z",
+   "author": "Selma Marsh",
+   "title": "ADR-0009: Transfer billing-api ownership from Sana Petrov to Luca Ostrander"
+  },
+  {
+   "id": "ADR-0012",
+   "ts": "2026-09-29T15:12:00Z",
+   "author": "Viktor Hartwell",
+   "title": "ADR-0012: Schema freeze on ledger-db during month-end close"
+  }
+ ],
+ "raw": {
+  "headers": [
+   "id",
+   "ts",
+   "author",
+   "title"
+  ],
+  "data": [
+   [
+    "ADR-0001",
+    "2026-08-18T15:15:00Z",
+    "Mateo Sandoval",
+    "ADR-0001: Idempotency keys on billing-api writes"
+   ],
+   [
+    "ADR-0002",
+    "2026-08-18T15:21:00Z",
+    "Mateo Sandoval",
+    "ADR-0002: Append-only ledger entries"
+   ],
+   [
+    "ADR-0004",
+    "2026-08-25T15:04:00Z",
+    "Mateo Sandoval",
+    "ADR-0004: Render invoices synchronously"
+   ],
+   [
+    "ADR-0003",
+    "2026-08-25T15:37:00Z",
+    "Luca Ostrander",
+    "ADR-0003: Signed webhooks with retry backoff"
+   ],
+   [
+    "ADR-0005",
+    "2026-09-01T15:14:00Z",
+    "Selma Marsh",
+    "ADR-0005: SSO required for admin-console"
+   ],
+   [
+    "ADR-0006",
+    "2026-09-01T15:55:00Z",
+    "Priya Farrow",
+    "ADR-0006: Status page updates come from on-call"
+   ],
+   [
+    "ADR-0014",
+    "2026-09-02T15:17:00Z",
+    "Oskar Alvarez",
+    "ADR-0014: Encrypt ledger-db backups with rotating keys"
+   ],
+   [
+    "ADR-0011",
+    "2026-09-08T15:15:00Z",
+    "Viktor Hartwell",
+    "ADR-0011: Render invoices asynchronously through invoice-renderer"
+   ],
+   [
+    "ADR-0007",
+    "2026-09-08T15:32:00Z",
+    "Selma Marsh",
+    "ADR-0007: Per-tenant rate limits in notifications"
+   ],
+   [
+    "ADR-0016",
+    "2026-09-09T15:44:00Z",
+    "Pavel Hollis",
+    "ADR-0016: Rotate auth signing keys every 30 days"
+   ],
+   [
+    "ADR-0010",
+    "2026-09-15T15:34:00Z",
+    "Luca Ostrander",
+    "ADR-0010: Audit logs kept for 400 days"
+   ],
+   [
+    "ADR-0008",
+    "2026-09-15T15:42:00Z",
+    "Aiko Rademacher",
+    "ADR-0008: Reporting reads from a replica"
+   ],
+   [
+    "ADR-0015",
+    "2026-09-16T15:11:00Z",
+    "Oskar Alvarez",
+    "ADR-0015: Mask customer names in reporting exports"
+   ],
+   [
+    "ADR-0013",
+    "2026-09-17T15:50:00Z",
+    "Yuki Moreau",
+    "ADR-0013: Revenue rollups read invoice state through billing-api"
+   ],
+   [
+    "ADR-0009",
+    "2026-09-22T15:28:00Z",
+    "Selma Marsh",
+    "ADR-0009: Transfer billing-api ownership from Sana Petrov to Luca Ostrander"
+   ],
+   [
+    "ADR-0012",
+    "2026-09-29T15:12:00Z",
+    "Viktor Hartwell",
+    "ADR-0012: Schema freeze on ledger-db during month-end close"
+   ]
+  ],
+  "total": 16,
+  "timeUsed": 524
+ }
+}

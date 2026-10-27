@@ -1,0 +1,16 @@
+{
+ "n": 2,
+ "statement": "CREATE NAMESPACE IF NOT EXISTS lightning.metastore.wlwt",
+ "ok": true,
+ "rows": 0,
+ "seconds": 0.09,
+ "sample": [],
+ "raw": {
+  "headers": [
+   "Result"
+  ],
+  "data": [],
+  "total": 0,
+  "timeUsed": 55
+ }
+}

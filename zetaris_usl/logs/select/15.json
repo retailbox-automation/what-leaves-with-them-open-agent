@@ -1,0 +1,23 @@
+{
+ "n": 15,
+ "statement": "SHOW DQ INVALID RECORD quotable TABLE lightning.metastore.wlwt.wlwt_usl.record",
+ "ok": true,
+ "rows": 0,
+ "seconds": 0.852,
+ "sample": [],
+ "raw": {
+  "headers": [
+   "record_id",
+   "system",
+   "ts",
+   "author",
+   "title",
+   "body",
+   "refs",
+   "content_hash"
+  ],
+  "data": [],
+  "total": 0,
+  "timeUsed": 821
+ }
+}

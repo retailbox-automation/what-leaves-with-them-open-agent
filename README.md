@@ -99,6 +99,8 @@ The only path from the agents to the three source systems. Team chat lives in Po
 
 Platform findings from the 22 Oct spike ([zetaris_spike/README.md](zetaris_spike/README.md), evidence [zetaris_spike/evidence/gate-20261022T153154Z.json](zetaris_spike/evidence/gate-20261022T153154Z.json)): counts 225 / 127 / 51 match; a cross-source JOIN returned 45 of 45 rows; 8 of 8 quotes found, 8 of 8 tampered quotes rejected, an unknown id returns 0 rows; point read by id p50 0.10 to 0.21 s. A CSV in `customer-data/shared/...` registers with a plain path (no S3 needed); `REGISTER DATASOURCE TABLES` imports nothing from a non-`public` Postgres schema; a REST table is fetched again on every query.
 
+**Added 27 Oct after submission, following Zetaris' scoring methodology (26 Oct):** a Unified Semantic Layer on the same live sources, in [zetaris_usl/](zetaris_usl/). One table of every citable record (403 rows) with a primary key and two data quality rules, `RUN DQ` 403 of 403 valid; a blanked chat message shows up as the one invalid record and clears when restored; a content hash shows which record the tamper demo changed. The agents' code is unchanged. Measured side by side, a point read through the USL was two to three times slower than our per-system query (0.405 s against 0.115 s median for a chat message), so the USL serves the record contract and the quality gate, not the Verifier's hot path. Our notes on time saved, fit and one requirement for Zetaris are in [zetaris_usl/README.md](zetaris_usl/README.md).
+
 ### Meterless
 
 Two separate things, both in the product:

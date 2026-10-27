@@ -1,0 +1,55 @@
+{
+ "n": 15,
+ "started": "2026-10-27T17:38:44Z",
+ "cases": {
+  "point_read_chat": {
+   "hand_coded": {
+    "median_s": 0.115,
+    "p90_s": 0.229,
+    "rows": 1
+   },
+   "usl": {
+    "median_s": 0.405,
+    "p90_s": 0.924,
+    "rows": 1
+   },
+   "sql": {
+    "hand_coded": "SELECT * FROM (SELECT id, ts, author, title, text, refs FROM WLWT_CHAT.chat) s WHERE s.id = 'msg-0148'",
+    "usl": "SELECT * FROM lightning.metastore.wlwt.wlwt_usl.record WHERE record_id = 'msg-0148'"
+   }
+  },
+  "point_read_doc": {
+   "hand_coded": {
+    "median_s": 0.186,
+    "p90_s": 0.595,
+    "rows": 1
+   },
+   "usl": {
+    "median_s": 0.38,
+    "p90_s": 0.604,
+    "rows": 1
+   },
+   "sql": {
+    "hand_coded": "SELECT * FROM (SELECT d.id AS id, d.ts AS ts, d.author AS author, d.title AS title, d.text AS text, d.refs AS refs FROM wlwt_docs.docs_raw LATERAL VIEW explode(docs) x AS d) s WHERE s.id = 'ADR-0009'",
+    "usl": "SELECT * FROM lightning.metastore.wlwt.wlwt_usl.record WHERE record_id = 'ADR-0009'"
+   }
+  },
+  "absence_check": {
+   "hand_coded": {
+    "median_s": 0.218,
+    "p90_s": 0.623,
+    "rows": 0
+   },
+   "usl": {
+    "median_s": 0.303,
+    "p90_s": 0.896,
+    "rows": 0
+   },
+   "sql": {
+    "hand_coded": "SELECT 'chat' AS source, s.id AS id FROM (SELECT id, ts, author, title, text, refs FROM WLWT_CHAT.chat) s WHERE instr(s.text, 'payroll-export') > 0 UNION ALL SELECT 'ticket' AS source, s.id AS id FROM (SELECT id, ts, author, title, text, refs FROM wlwt_tickets.tickets) s WHERE instr(s.text, 'payroll-export') > 0 UNION ALL SELECT 'doc' AS source, s.id AS id FROM (SELECT d.id AS id, d.ts AS ts, d.author AS author, d.title AS title, d.text AS text, d.refs AS refs FROM wlwt_docs.docs_raw LATERAL VIEW explode(docs) x AS d) s WHERE instr(s.text, 'payroll-export') > 0",
+    "usl": "SELECT system, record_id FROM lightning.metastore.wlwt.wlwt_usl.record WHERE instr(body, 'payroll-export') > 0"
+   }
+  }
+ },
+ "finished": "2026-10-27T17:39:19Z"
+}

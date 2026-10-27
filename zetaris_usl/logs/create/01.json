@@ -1,0 +1,16 @@
+{
+ "n": 1,
+ "statement": "CREATE NAMESPACE IF NOT EXISTS lightning.metastore",
+ "ok": true,
+ "rows": 0,
+ "seconds": 0.114,
+ "sample": [],
+ "raw": {
+  "headers": [
+   "Result"
+  ],
+  "data": [],
+  "total": 0,
+  "timeUsed": 60
+ }
+}

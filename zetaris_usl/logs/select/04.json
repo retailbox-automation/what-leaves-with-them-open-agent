@@ -1,0 +1,24 @@
+{
+ "n": 4,
+ "statement": "SELECT count(*) AS tickets FROM wlwt_tickets.tickets",
+ "ok": true,
+ "rows": 1,
+ "seconds": 0.201,
+ "sample": [
+  {
+   "tickets": "127"
+  }
+ ],
+ "raw": {
+  "headers": [
+   "tickets"
+  ],
+  "data": [
+   [
+    "127"
+   ]
+  ],
+  "total": 1,
+  "timeUsed": 167
+ }
+}

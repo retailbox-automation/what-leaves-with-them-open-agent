@@ -1,0 +1,131 @@
+{
+ "n": 5,
+ "statement": "SELECT author, count(*) AS tickets FROM wlwt_tickets.tickets GROUP BY author ORDER BY tickets DESC",
+ "ok": true,
+ "rows": 14,
+ "seconds": 0.317,
+ "sample": [
+  {
+   "author": "Oskar Alvarez",
+   "tickets": "21"
+  },
+  {
+   "author": "Priya Farrow",
+   "tickets": "15"
+  },
+  {
+   "author": "Luca Ostrander",
+   "tickets": "15"
+  },
+  {
+   "author": "Viktor Hartwell",
+   "tickets": "14"
+  },
+  {
+   "author": "Pavel Hollis",
+   "tickets": "11"
+  },
+  {
+   "author": "Lars Thorne",
+   "tickets": "10"
+  },
+  {
+   "author": "Tomas Kessler",
+   "tickets": "9"
+  },
+  {
+   "author": "Zara Lowell",
+   "tickets": "8"
+  },
+  {
+   "author": "Sana Petrov",
+   "tickets": "7"
+  },
+  {
+   "author": "Selma Marsh",
+   "tickets": "5"
+  },
+  {
+   "author": "Omar Fenwick",
+   "tickets": "4"
+  },
+  {
+   "author": "Aiko Rademacher",
+   "tickets": "4"
+  },
+  {
+   "author": "Mateo Sandoval",
+   "tickets": "3"
+  },
+  {
+   "author": "Yuki Moreau",
+   "tickets": "1"
+  }
+ ],
+ "raw": {
+  "headers": [
+   "author",
+   "tickets"
+  ],
+  "data": [
+   [
+    "Oskar Alvarez",
+    "21"
+   ],
+   [
+    "Priya Farrow",
+    "15"
+   ],
+   [
+    "Luca Ostrander",
+    "15"
+   ],
+   [
+    "Viktor Hartwell",
+    "14"
+   ],
+   [
+    "Pavel Hollis",
+    "11"
+   ],
+   [
+    "Lars Thorne",
+    "10"
+   ],
+   [
+    "Tomas Kessler",
+    "9"
+   ],
+   [
+    "Zara Lowell",
+    "8"
+   ],
+   [
+    "Sana Petrov",
+    "7"
+   ],
+   [
+    "Selma Marsh",
+    "5"
+   ],
+   [
+    "Omar Fenwick",
+    "4"
+   ],
+   [
+    "Aiko Rademacher",
+    "4"
+   ],
+   [
+    "Mateo Sandoval",
+    "3"
+   ],
+   [
+    "Yuki Moreau",
+    "1"
+   ]
+  ],
+  "total": 14,
+  "timeUsed": 287
+ }
+}

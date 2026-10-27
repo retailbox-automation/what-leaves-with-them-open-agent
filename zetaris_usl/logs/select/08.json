@@ -1,0 +1,59 @@
+{
+ "n": 8,
+ "statement": "SELECT split(d.id, '-')[0] AS doc_kind, count(*) AS docs FROM wlwt_docs.docs_raw LATERAL VIEW explode(docs) x AS d GROUP BY 1",
+ "ok": true,
+ "rows": 5,
+ "seconds": 0.656,
+ "sample": [
+  {
+   "doc_kind": "PM",
+   "docs": "6"
+  },
+  {
+   "doc_kind": "ARCH",
+   "docs": "1"
+  },
+  {
+   "doc_kind": "RB",
+   "docs": "10"
+  },
+  {
+   "doc_kind": "ADR",
+   "docs": "16"
+  },
+  {
+   "doc_kind": "DOC",
+   "docs": "18"
+  }
+ ],
+ "raw": {
+  "headers": [
+   "doc_kind",
+   "docs"
+  ],
+  "data": [
+   [
+    "PM",
+    "6"
+   ],
+   [
+    "ARCH",
+    "1"
+   ],
+   [
+    "RB",
+    "10"
+   ],
+   [
+    "ADR",
+    "16"
+   ],
+   [
+    "DOC",
+    "18"
+   ]
+  ],
+  "total": 5,
+  "timeUsed": 621
+ }
+}

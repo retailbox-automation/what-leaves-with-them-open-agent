@@ -1,0 +1,4255 @@
+{
+ "n": 14,
+ "statement": "SHOW DQ VALID RECORD quotable TABLE lightning.metastore.wlwt.wlwt_usl.record",
+ "ok": true,
+ "rows": 403,
+ "seconds": 1.438,
+ "sample": [
+  {
+   "record_id": "msg-0001",
+   "system": "chat",
+   "ts": "2026-08-17T14:02:00Z",
+   "author": "Zara Lowell",
+   "title": "#growth",
+   "body": "Reminder: timesheets are due Friday.",
+   "refs": "",
+   "content_hash": "9cea5823e9646281f9d999eb8c4baf3f682b1e7662e3debdca080dd9a8060775"
+  },
+  {
+   "record_id": "msg-0002",
+   "system": "chat",
+   "ts": "2026-08-17T16:34:00Z",
+   "author": "Omar Fenwick",
+   "title": "#general",
+   "body": "Great work this week, Zara.",
+   "refs": "",
+   "content_hash": "fff856db53a983b27271ccc2150a2aaf65679de9422fb9348b0735a6b80af81b"
+  },
+  {
+   "record_id": "msg-0003",
+   "system": "chat",
+   "ts": "2026-08-17T17:28:00Z",
+   "author": "Aiko Rademacher",
+   "title": "#platform",
+   "body": "Wrapped up tests for bounce handling in notifications, merging after lunch.",
+   "refs": "",
+   "content_hash": "1e5a7f18ab50a3e1c9e6424e3708d0329038113feb292843b7cf1073eaedffe0"
+  },
+  {
+   "record_id": "msg-0004",
+   "system": "chat",
+   "ts": "2026-08-17T17:29:00Z",
+   "author": "Zara Lowell",
+   "title": "#growth",
+   "body": "Kudos to Yuki for staying late on the release.",
+   "refs": "",
+   "content_hash": "2bee0ad1c48bd9f247166752c266de07392980106cdcfc26e6b99e94f3128e0b"
+  },
+  {
+   "record_id": "msg-0005",
+   "system": "chat",
+   "ts": "2026-08-17T18:53:00Z",
+   "author": "Viktor Hartwell",
+   "title": "#payments",
+   "body": "Deployed the backup verification change in ledger-db to staging, looks good.",
+   "refs": "",
+   "content_hash": "7f3d48ca1e41acb0012ca32180a5e77f1ebbd6e792895e7094c4ee7e789258ea"
+  },
+  {
+   "record_id": "msg-0006",
+   "system": "chat",
+   "ts": "2026-08-17T19:08:00Z",
+   "author": "Yuki Moreau",
+   "title": "#payments",
+   "body": "Kudos to Yuki for staying late on the release.",
+   "refs": "",
+   "content_hash": "2bee0ad1c48bd9f247166752c266de07392980106cdcfc26e6b99e94f3128e0b"
+  },
+  {
+   "record_id": "msg-0007",
+   "system": "chat",
+   "ts": "2026-08-18T13:25:00Z",
+   "author": "Oskar Alvarez",
+   "title": "#payments",
+   "body": "Thanks Oskar for the quick review.",
+   "refs": "",
+   "content_hash": "21625984a3476c9a6e10534a25450323c0ac36b4ac000f0f0784b8324ecc8051"
+  },
+  {
+   "record_id": "msg-0008",
+   "system": "chat",
+   "ts": "2026-08-18T16:15:00Z",
+   "author": "Mateo Sandoval",
+   "title": "#payments",
+   "body": "ADR-0001 accepted: Idempotency keys on billing-api writes. Please read it before your next change.",
+   "refs": "ADR-0001",
+   "content_hash": "ea4b43c7414cda95fb9ee56a75256b69c12e5006874bc24bb2d43e481ce9e5ab"
+  },
+  {
+   "record_id": "msg-0009",
+   "system": "chat",
+   "ts": "2026-08-18T16:21:00Z",
+   "author": "Mateo Sandoval",
+   "title": "#payments",
+   "body": "ADR-0002 accepted: Append-only ledger entries. Please read it before your next change.",
+   "refs": "ADR-0002",
+   "content_hash": "dfb7e6336f11709acf34bad3415ef73c8daa8a5fe2179451f71863785ab87b83"
+  },
+  {
+   "record_id": "msg-0010",
+   "system": "chat",
+   "ts": "2026-08-18T17:02:00Z",
+   "author": "Selma Marsh",
+   "title": "#payments",
+   "body": "Welcome back Tomas!",
+   "refs": "",
+   "content_hash": "de0da4b63f8ff174dd27053290289cab7362dcc7a50d3c6ee4b2bb53ec7d801b"
+  },
+  {
+   "record_id": "msg-0011",
+   "system": "chat",
+   "ts": "2026-08-19T11:23:00Z",
+   "author": "Lars Thorne",
+   "title": "#payments",
+   "body": "Marked TCK-0007 as resolved.",
+   "refs": "TCK-0007",
+   "content_hash": "62fa7898c8deaf56534937adceeec96b8baa939fdc0fd41ea66b7073231bb712"
+  },
+  {
+   "record_id": "msg-0012",
+   "system": "chat",
+   "ts": "2026-08-19T13:31:00Z",
+   "author": "Sana Petrov",
+   "title": "#payments",
+   "body": "Reminder: timesheets are due Thursday.",
+   "refs": "",
+   "content_hash": "713eda222d138f4a9f069b75b7bf0774e8e4889420ac7ec521eea53c009172f2"
+  },
+  {
+   "record_id": "msg-0013",
+   "system": "chat",
+   "ts": "2026-08-19T17:22:00Z",
+   "author": "Priya Farrow",
+   "title": "#support",
+   "body": "Pushed a fix for history view in status-page; the cause was a config value that differed between environments.",
+   "refs": "",
+   "content_hash": "04a8c4a6924320b4169a4c17ed67b2051368fe25306331fdf00388c7b5bf8b2d"
+  },
+  {
+   "record_id": "msg-0014",
+   "system": "chat",
+   "ts": "2026-08-19T18:44:00Z",
+   "author": "Viktor Hartwell",
+   "title": "#general",
+   "body": "Quick poll: should we move the weekly sync to Wednesday?",
+   "refs": "",
+   "content_hash": "ad8407f39ce414eb9017917da0ea14c0bb89f6387f04172d650c91b18704c611"
+  },
+  {
+   "record_id": "msg-0015",
+   "system": "chat",
+   "ts": "2026-08-19T19:55:00Z",
+   "author": "Tomas Kessler",
+   "title": "#support",
+   "body": "Quick poll: should we move the weekly sync to Tuesday?",
+   "refs": "",
+   "content_hash": "588194b34aeb5066a4149e77caf34e2350314588bab0331e78e2262b299448ad"
+  },
+  {
+   "record_id": "msg-0016",
+   "system": "chat",
+   "ts": "2026-08-19T21:04:00Z",
+   "author": "Lars Thorne",
+   "title": "#payments",
+   "body": "Deployed the tax summary block change in invoice-renderer to staging, looks good.",
+   "refs": "",
+   "content_hash": "be2305c612c0af55aac249ad2c32e4f6c829e741ab947ce6e3268d1ff808c451"
+  },
+  {
+   "record_id": "msg-0017",
+   "system": "chat",
+   "ts": "2026-08-20T07:11:00Z",
+   "author": "Priya Farrow",
+   "title": "#support",
+   "body": "TCK-0010 is done and waiting for review.",
+   "refs": "TCK-0010",
+   "content_hash": "4b1c847bfa254a52446136469215de592f6f52ba065f1b19db80d108686164e1"
+  },
+  {
+   "record_id": "msg-0018",
+   "system": "chat",
+   "ts": "2026-08-20T08:13:00Z",
+   "author": "Aiko Rademacher",
+   "title": "#growth",
+   "body": "Marked TCK-0011 as resolved.",
+   "refs": "TCK-0011",
+   "content_hash": "2f52c0f011bcbab2aa3e54ae60acc710ef480dfc021960787a7ed175de2b746c"
+  },
+  {
+   "record_id": "msg-0019",
+   "system": "chat",
+   "ts": "2026-08-20T12:08:00Z",
+   "author": "Lars Thorne",
+   "title": "#payments",
+   "body": "Closed TCK-0008, it goes out with the next release.",
+   "refs": "TCK-0008",
+   "content_hash": "f09d78c6eabf0e189a74c49788b6aff754e0e4cda01696d32fb7b8428c8c6386"
+  },
+  {
+   "record_id": "msg-0020",
+   "system": "chat",
+   "ts": "2026-08-20T15:32:00Z",
+   "author": "Pavel Hollis",
+   "title": "#support",
+   "body": "Lunch order closes in ten minutes.",
+   "refs": "",
+   "content_hash": "9f7adac0e028408624f2413d8b6f0f50b3cb54058ff93482c80b0e10c8b631d8"
+  }
+ ],
+ "raw": {
+  "headers": [
+   "record_id",
+   "system",
+   "ts",
+   "author",
+   "title",
+   "body",
+   "refs",
+   "content_hash"
+  ],
+  "data": [
+   [
+    "msg-0001",
+    "chat",
+    "2026-08-17T14:02:00Z",
+    "Zara Lowell",
+    "#growth",
+    "Reminder: timesheets are due Friday.",
+    "",
+    "9cea5823e9646281f9d999eb8c4baf3f682b1e7662e3debdca080dd9a8060775"
+   ],
+   [
+    "msg-0002",
+    "chat",
+    "2026-08-17T16:34:00Z",
+    "Omar Fenwick",
+    "#general",
+    "Great work this week, Zara.",
+    "",
+    "fff856db53a983b27271ccc2150a2aaf65679de9422fb9348b0735a6b80af81b"
+   ],
+   [
+    "msg-0003",
+    "chat",
+    "2026-08-17T17:28:00Z",
+    "Aiko Rademacher",
+    "#platform",
+    "Wrapped up tests for bounce handling in notifications, merging after lunch.",
+    "",
+    "1e5a7f18ab50a3e1c9e6424e3708d0329038113feb292843b7cf1073eaedffe0"
+   ],
+   [
+    "msg-0004",
+    "chat",
+    "2026-08-17T17:29:00Z",
+    "Zara Lowell",
+    "#growth",
+    "Kudos to Yuki for staying late on the release.",
+    "",
+    "2bee0ad1c48bd9f247166752c266de07392980106cdcfc26e6b99e94f3128e0b"
+   ],
+   [
+    "msg-0005",
+    "chat",
+    "2026-08-17T18:53:00Z",
+    "Viktor Hartwell",
+    "#payments",
+    "Deployed the backup verification change in ledger-db to staging, looks good.",
+    "",
+    "7f3d48ca1e41acb0012ca32180a5e77f1ebbd6e792895e7094c4ee7e789258ea"
+   ],
+   [
+    "msg-0006",
+    "chat",
+    "2026-08-17T19:08:00Z",
+    "Yuki Moreau",
+    "#payments",
+    "Kudos to Yuki for staying late on the release.",
+    "",
+    "2bee0ad1c48bd9f247166752c266de07392980106cdcfc26e6b99e94f3128e0b"
+   ],
+   [
+    "msg-0007",
+    "chat",
+    "2026-08-18T13:25:00Z",
+    "Oskar Alvarez",
+    "#payments",
+    "Thanks Oskar for the quick review.",
+    "",
+    "21625984a3476c9a6e10534a25450323c0ac36b4ac000f0f0784b8324ecc8051"
+   ],
+   [
+    "msg-0008",
+    "chat",
+    "2026-08-18T16:15:00Z",
+    "Mateo Sandoval",
+    "#payments",
+    "ADR-0001 accepted: Idempotency keys on billing-api writes. Please read it before your next change.",
+    "ADR-0001",
+    "ea4b43c7414cda95fb9ee56a75256b69c12e5006874bc24bb2d43e481ce9e5ab"
+   ],
+   [
+    "msg-0009",
+    "chat",
+    "2026-08-18T16:21:00Z",
+    "Mateo Sandoval",
+    "#payments",
+    "ADR-0002 accepted: Append-only ledger entries. Please read it before your next change.",
+    "ADR-0002",
+    "dfb7e6336f11709acf34bad3415ef73c8daa8a5fe2179451f71863785ab87b83"
+   ],
+   [
+    "msg-0010",
+    "chat",
+    "2026-08-18T17:02:00Z",
+    "Selma Marsh",
+    "#payments",
+    "Welcome back Tomas!",
+    "",
+    "de0da4b63f8ff174dd27053290289cab7362dcc7a50d3c6ee4b2bb53ec7d801b"
+   ],
+   [
+    "msg-0011",
+    "chat",
+    "2026-08-19T11:23:00Z",
+    "Lars Thorne",
+    "#payments",
+    "Marked TCK-0007 as resolved.",
+    "TCK-0007",
+    "62fa7898c8deaf56534937adceeec96b8baa939fdc0fd41ea66b7073231bb712"
+   ],
+   [
+    "msg-0012",
+    "chat",
+    "2026-08-19T13:31:00Z",
+    "Sana Petrov",
+    "#payments",
+    "Reminder: timesheets are due Thursday.",
+    "",
+    "713eda222d138f4a9f069b75b7bf0774e8e4889420ac7ec521eea53c009172f2"
+   ],
+   [
+    "msg-0013",
+    "chat",
+    "2026-08-19T17:22:00Z",
+    "Priya Farrow",
+    "#support",
+    "Pushed a fix for history view in status-page; the cause was a config value that differed between environments.",
+    "",
+    "04a8c4a6924320b4169a4c17ed67b2051368fe25306331fdf00388c7b5bf8b2d"
+   ],
+   [
+    "msg-0014",
+    "chat",
+    "2026-08-19T18:44:00Z",
+    "Viktor Hartwell",
+    "#general",
+    "Quick poll: should we move the weekly sync to Wednesday?",
+    "",
+    "ad8407f39ce414eb9017917da0ea14c0bb89f6387f04172d650c91b18704c611"
+   ],
+   [
+    "msg-0015",
+    "chat",
+    "2026-08-19T19:55:00Z",
+    "Tomas Kessler",
+    "#support",
+    "Quick poll: should we move the weekly sync to Tuesday?",
+    "",
+    "588194b34aeb5066a4149e77caf34e2350314588bab0331e78e2262b299448ad"
+   ],
+   [
+    "msg-0016",
+    "chat",
+    "2026-08-19T21:04:00Z",
+    "Lars Thorne",
+    "#payments",
+    "Deployed the tax summary block change in invoice-renderer to staging, looks good.",
+    "",
+    "be2305c612c0af55aac249ad2c32e4f6c829e741ab947ce6e3268d1ff808c451"
+   ],
+   [
+    "msg-0017",
+    "chat",
+    "2026-08-20T07:11:00Z",
+    "Priya Farrow",
+    "#support",
+    "TCK-0010 is done and waiting for review.",
+    "TCK-0010",
+    "4b1c847bfa254a52446136469215de592f6f52ba065f1b19db80d108686164e1"
+   ],
+   [
+    "msg-0018",
+    "chat",
+    "2026-08-20T08:13:00Z",
+    "Aiko Rademacher",
+    "#growth",
+    "Marked TCK-0011 as resolved.",
+    "TCK-0011",
+    "2f52c0f011bcbab2aa3e54ae60acc710ef480dfc021960787a7ed175de2b746c"
+   ],
+   [
+    "msg-0019",
+    "chat",
+    "2026-08-20T12:08:00Z",
+    "Lars Thorne",
+    "#payments",
+    "Closed TCK-0008, it goes out with the next release.",
+    "TCK-0008",
+    "f09d78c6eabf0e189a74c49788b6aff754e0e4cda01696d32fb7b8428c8c6386"
+   ],
+   [
+    "msg-0020",
+    "chat",
+    "2026-08-20T15:32:00Z",
+    "Pavel Hollis",
+    "#support",
+    "Lunch order closes in ten minutes.",
+    "",
+    "9f7adac0e028408624f2413d8b6f0f50b3cb54058ff93482c80b0e10c8b631d8"
+   ],
+   [
+    "msg-0021",
+    "chat",
+    "2026-08-20T16:20:00Z",
+    "Lars Thorne",
+    "#platform",
+    "Rolled out the rate limit on login fix in auth to all tenants.",
+    "",
+    "3af739e1d31912eb882ae9b1be5c7eb7165df6ab3e7310bb83ee7522fa76924c"
+   ],
+   [
+    "msg-0022",
+    "chat",
+    "2026-08-20T21:18:00Z",
+    "Zara Lowell",
+    "#platform",
+    "Can someone cover the support queue for an hour at 14:00 UTC?",
+    "",
+    "800bc4c737968ec5d578de9e32f2ec78b3ca0400e7e4705fbeeeffcee35100e8"
+   ],
+   [
+    "msg-0023",
+    "chat",
+    "2026-08-21T17:01:00Z",
+    "Lars Thorne",
+    "#platform",
+    "Finished the dead letter queue cleanup in webhooks, pull request is up.",
+    "",
+    "9cd006f3eeb8b3d9d2e6a13a280b4b1d969bdcaa7e12e8a7c9a2dafe366a3039"
+   ],
+   [
+    "msg-0024",
+    "chat",
+    "2026-08-21T19:05:00Z",
+    "Pavel Hollis",
+    "#platform",
+    "Closed TCK-0013, it goes out with the next release.",
+    "TCK-0013",
+    "c1ee35d041cbbf618412946d3d55b82006183fb24f6a15f99efe26fb4442784e"
+   ],
+   [
+    "msg-0025",
+    "chat",
+    "2026-08-21T20:16:00Z",
+    "Zara Lowell",
+    "#growth",
+    "New laptops arrive Wednesday; ping me if yours is on the list.",
+    "",
+    "ba94cd3918977c8fa1b450ece51d20c4537aa01a3d025989366d24492ccf0419"
+   ],
+   [
+    "msg-0026",
+    "chat",
+    "2026-08-21T21:12:00Z",
+    "Tomas Kessler",
+    "#growth",
+    "I pushed the slide deck to the shared drive.",
+    "",
+    "b8677024858da828d7b98d69ff797b820642fd395bd17651f9cf451b7bae3562"
+   ],
+   [
+    "msg-0027",
+    "chat",
+    "2026-08-22T03:53:00Z",
+    "Luca Ostrander",
+    "#platform",
+    "Marked TCK-0016 as resolved.",
+    "TCK-0016",
+    "e5771a594f2508bb769f1f82d1dfc242591df2917de6c6e2fcf72ee86266c3ee"
+   ],
+   [
+    "msg-0028",
+    "chat",
+    "2026-08-24T13:19:00Z",
+    "Oskar Alvarez",
+    "#platform",
+    "I'm out on Wednesday, back the day after.",
+    "",
+    "f8c07fee42ef3bfc0275beef94798ef9852bb2d4f6853b7fa4962192ec8af988"
+   ],
+   [
+    "msg-0029",
+    "chat",
+    "2026-08-24T14:27:00Z",
+    "Viktor Hartwell",
+    "#growth",
+    "Pushed a fix for cohort query in reporting; the cause was a slow query on a large tenant.",
+    "",
+    "bb8a88d5655e8e30a5b994cb954fe6ae58609f6867fc784b2240b169b0327e6c"
+   ],
+   [
+    "msg-0030",
+    "chat",
+    "2026-08-25T13:28:00Z",
+    "Luca Ostrander",
+    "#support",
+    "Fire drill at 14:00 UTC, please ignore the alarm.",
+    "",
+    "aa5644aebb9a486d1f9310a19b9dcfbec2c9b35dd8f60c19f5377be1bc2216dc"
+   ],
+   [
+    "msg-0031",
+    "chat",
+    "2026-08-25T16:37:00Z",
+    "Luca Ostrander",
+    "#platform",
+    "ADR-0003 accepted: Signed webhooks with retry backoff. Please read it before your next change.",
+    "ADR-0003",
+    "fe460289429a042cd10c86fdd6b013fe94dc0244ce5b5b55c7d6ff96c9507999"
+   ],
+   [
+    "msg-0032",
+    "chat",
+    "2026-08-25T18:04:00Z",
+    "Mateo Sandoval",
+    "#payments",
+    "ADR-0004 accepted: Render invoices synchronously. Please read it before your next change.",
+    "ADR-0004",
+    "a08856fb5a7cced5f852eea00d8008ebbc198698960acaf1b3c1e108097333b7"
+   ],
+   [
+    "msg-0033",
+    "chat",
+    "2026-08-25T20:29:00Z",
+    "Luca Ostrander",
+    "#support",
+    "Rolled out the bulk actions fix in admin-console to all tenants.",
+    "",
+    "d08f6c0b13717ef89ab24b896052182916c9eb1a5f334791df8ad6839e70d71f"
+   ],
+   [
+    "msg-0034",
+    "chat",
+    "2026-08-26T13:51:00Z",
+    "Omar Fenwick",
+    "#general",
+    "Thanks Luca for the quick review.",
+    "",
+    "b35cb8c7d4df8563f600a222e9bd8239dd2673bae3e89ea2b40165982e42ae30"
+   ],
+   [
+    "msg-0035",
+    "chat",
+    "2026-08-26T16:29:00Z",
+    "Lars Thorne",
+    "#platform",
+    "Fire drill at 14:00 UTC, please ignore the alarm.",
+    "",
+    "aa5644aebb9a486d1f9310a19b9dcfbec2c9b35dd8f60c19f5377be1bc2216dc"
+   ],
+   [
+    "msg-0036",
+    "chat",
+    "2026-08-26T16:40:00Z",
+    "Priya Farrow",
+    "#platform",
+    "I pushed the slide deck to the shared drive.",
+    "",
+    "b8677024858da828d7b98d69ff797b820642fd395bd17651f9cf451b7bae3562"
+   ],
+   [
+    "msg-0037",
+    "chat",
+    "2026-08-26T17:29:00Z",
+    "Zara Lowell",
+    "#growth",
+    "Does anyone have the link to the onboarding checklist?",
+    "",
+    "bd683fe3f7145b655c8b6252d6c6b4c583673aa2def98f6e732ff20649de881b"
+   ],
+   [
+    "msg-0038",
+    "chat",
+    "2026-08-26T20:41:00Z",
+    "Selma Marsh",
+    "#support",
+    "Great work this week, Omar.",
+    "",
+    "8d051aa2f4d97471ad8fbf891141ca6ddf7f829add6f53ddda910eb74e8ad9e6"
+   ],
+   [
+    "msg-0039",
+    "chat",
+    "2026-08-27T13:07:00Z",
+    "Yuki Moreau",
+    "#payments",
+    "Welcome back Mateo!",
+    "",
+    "22486c0a3f7b24930527217cd13d65f2f592a8ab66f283b6e5db9f9c98cf558e"
+   ],
+   [
+    "msg-0040",
+    "chat",
+    "2026-08-27T15:28:00Z",
+    "Luca Ostrander",
+    "#platform",
+    "Postmortem PM-01 is published. Action items are listed at the bottom.",
+    "PM-01",
+    "c1c7d59e48e0cc33de4c26d15275ebcf6c744abcc8dddd9c02c94738c68182a9"
+   ],
+   [
+    "msg-0221",
+    "chat",
+    "2026-08-27T16:38:00Z",
+    "Oskar Alvarez",
+    "#growth",
+    "Rolled out the cohort query fix in reporting to all tenants.",
+    "",
+    "c0b88c71b4f4bc155f6475b3fad78bda6637f8a7693c8074b161e0eb70387f8c"
+   ],
+   [
+    "msg-0041",
+    "chat",
+    "2026-08-27T16:44:00Z",
+    "Tomas Kessler",
+    "#payments",
+    "Standup moves to 14:00 UTC today.",
+    "",
+    "9c500b1d911c9e47eaecc62bf656a8b36d1ed85f58c311a9dcbf8da083e57920"
+   ],
+   [
+    "msg-0042",
+    "chat",
+    "2026-08-27T20:40:00Z",
+    "Luca Ostrander",
+    "#support",
+    "Deployed the maintenance schedule change in status-page to staging, looks good.",
+    "",
+    "f94f8e4e44372593c88c752da685ce987a78767ab5aa473386065a9f06c66ea7"
+   ],
+   [
+    "msg-0043",
+    "chat",
+    "2026-08-27T20:43:00Z",
+    "Priya Farrow",
+    "#platform",
+    "Lunch order closes in ten minutes.",
+    "",
+    "9f7adac0e028408624f2413d8b6f0f50b3cb54058ff93482c80b0e10c8b631d8"
+   ],
+   [
+    "msg-0044",
+    "chat",
+    "2026-08-27T21:29:00Z",
+    "Viktor Hartwell",
+    "#payments",
+    "Welcome back Mateo!",
+    "",
+    "22486c0a3f7b24930527217cd13d65f2f592a8ab66f283b6e5db9f9c98cf558e"
+   ],
+   [
+    "msg-0045",
+    "chat",
+    "2026-08-28T15:23:00Z",
+    "Luca Ostrander",
+    "#payments",
+    "Happy Monday, everyone!",
+    "",
+    "29769d010da87c721398e341c8e442867ebc8e035b69769e8cf7346633466c6e"
+   ],
+   [
+    "msg-0046",
+    "chat",
+    "2026-08-28T15:37:00Z",
+    "Tomas Kessler",
+    "#payments",
+    "I'm out on Friday, back the day after.",
+    "",
+    "f80fc886b0fdaa21e8b9d0bd0afe70b85672413c9200a2b7b0b640cb62134e82"
+   ],
+   [
+    "msg-0047",
+    "chat",
+    "2026-08-28T19:13:00Z",
+    "Pavel Hollis",
+    "#payments",
+    "Lunch order closes in ten minutes.",
+    "",
+    "9f7adac0e028408624f2413d8b6f0f50b3cb54058ff93482c80b0e10c8b631d8"
+   ],
+   [
+    "msg-0048",
+    "chat",
+    "2026-08-28T21:24:00Z",
+    "Sana Petrov",
+    "#platform",
+    "Wrapped up tests for token signing in auth, merging after lunch.",
+    "",
+    "515ff983416b1a81d1045d462efd0b20ed070f086dac1d6829493bcd4d797d8e"
+   ],
+   [
+    "msg-0049",
+    "chat",
+    "2026-08-29T03:01:00Z",
+    "Zara Lowell",
+    "#support",
+    "Marked TCK-0028 as resolved.",
+    "TCK-0028",
+    "d071adceb1984be95918e00524ed9bd2c2cef285802fcc88d289473f38d16237"
+   ],
+   [
+    "msg-0050",
+    "chat",
+    "2026-08-31T16:45:00Z",
+    "Viktor Hartwell",
+    "#payments",
+    "Wrapped up tests for line item layout in invoice-renderer, merging after lunch.",
+    "",
+    "08b8564ecdf7fb0e07a7f7af5c4e12baa731bbfce6864a3b445f575c8ad87f59"
+   ],
+   [
+    "msg-0051",
+    "chat",
+    "2026-08-31T18:50:00Z",
+    "Selma Marsh",
+    "#growth",
+    "Reminder: timesheets are due Wednesday.",
+    "",
+    "538968798da76cb03e170cbd9bbe680e4c0ff7d5964531811be527c256073de0"
+   ],
+   [
+    "msg-0052",
+    "chat",
+    "2026-08-31T19:23:00Z",
+    "Aiko Rademacher",
+    "#platform",
+    "Can someone cover the support queue for an hour at 17:30 UTC?",
+    "",
+    "fc5cd82f0d294f272781cc2442f99b6dfabccac35e991483483b1b652ca216cd"
+   ],
+   [
+    "msg-0053",
+    "chat",
+    "2026-08-31T20:06:00Z",
+    "Lars Thorne",
+    "#payments",
+    "Deployed the page break logic change in invoice-renderer to staging, looks good.",
+    "",
+    "084e90818f60abef2940c053a601c9d748385c05489852eda60745ff59413006"
+   ],
+   [
+    "msg-0054",
+    "chat",
+    "2026-09-01T16:14:00Z",
+    "Selma Marsh",
+    "#platform",
+    "ADR-0005 accepted: SSO required for admin-console. Please read it before your next change.",
+    "ADR-0005",
+    "afd97437ced9b28011f2e2c694ef6852328abef21f1939cf6764adf1826f0336"
+   ],
+   [
+    "msg-0055",
+    "chat",
+    "2026-09-01T17:55:00Z",
+    "Priya Farrow",
+    "#support",
+    "ADR-0006 accepted: Status page updates come from on-call. Please read it before your next change.",
+    "ADR-0006",
+    "924a0b831e77feabf56be4419aea7648adb792214a8453865accd16640c74d2a"
+   ],
+   [
+    "msg-0056",
+    "chat",
+    "2026-09-01T18:59:00Z",
+    "Omar Fenwick",
+    "#payments",
+    "Thanks Selma for the quick review.",
+    "",
+    "7f31219456ef0c89c04064df5e8aedc29ff5126c4a7459f4522cb27b07fa5922"
+   ],
+   [
+    "msg-0057",
+    "chat",
+    "2026-09-01T19:15:00Z",
+    "Oskar Alvarez",
+    "#platform",
+    "Marked TCK-0033 as resolved.",
+    "TCK-0033",
+    "4f34c989e9a297f5f6eb4b0aef030ced669128d6ede5ae9463619cfa07641a0b"
+   ],
+   [
+    "msg-0058",
+    "chat",
+    "2026-09-01T19:23:00Z",
+    "Pavel Hollis",
+    "#support",
+    "Welcome back Pavel!",
+    "",
+    "c66cf03cacfc9804304a6ed0f0fc1631f0d2d58b39c437c632147660ca9e1495"
+   ],
+   [
+    "msg-0059",
+    "chat",
+    "2026-09-01T19:34:00Z",
+    "Aiko Rademacher",
+    "#platform",
+    "Finished the unsubscribe links cleanup in notifications, pull request is up.",
+    "",
+    "4e634d94249247f1aaa944abcd934d252ac71a5b496d84630147c07ae16548d7"
+   ],
+   [
+    "msg-0060",
+    "chat",
+    "2026-09-01T21:11:00Z",
+    "Priya Farrow",
+    "#payments",
+    "Standup moves to 15:30 UTC today.",
+    "",
+    "e79c4d0d60347bdb56bdfd12e9706d4b72907b8ce9ccdf46bb016e337591a25d"
+   ],
+   [
+    "msg-0061",
+    "chat",
+    "2026-09-02T14:11:00Z",
+    "Priya Farrow",
+    "#support",
+    "Fire drill at 16:00 UTC, please ignore the alarm.",
+    "",
+    "129ec10c3d837843ee551293bcd26afbe7966f2f6e748d44980a16d29342e91e"
+   ],
+   [
+    "msg-0062",
+    "chat",
+    "2026-09-02T14:15:00Z",
+    "Selma Marsh",
+    "#general",
+    "I'll be online a bit later than usual today.",
+    "",
+    "c98987440e15122fcf9460103818b61b7ed611ff5f114bb63af3950491ed7a28"
+   ],
+   [
+    "msg-0063",
+    "chat",
+    "2026-09-02T14:26:00Z",
+    "Viktor Hartwell",
+    "#payments",
+    "TCK-0037 is done and waiting for review.",
+    "TCK-0037",
+    "1bc30f196a34ed5cbe5950d416680b90205b7313b0965281a259527580b4da16"
+   ],
+   [
+    "msg-0064",
+    "chat",
+    "2026-09-02T16:11:00Z",
+    "Selma Marsh",
+    "#payments",
+    "Rolled out the proration rounding fix in billing-api to all tenants.",
+    "",
+    "1427b9885bc6d0c8cedf000cce3c09354b259ff7b5f773db452e730c96cd7f04"
+   ],
+   [
+    "msg-0065",
+    "chat",
+    "2026-09-02T16:47:00Z",
+    "Sana Petrov",
+    "#payments",
+    "Closed TCK-0036, it goes out with the next release.",
+    "TCK-0036",
+    "b527dab5d33bb8f506e2b3e84a3257d6ba06d728f9a8b4dfa822b51d282f02b3"
+   ],
+   [
+    "msg-0066",
+    "chat",
+    "2026-09-02T17:17:00Z",
+    "Oskar Alvarez",
+    "#payments",
+    "Kudos to Sana for staying late on the release.",
+    "",
+    "bfa994b554dcf3afae52cedad7d2da4d2b82e2896d4ba0241706ef49de3dd3a4"
+   ],
+   [
+    "msg-0067",
+    "chat",
+    "2026-09-02T18:46:00Z",
+    "Yuki Moreau",
+    "#platform",
+    "Welcome back Luca!",
+    "",
+    "10f844c741a588479e1f20508b6ec6d0ec893cf3f3711402e09da90b48a26c6a"
+   ],
+   [
+    "msg-0068",
+    "chat",
+    "2026-09-02T18:58:00Z",
+    "Selma Marsh",
+    "#support",
+    "Deployed the impersonation banner change in admin-console to staging, looks good.",
+    "",
+    "99ab86b0ecc64513d46a102cb0f96a9a4deddb752e7b387c7d47c5987e46286e"
+   ],
+   [
+    "msg-0069",
+    "chat",
+    "2026-09-02T19:11:00Z",
+    "Aiko Rademacher",
+    "#growth",
+    "Kudos to Pavel for staying late on the release.",
+    "",
+    "b286c66b5c035243d65e3911a4c00261927da486ddc147fc68d880eebf4eb656"
+   ],
+   [
+    "msg-0070",
+    "chat",
+    "2026-09-03T13:35:00Z",
+    "Pavel Hollis",
+    "#support",
+    "Welcome back Selma!",
+    "",
+    "32855af94b3b490fdfc2ef8dbef2198607956973172fc82026eefcc156898098"
+   ],
+   [
+    "msg-0071",
+    "chat",
+    "2026-09-03T15:17:00Z",
+    "Aiko Rademacher",
+    "#growth",
+    "Postmortem PM-02 is published. Action items are listed at the bottom.",
+    "PM-02",
+    "d42de11e2c80a8feb5905a9c294729f1f4d42dc531b7ad9c676f168c11991acc"
+   ],
+   [
+    "msg-0072",
+    "chat",
+    "2026-09-03T15:29:00Z",
+    "Omar Fenwick",
+    "#growth",
+    "I pushed the slide deck to the shared drive.",
+    "",
+    "b8677024858da828d7b98d69ff797b820642fd395bd17651f9cf451b7bae3562"
+   ],
+   [
+    "msg-0073",
+    "chat",
+    "2026-09-03T18:57:00Z",
+    "Zara Lowell",
+    "#support",
+    "TCK-0041 is done and waiting for review.",
+    "TCK-0041",
+    "52bc5c1ea8056653a39220643c0a39af0f1fb7f059a5c4c8bfd09983fb6c6a24"
+   ],
+   [
+    "msg-0074",
+    "chat",
+    "2026-09-03T20:30:00Z",
+    "Zara Lowell",
+    "#payments",
+    "Welcome back Mateo!",
+    "",
+    "22486c0a3f7b24930527217cd13d65f2f592a8ab66f283b6e5db9f9c98cf558e"
+   ],
+   [
+    "msg-0075",
+    "chat",
+    "2026-09-03T20:35:00Z",
+    "Priya Farrow",
+    "#growth",
+    "Can someone cover the support queue for an hour at 13:30 UTC?",
+    "",
+    "012d7a5679d8419695f08ebde3ea261ce79daba33842f19d50d028633f27b36e"
+   ],
+   [
+    "msg-0076",
+    "chat",
+    "2026-09-03T21:24:00Z",
+    "Priya Farrow",
+    "#general",
+    "Can someone cover the support queue for an hour at 14:00 UTC?",
+    "",
+    "800bc4c737968ec5d578de9e32f2ec78b3ca0400e7e4705fbeeeffcee35100e8"
+   ],
+   [
+    "msg-0077",
+    "chat",
+    "2026-09-03T21:58:00Z",
+    "Yuki Moreau",
+    "#general",
+    "I'm out on Friday, back the day after.",
+    "",
+    "f80fc886b0fdaa21e8b9d0bd0afe70b85672413c9200a2b7b0b640cb62134e82"
+   ],
+   [
+    "msg-0078",
+    "chat",
+    "2026-09-04T13:46:00Z",
+    "Oskar Alvarez",
+    "#payments",
+    "I pushed the slide deck to the shared drive.",
+    "",
+    "b8677024858da828d7b98d69ff797b820642fd395bd17651f9cf451b7bae3562"
+   ],
+   [
+    "msg-0079",
+    "chat",
+    "2026-09-04T15:31:00Z",
+    "Selma Marsh",
+    "#payments",
+    "Reminder: timesheets are due Friday.",
+    "",
+    "9cea5823e9646281f9d999eb8c4baf3f682b1e7662e3debdca080dd9a8060775"
+   ],
+   [
+    "msg-0080",
+    "chat",
+    "2026-09-04T20:11:00Z",
+    "Priya Farrow",
+    "#general",
+    "Quick poll: should we move the weekly sync to Wednesday?",
+    "",
+    "ad8407f39ce414eb9017917da0ea14c0bb89f6387f04172d650c91b18704c611"
+   ],
+   [
+    "msg-0081",
+    "chat",
+    "2026-09-04T21:08:00Z",
+    "Luca Ostrander",
+    "#growth",
+    "Is the retro still on for Friday?",
+    "",
+    "686ca23d55dda25be764a8207a8b83de97b936cb97b60b1d1d165fa64eba767e"
+   ],
+   [
+    "msg-0082",
+    "chat",
+    "2026-09-05T01:03:00Z",
+    "Viktor Hartwell",
+    "#payments",
+    "Closed TCK-0051, it goes out with the next release.",
+    "TCK-0051",
+    "4622a2f7068ec923ff659e2b7484c58b91222e8ae4a66326385db5114cc259f7"
+   ],
+   [
+    "msg-0083",
+    "chat",
+    "2026-09-05T13:19:00Z",
+    "Zara Lowell",
+    "#support",
+    "TCK-0048 is done and waiting for review.",
+    "TCK-0048",
+    "ccb65980adbfd3ff8524a1070e471cc2a4030ce846b0c8a87564a8e7d9bf824f"
+   ],
+   [
+    "msg-0084",
+    "chat",
+    "2026-09-07T14:17:00Z",
+    "Sana Petrov",
+    "#support",
+    "Lunch order closes in ten minutes.",
+    "",
+    "9f7adac0e028408624f2413d8b6f0f50b3cb54058ff93482c80b0e10c8b631d8"
+   ],
+   [
+    "msg-0085",
+    "chat",
+    "2026-09-07T17:24:00Z",
+    "Zara Lowell",
+    "#growth",
+    "Quick poll: should we move the weekly sync to Monday?",
+    "",
+    "bc86ab4eacd18ef40c0ba99a66bc291213583df529b7382d4fe314191e403bdf"
+   ],
+   [
+    "msg-0086",
+    "chat",
+    "2026-09-08T12:13:00Z",
+    "Viktor Hartwell",
+    "#payments",
+    "TCK-0055 is done and waiting for review.",
+    "TCK-0055",
+    "08d3d584699f1abeb6fbb58c9c5a15ecc489ccfc759dde64839522d622078f71"
+   ],
+   [
+    "msg-0087",
+    "chat",
+    "2026-09-08T13:06:00Z",
+    "Pavel Hollis",
+    "#platform",
+    "The coffee machine on the second floor is fixed.",
+    "",
+    "af22964e7076fb5066b3ac50a96415e56b68508766def8b8ea551aeb41154ab2"
+   ],
+   [
+    "msg-0088",
+    "chat",
+    "2026-09-08T13:36:00Z",
+    "Luca Ostrander",
+    "#growth",
+    "New laptops arrive Friday; ping me if yours is on the list.",
+    "",
+    "5df8aa85dfbdda54cc61adb8888f36a5a134ace697a120338ade32a502f21e99"
+   ],
+   [
+    "msg-0089",
+    "chat",
+    "2026-09-08T14:33:00Z",
+    "Oskar Alvarez",
+    "#growth",
+    "I pushed the slide deck to the shared drive.",
+    "",
+    "b8677024858da828d7b98d69ff797b820642fd395bd17651f9cf451b7bae3562"
+   ],
+   [
+    "msg-0090",
+    "chat",
+    "2026-09-08T16:32:00Z",
+    "Selma Marsh",
+    "#platform",
+    "ADR-0007 accepted: Per-tenant rate limits in notifications. Please read it before your next change.",
+    "ADR-0007",
+    "8bcfed8ee4fa28ffb694ce8f6f458cfa6d6fdd42808883c4fcd538b033e0fbfb"
+   ],
+   [
+    "msg-0091",
+    "chat",
+    "2026-09-08T17:10:00Z",
+    "Yuki Moreau",
+    "#platform",
+    "Quick poll: should we move the weekly sync to Monday?",
+    "",
+    "bc86ab4eacd18ef40c0ba99a66bc291213583df529b7382d4fe314191e403bdf"
+   ],
+   [
+    "msg-0092",
+    "chat",
+    "2026-09-08T17:15:00Z",
+    "Viktor Hartwell",
+    "#payments",
+    "ADR-0011 accepted: Render invoices asynchronously through invoice-renderer. Please read it before your next change.",
+    "ADR-0011",
+    "a6f06235283e1972d38fbab874978a9dd9d614d0714852db0e05d28cce9e24e6"
+   ],
+   [
+    "msg-0093",
+    "chat",
+    "2026-09-08T17:43:00Z",
+    "Yuki Moreau",
+    "#general",
+    "I pushed the slide deck to the shared drive.",
+    "",
+    "b8677024858da828d7b98d69ff797b820642fd395bd17651f9cf451b7bae3562"
+   ],
+   [
+    "msg-0094",
+    "chat",
+    "2026-09-08T17:54:00Z",
+    "Oskar Alvarez",
+    "#platform",
+    "TCK-0053 is done and waiting for review.",
+    "TCK-0053",
+    "0aa46e6e5bad53875885b36378cae1fb7eb1e3d23defdce7a1cce1d8a9bfffd5"
+   ],
+   [
+    "msg-0095",
+    "chat",
+    "2026-09-08T18:55:00Z",
+    "Omar Fenwick",
+    "#growth",
+    "Lunch order closes in ten minutes.",
+    "",
+    "9f7adac0e028408624f2413d8b6f0f50b3cb54058ff93482c80b0e10c8b631d8"
+   ],
+   [
+    "msg-0096",
+    "chat",
+    "2026-09-08T20:14:00Z",
+    "Lars Thorne",
+    "#payments",
+    "Pushed a fix for page break logic in invoice-renderer; the cause was an off-by-one in the date window.",
+    "",
+    "9e0579c70a2da050ed4b4b2c0e280bd03007999be95d2642be46e343704530cb"
+   ],
+   [
+    "msg-0097",
+    "chat",
+    "2026-09-08T20:22:00Z",
+    "Sana Petrov",
+    "#platform",
+    "New laptops arrive Thursday; ping me if yours is on the list.",
+    "",
+    "f0a95b78668162f2a28d3a5c19d63530f6ef7ef0a7c2c34f6b3aeaaf7ecbd33d"
+   ],
+   [
+    "msg-0098",
+    "chat",
+    "2026-09-09T13:28:00Z",
+    "Selma Marsh",
+    "#platform",
+    "VPN is flaky for me this morning, anyone else?",
+    "",
+    "8fd67c24494f8f351670a1bc06195030eb2ee2f48e42cadfe8cf8cda9a1d3e5a"
+   ],
+   [
+    "msg-0099",
+    "chat",
+    "2026-09-09T15:04:00Z",
+    "Viktor Hartwell",
+    "#payments",
+    "Rolled out the month-end close query fix in ledger-db to all tenants.",
+    "",
+    "1ab42824a043dedcd585e6b395404b463b5f72c75bc8dca5312084abc04faf9b"
+   ],
+   [
+    "msg-0100",
+    "chat",
+    "2026-09-09T15:39:00Z",
+    "Luca Ostrander",
+    "#platform",
+    "TCK-0056 is done and waiting for review.",
+    "TCK-0056",
+    "9a330d324b4357ddada438a4f705f8a7ef21763eec2d7c4f247e5eafb27e5b8b"
+   ],
+   [
+    "msg-0101",
+    "chat",
+    "2026-09-09T15:41:00Z",
+    "Tomas Kessler",
+    "#general",
+    "I'll be online a bit later than usual today.",
+    "",
+    "c98987440e15122fcf9460103818b61b7ed611ff5f114bb63af3950491ed7a28"
+   ],
+   [
+    "msg-0102",
+    "chat",
+    "2026-09-09T16:21:00Z",
+    "Zara Lowell",
+    "#general",
+    "VPN is flaky for me this morning, anyone else?",
+    "",
+    "8fd67c24494f8f351670a1bc06195030eb2ee2f48e42cadfe8cf8cda9a1d3e5a"
+   ],
+   [
+    "msg-0103",
+    "chat",
+    "2026-09-09T16:49:00Z",
+    "Pavel Hollis",
+    "#payments",
+    "Finished the entry partitioning cleanup in ledger-db, pull request is up.",
+    "",
+    "773dc5dd2be4035aa0b34d8e91ac0fc79b4bf152d322c36f9198bcce4dacda2f"
+   ],
+   [
+    "msg-0104",
+    "chat",
+    "2026-09-09T18:46:00Z",
+    "Luca Ostrander",
+    "#support",
+    "Finished the incident banner cleanup in status-page, pull request is up.",
+    "",
+    "58aa2c18dcc23977aaca67ebab7c1b34b0b2551c50cd569f34668a563bba3eb4"
+   ],
+   [
+    "msg-0105",
+    "chat",
+    "2026-09-09T19:17:00Z",
+    "Yuki Moreau",
+    "#support",
+    "Great work this week, Aiko.",
+    "",
+    "bfd12c9de0040d36dafbc981bf21f1cd988ff692f515e650680719ee01cf0fe7"
+   ],
+   [
+    "msg-0106",
+    "chat",
+    "2026-09-10T01:57:00Z",
+    "Priya Farrow",
+    "#support",
+    "Marked TCK-0063 as resolved.",
+    "TCK-0063",
+    "5a70e6d80d0458499999bad6e26648a76a9745626a9d147cf6c20f15242efc3c"
+   ],
+   [
+    "msg-0107",
+    "chat",
+    "2026-09-10T14:08:00Z",
+    "Selma Marsh",
+    "#general",
+    "Can someone cover the support queue for an hour at 14:00 UTC?",
+    "",
+    "800bc4c737968ec5d578de9e32f2ec78b3ca0400e7e4705fbeeeffcee35100e8"
+   ],
+   [
+    "msg-0222",
+    "chat",
+    "2026-09-10T14:40:00Z",
+    "Oskar Alvarez",
+    "#platform",
+    "Pushed a fix for paging policy in oncall-runbook; the cause was a retry that fired twice.",
+    "",
+    "f5ecd373eb31080e6d7e401a796469b9c8ba18545dd393687924e74be8191fa8"
+   ],
+   [
+    "msg-0108",
+    "chat",
+    "2026-09-10T15:11:00Z",
+    "Zara Lowell",
+    "#support",
+    "Is the retro still on for Thursday?",
+    "",
+    "dd962743dc4fdcdd18a976dfa84b23a34f57183c542c70db90a5a88e9034c9ce"
+   ],
+   [
+    "msg-0109",
+    "chat",
+    "2026-09-10T16:55:00Z",
+    "Luca Ostrander",
+    "#platform",
+    "I'll be online a bit later than usual today.",
+    "",
+    "c98987440e15122fcf9460103818b61b7ed611ff5f114bb63af3950491ed7a28"
+   ],
+   [
+    "msg-0110",
+    "chat",
+    "2026-09-10T17:17:00Z",
+    "Mateo Sandoval",
+    "#growth",
+    "The coffee machine on the second floor is fixed.",
+    "",
+    "af22964e7076fb5066b3ac50a96415e56b68508766def8b8ea551aeb41154ab2"
+   ],
+   [
+    "msg-0111",
+    "chat",
+    "2026-09-10T17:28:00Z",
+    "Mateo Sandoval",
+    "#payments",
+    "Postmortem PM-03 is published. Action items are listed at the bottom.",
+    "PM-03",
+    "26d97a968ee2d5e13fbf4c5cde3d8b8b8101be1cc67d1dcb04a84a367266da7a"
+   ],
+   [
+    "msg-0112",
+    "chat",
+    "2026-09-10T18:11:00Z",
+    "Pavel Hollis",
+    "#platform",
+    "I'm out on Wednesday, back the day after.",
+    "",
+    "f8c07fee42ef3bfc0275beef94798ef9852bb2d4f6853b7fa4962192ec8af988"
+   ],
+   [
+    "msg-0113",
+    "chat",
+    "2026-09-10T18:25:00Z",
+    "Oskar Alvarez",
+    "#growth",
+    "Kudos to Tomas for staying late on the release.",
+    "",
+    "36570f9d77af58208d8dc2243ac192f25a4894b8012b3c9f3c9432abd9d41d1a"
+   ],
+   [
+    "msg-0114",
+    "chat",
+    "2026-09-10T18:30:00Z",
+    "Luca Ostrander",
+    "#growth",
+    "The coffee machine on the second floor is fixed.",
+    "",
+    "af22964e7076fb5066b3ac50a96415e56b68508766def8b8ea551aeb41154ab2"
+   ],
+   [
+    "msg-0115",
+    "chat",
+    "2026-09-10T19:29:00Z",
+    "Lars Thorne",
+    "#platform",
+    "Deployed the replay tool change in webhooks to staging, looks good.",
+    "",
+    "608469018e6104b76e05fe09937ebf90313a32399d01540799d95b37807de1a1"
+   ],
+   [
+    "msg-0116",
+    "chat",
+    "2026-09-10T23:04:00Z",
+    "Sana Petrov",
+    "#payments",
+    "Marked TCK-0061 as resolved.",
+    "TCK-0061",
+    "0114431685a32663eb7b663c0e3f6e6225f1f2b8d628d5bf23c7d5d616d9a94f"
+   ],
+   [
+    "msg-0223",
+    "chat",
+    "2026-09-11T19:04:00Z",
+    "Oskar Alvarez",
+    "#platform",
+    "Rolled out the severity table fix in oncall-runbook to all tenants.",
+    "",
+    "2020044b9356c4f1bee5b0fc9dbf33831766570508b5c4f21441601326050802"
+   ],
+   [
+    "msg-0117",
+    "chat",
+    "2026-09-11T19:43:00Z",
+    "Priya Farrow",
+    "#platform",
+    "Lunch order closes in ten minutes.",
+    "",
+    "9f7adac0e028408624f2413d8b6f0f50b3cb54058ff93482c80b0e10c8b631d8"
+   ],
+   [
+    "msg-0118",
+    "chat",
+    "2026-09-14T14:43:00Z",
+    "Selma Marsh",
+    "#growth",
+    "The coffee machine on the second floor is fixed.",
+    "",
+    "af22964e7076fb5066b3ac50a96415e56b68508766def8b8ea551aeb41154ab2"
+   ],
+   [
+    "msg-0119",
+    "chat",
+    "2026-09-14T16:25:00Z",
+    "Pavel Hollis",
+    "#platform",
+    "Rolled out the batch sender fix in notifications to all tenants.",
+    "",
+    "7e7374ef5d941720b1420c1a60beef7ff74d982e58b1a33964792d5a25eca061"
+   ],
+   [
+    "msg-0120",
+    "chat",
+    "2026-09-14T19:16:00Z",
+    "Yuki Moreau",
+    "#general",
+    "Reminder to update your out-of-office calendar.",
+    "",
+    "c9afbd88587f9976f9ca8b1c45776251113323f1f5686a473ccfb7f218309c00"
+   ],
+   [
+    "msg-0121",
+    "chat",
+    "2026-09-14T19:32:00Z",
+    "Oskar Alvarez",
+    "#growth",
+    "Reminder to update your out-of-office calendar.",
+    "",
+    "c9afbd88587f9976f9ca8b1c45776251113323f1f5686a473ccfb7f218309c00"
+   ],
+   [
+    "msg-0122",
+    "chat",
+    "2026-09-14T20:18:00Z",
+    "Luca Ostrander",
+    "#platform",
+    "Marked TCK-0074 as resolved.",
+    "TCK-0074",
+    "56f31ad0a76f025eaa520d8f11999c862edfec7b21c7f0fee927e3cfaf4fabab"
+   ],
+   [
+    "msg-0224",
+    "chat",
+    "2026-09-14T20:38:00Z",
+    "Oskar Alvarez",
+    "#platform",
+    "Deployed the certificate rollover change in fernhill-sso to staging, looks good.",
+    "",
+    "aa2fa7f5c963223482e19028855e5ba4cf239daeea9fca280a758c75f4b82bc2"
+   ],
+   [
+    "msg-0123",
+    "chat",
+    "2026-09-15T14:39:00Z",
+    "Omar Fenwick",
+    "#growth",
+    "Happy Friday, everyone!",
+    "",
+    "40905db7c30b15865b57691b852649d5ebbaeb2a1ac7596818b6893db124cacd"
+   ],
+   [
+    "msg-0124",
+    "chat",
+    "2026-09-15T15:15:00Z",
+    "Sana Petrov",
+    "#platform",
+    "Thanks Mateo for the quick review.",
+    "",
+    "d499dc92a51224deb22564fc29e3cb5cf9261a948401e33034b073802db4a5c0"
+   ],
+   [
+    "msg-0125",
+    "chat",
+    "2026-09-15T16:34:00Z",
+    "Luca Ostrander",
+    "#platform",
+    "ADR-0010 accepted: Audit logs kept for 400 days. Please read it before your next change.",
+    "ADR-0010",
+    "e6132cdeee81fd7f22b89dc75cb80e70b71dfb595d829ab6216823c76936cc19"
+   ],
+   [
+    "msg-0126",
+    "chat",
+    "2026-09-15T16:44:00Z",
+    "Priya Farrow",
+    "#platform",
+    "Selma Marsh, the handoff ticket TCK-0077 is yours.",
+    "TCK-0077",
+    "a63286907cd33a7fcfaa050a9ea7cff56424a822a140ae445ea952434e2c7847"
+   ],
+   [
+    "msg-0127",
+    "chat",
+    "2026-09-15T17:42:00Z",
+    "Aiko Rademacher",
+    "#growth",
+    "ADR-0008 accepted: Reporting reads from a replica. Please read it before your next change.",
+    "ADR-0008",
+    "6da2cf21ec7cf3689a557206277fc3354cfcd4dad50d882bfc31c0de10c44abf"
+   ],
+   [
+    "msg-0128",
+    "chat",
+    "2026-09-15T18:36:00Z",
+    "Tomas Kessler",
+    "#platform",
+    "VPN is flaky for me this morning, anyone else?",
+    "",
+    "8fd67c24494f8f351670a1bc06195030eb2ee2f48e42cadfe8cf8cda9a1d3e5a"
+   ],
+   [
+    "msg-0129",
+    "chat",
+    "2026-09-16T14:00:00Z",
+    "Pavel Hollis",
+    "#platform",
+    "Wrapped up tests for event ordering in webhooks, merging after lunch.",
+    "",
+    "4b660d96c61453887f0dbb9488fe79983808e95940ba11db587a4f6816e10af5"
+   ],
+   [
+    "msg-0130",
+    "chat",
+    "2026-09-16T14:56:00Z",
+    "Luca Ostrander",
+    "#payments",
+    "Pushed a fix for idempotency key lookup in billing-api; the cause was a stale cache entry.",
+    "",
+    "7b3c05fa30d6a05d46721c14de88f38521ead43d542918d655e8bd12dbdfc530"
+   ],
+   [
+    "msg-0131",
+    "chat",
+    "2026-09-16T17:50:00Z",
+    "Pavel Hollis",
+    "#general",
+    "I'm out on Tuesday, back the day after.",
+    "",
+    "1bc34124fc0d985f9f6d996472259cb1e2b39a986683176240685bc107f19133"
+   ],
+   [
+    "msg-0132",
+    "chat",
+    "2026-09-16T18:00:00Z",
+    "Priya Farrow",
+    "#support",
+    "Finished the bulk actions cleanup in admin-console, pull request is up.",
+    "",
+    "9a9ace29fd6926246a0e1ebe1add07bb69c046479277c1918a095f1ece2a41bc"
+   ],
+   [
+    "msg-0133",
+    "chat",
+    "2026-09-16T21:36:00Z",
+    "Sana Petrov",
+    "#growth",
+    "Welcome back Yuki!",
+    "",
+    "c48246a65adbacde4040d92e40d565056893204cc7a3dfe6e7b00ce0cb8d1ae3"
+   ],
+   [
+    "msg-0134",
+    "chat",
+    "2026-09-17T16:07:00Z",
+    "Sana Petrov",
+    "#general",
+    "Can someone cover the support queue for an hour at 15:30 UTC?",
+    "",
+    "253ec5970f9f5ec666f6d059628111129588a5709d682fae87357d57e1548634"
+   ],
+   [
+    "msg-0135",
+    "chat",
+    "2026-09-17T19:28:00Z",
+    "Lars Thorne",
+    "#general",
+    "The coffee machine on the second floor is fixed.",
+    "",
+    "af22964e7076fb5066b3ac50a96415e56b68508766def8b8ea551aeb41154ab2"
+   ],
+   [
+    "msg-0136",
+    "chat",
+    "2026-09-17T20:18:00Z",
+    "Priya Farrow",
+    "#general",
+    "Reminder to update your out-of-office calendar.",
+    "",
+    "c9afbd88587f9976f9ca8b1c45776251113323f1f5686a473ccfb7f218309c00"
+   ],
+   [
+    "msg-0137",
+    "chat",
+    "2026-09-17T20:34:00Z",
+    "Zara Lowell",
+    "#platform",
+    "Fire drill at 14:00 UTC, please ignore the alarm.",
+    "",
+    "aa5644aebb9a486d1f9310a19b9dcfbec2c9b35dd8f60c19f5377be1bc2216dc"
+   ],
+   [
+    "msg-0138",
+    "chat",
+    "2026-09-18T15:34:00Z",
+    "Selma Marsh",
+    "#platform",
+    "Postmortem PM-04 is published. Action items are listed at the bottom.",
+    "PM-04",
+    "0b03ce0836911fb33f5cdd5109df099d84e843df7631607331f8cf65b6d37e9d"
+   ],
+   [
+    "msg-0139",
+    "chat",
+    "2026-09-18T18:32:00Z",
+    "Yuki Moreau",
+    "#growth",
+    "Is the retro still on for Thursday?",
+    "",
+    "dd962743dc4fdcdd18a976dfa84b23a34f57183c542c70db90a5a88e9034c9ce"
+   ],
+   [
+    "msg-0140",
+    "chat",
+    "2026-09-21T14:27:00Z",
+    "Viktor Hartwell",
+    "#general",
+    "Fire drill at 14:00 UTC, please ignore the alarm.",
+    "",
+    "aa5644aebb9a486d1f9310a19b9dcfbec2c9b35dd8f60c19f5377be1bc2216dc"
+   ],
+   [
+    "msg-0141",
+    "chat",
+    "2026-09-21T16:37:00Z",
+    "Sana Petrov",
+    "#support",
+    "Reminder to update your out-of-office calendar.",
+    "",
+    "c9afbd88587f9976f9ca8b1c45776251113323f1f5686a473ccfb7f218309c00"
+   ],
+   [
+    "msg-0142",
+    "chat",
+    "2026-09-21T17:36:00Z",
+    "Lars Thorne",
+    "#payments",
+    "Finished the page break logic cleanup in invoice-renderer, pull request is up.",
+    "",
+    "faeba617c5932e0be284cb8444335e9b09efa952c79d42d4af035fa95410199b"
+   ],
+   [
+    "msg-0143",
+    "chat",
+    "2026-09-21T19:22:00Z",
+    "Lars Thorne",
+    "#payments",
+    "Wrapped up tests for page break logic in invoice-renderer, merging after lunch.",
+    "",
+    "9110584b6a84eae3e0f23bb473c5e30fb4203e355c1d478bc156fe98b4146062"
+   ],
+   [
+    "msg-0144",
+    "chat",
+    "2026-09-21T19:55:00Z",
+    "Priya Farrow",
+    "#support",
+    "Pushed a fix for impersonation banner in admin-console; the cause was a retry that fired twice.",
+    "",
+    "bd8b4515868376e635aa0617d839bca820ecb2eae0b6ed388e522c089fe06ebd"
+   ],
+   [
+    "msg-0145",
+    "chat",
+    "2026-09-22T13:16:00Z",
+    "Pavel Hollis",
+    "#payments",
+    "Thanks Oskar for the quick review.",
+    "",
+    "21625984a3476c9a6e10534a25450323c0ac36b4ac000f0f0784b8324ecc8051"
+   ],
+   [
+    "msg-0146",
+    "chat",
+    "2026-09-22T13:25:00Z",
+    "Zara Lowell",
+    "#platform",
+    "Lunch order closes in ten minutes.",
+    "",
+    "9f7adac0e028408624f2413d8b6f0f50b3cb54058ff93482c80b0e10c8b631d8"
+   ],
+   [
+    "msg-0147",
+    "chat",
+    "2026-09-22T15:31:00Z",
+    "Priya Farrow",
+    "#support",
+    "The coffee machine on the second floor is fixed.",
+    "",
+    "af22964e7076fb5066b3ac50a96415e56b68508766def8b8ea551aeb41154ab2"
+   ],
+   [
+    "msg-0149",
+    "chat",
+    "2026-09-22T20:58:00Z",
+    "Priya Farrow",
+    "#platform",
+    "Is the retro still on for Friday?",
+    "",
+    "686ca23d55dda25be764a8207a8b83de97b936cb97b60b1d1d165fa64eba767e"
+   ],
+   [
+    "msg-0150",
+    "chat",
+    "2026-09-22T21:03:00Z",
+    "Omar Fenwick",
+    "#growth",
+    "Rolled out the revenue rollup fix in reporting to all tenants.",
+    "",
+    "dc63474c4b4843c266c1dadef9f1c8a5044834be0384b6fc0bfaa4e7aa909ff5"
+   ],
+   [
+    "msg-0151",
+    "chat",
+    "2026-09-23T14:35:00Z",
+    "Priya Farrow",
+    "#platform",
+    "Quick poll: should we move the weekly sync to Thursday?",
+    "",
+    "e671a6e54990ca5608c67d9b798cc98ada18c4c8b1b834a6945372c847ae7ab4"
+   ],
+   [
+    "msg-0152",
+    "chat",
+    "2026-09-23T17:36:00Z",
+    "Selma Marsh",
+    "#growth",
+    "Can someone cover the support queue for an hour at 17:30 UTC?",
+    "",
+    "fc5cd82f0d294f272781cc2442f99b6dfabccac35e991483483b1b652ca216cd"
+   ],
+   [
+    "msg-0153",
+    "chat",
+    "2026-09-23T20:46:00Z",
+    "Zara Lowell",
+    "#support",
+    "Fire drill at 17:30 UTC, please ignore the alarm.",
+    "",
+    "cfb31efa006b3e07518b111ac8e2ee8459e65a2f8cd3f0e1cf1ea60afeba84cc"
+   ],
+   [
+    "msg-0154",
+    "chat",
+    "2026-09-24T15:52:00Z",
+    "Zara Lowell",
+    "#platform",
+    "Fire drill at 17:30 UTC, please ignore the alarm.",
+    "",
+    "cfb31efa006b3e07518b111ac8e2ee8459e65a2f8cd3f0e1cf1ea60afeba84cc"
+   ],
+   [
+    "msg-0155",
+    "chat",
+    "2026-09-24T16:10:00Z",
+    "Pavel Hollis",
+    "#platform",
+    "Postmortem PM-05 is published. Action items are listed at the bottom.",
+    "PM-05",
+    "7229e227f5df4eeefd93856a1e074132bca31b9e87e7eb703771e341506b9cc6"
+   ],
+   [
+    "msg-0156",
+    "chat",
+    "2026-09-24T18:02:00Z",
+    "Pavel Hollis",
+    "#general",
+    "Thanks Selma for the quick review.",
+    "",
+    "7f31219456ef0c89c04064df5e8aedc29ff5126c4a7459f4522cb27b07fa5922"
+   ],
+   [
+    "msg-0157",
+    "chat",
+    "2026-09-24T18:27:00Z",
+    "Yuki Moreau",
+    "#growth",
+    "Fire drill at 15:30 UTC, please ignore the alarm.",
+    "",
+    "27cfcbafd5c4b80c1eabb5f6d0592d72f4e677f3e0e3c73c32ba58af163d54bf"
+   ],
+   [
+    "msg-0158",
+    "chat",
+    "2026-09-24T20:20:00Z",
+    "Tomas Kessler",
+    "#general",
+    "Fire drill at 17:30 UTC, please ignore the alarm.",
+    "",
+    "cfb31efa006b3e07518b111ac8e2ee8459e65a2f8cd3f0e1cf1ea60afeba84cc"
+   ],
+   [
+    "msg-0159",
+    "chat",
+    "2026-09-24T21:08:00Z",
+    "Tomas Kessler",
+    "#general",
+    "The coffee machine on the second floor is fixed.",
+    "",
+    "af22964e7076fb5066b3ac50a96415e56b68508766def8b8ea551aeb41154ab2"
+   ],
+   [
+    "msg-0160",
+    "chat",
+    "2026-09-25T08:18:00Z",
+    "Viktor Hartwell",
+    "#payments",
+    "Marked TCK-0088 as resolved.",
+    "TCK-0088",
+    "b98a104750886d1a37cf4d4ccd9b8f6b0c2b72ffb9d37b183c226292ad55be62"
+   ],
+   [
+    "msg-0161",
+    "chat",
+    "2026-09-25T13:48:00Z",
+    "Omar Fenwick",
+    "#support",
+    "Reminder to update your out-of-office calendar.",
+    "",
+    "c9afbd88587f9976f9ca8b1c45776251113323f1f5686a473ccfb7f218309c00"
+   ],
+   [
+    "msg-0162",
+    "chat",
+    "2026-09-25T13:50:00Z",
+    "Luca Ostrander",
+    "#payments",
+    "Deployed the invoice list pagination change in billing-api to staging, looks good.",
+    "",
+    "562138a3e5db35ba0fcabcde9057c6da05bb4cf6135b6a05057578c240cb3341"
+   ],
+   [
+    "msg-0163",
+    "chat",
+    "2026-09-25T14:38:00Z",
+    "Tomas Kessler",
+    "#platform",
+    "New laptops arrive Monday; ping me if yours is on the list.",
+    "",
+    "4f190664eaf32f8e77710cd797109a5e6be99cb918cd94cbc363dfa243d1b147"
+   ],
+   [
+    "msg-0164",
+    "chat",
+    "2026-09-25T16:07:00Z",
+    "Viktor Hartwell",
+    "#payments",
+    "Great work this week, Aiko.",
+    "",
+    "bfd12c9de0040d36dafbc981bf21f1cd988ff692f515e650680719ee01cf0fe7"
+   ],
+   [
+    "msg-0165",
+    "chat",
+    "2026-09-28T13:06:00Z",
+    "Selma Marsh",
+    "#payments",
+    "Reminder to update your out-of-office calendar.",
+    "",
+    "c9afbd88587f9976f9ca8b1c45776251113323f1f5686a473ccfb7f218309c00"
+   ],
+   [
+    "msg-0166",
+    "chat",
+    "2026-09-28T13:33:00Z",
+    "Omar Fenwick",
+    "#platform",
+    "Welcome back Mateo!",
+    "",
+    "22486c0a3f7b24930527217cd13d65f2f592a8ab66f283b6e5db9f9c98cf558e"
+   ],
+   [
+    "msg-0167",
+    "chat",
+    "2026-09-28T15:47:00Z",
+    "Aiko Rademacher",
+    "#platform",
+    "Pushed a fix for bounce handling in notifications; the cause was a missing null check.",
+    "",
+    "0e5cd48e11e3dfe3fa8cbf24185417f50f9b11251af3657dc0031d9953cd25bd"
+   ],
+   [
+    "msg-0168",
+    "chat",
+    "2026-09-28T16:47:00Z",
+    "Sana Petrov",
+    "#general",
+    "Is the retro still on for Wednesday?",
+    "",
+    "9fc615b90b96d30c29e194c5ee7a275d888b1f7e8865e23b7b1e2d04653a85fa"
+   ],
+   [
+    "msg-0169",
+    "chat",
+    "2026-09-28T17:43:00Z",
+    "Aiko Rademacher",
+    "#growth",
+    "Rolled out the timezone handling fix in reporting to all tenants.",
+    "",
+    "6ed51a045bdbf822d621963d6f56de720f4cbeab3c3fafb475c7ead3c0f4358a"
+   ],
+   [
+    "msg-0170",
+    "chat",
+    "2026-09-28T20:38:00Z",
+    "Oskar Alvarez",
+    "#growth",
+    "Can someone cover the support queue for an hour at 14:00 UTC?",
+    "",
+    "800bc4c737968ec5d578de9e32f2ec78b3ca0400e7e4705fbeeeffcee35100e8"
+   ],
+   [
+    "msg-0171",
+    "chat",
+    "2026-09-28T21:57:00Z",
+    "Viktor Hartwell",
+    "#growth",
+    "Fire drill at 13:30 UTC, please ignore the alarm.",
+    "",
+    "8617aafc1db4844916dc230ba891569c869bd54a6e7cef4fad29d7ee92a173a9"
+   ],
+   [
+    "msg-0172",
+    "chat",
+    "2026-09-29T14:58:00Z",
+    "Lars Thorne",
+    "#growth",
+    "VPN is flaky for me this morning, anyone else?",
+    "",
+    "8fd67c24494f8f351670a1bc06195030eb2ee2f48e42cadfe8cf8cda9a1d3e5a"
+   ],
+   [
+    "msg-0225",
+    "chat",
+    "2026-09-29T15:25:00Z",
+    "Oskar Alvarez",
+    "#platform",
+    "Writing handover notes for fernhill-sso and oncall-runbook this week.",
+    "",
+    "dca63b768a73775a08f74dc34a605d411a344f0a551bcd4d8a4a03148f8ed5c8"
+   ],
+   [
+    "msg-0173",
+    "chat",
+    "2026-09-29T16:12:00Z",
+    "Viktor Hartwell",
+    "#payments",
+    "ADR-0012 accepted: Schema freeze on ledger-db during month-end close. Please read it before your next change.",
+    "ADR-0012",
+    "d11bdb8555ea920a06cd63e9c8c0b14ec7612d26dc6a4a641a8d5d3a7a5f05f9"
+   ],
+   [
+    "msg-0174",
+    "chat",
+    "2026-09-29T16:27:00Z",
+    "Yuki Moreau",
+    "#general",
+    "Heads up: billing-api is owned by Growth now, so route billing-api questions to us.",
+    "",
+    "9e8d13865e06eaee3cd32723aad1b29b2a223ee53e9ef954ab167a835016a608"
+   ],
+   [
+    "msg-0175",
+    "chat",
+    "2026-09-30T13:40:00Z",
+    "Selma Marsh",
+    "#support",
+    "Is the retro still on for Friday?",
+    "",
+    "686ca23d55dda25be764a8207a8b83de97b936cb97b60b1d1d165fa64eba767e"
+   ],
+   [
+    "msg-0176",
+    "chat",
+    "2026-09-30T14:25:00Z",
+    "Sana Petrov",
+    "#payments",
+    "Pushed a fix for logo scaling in invoice-renderer; the cause was an off-by-one in the date window.",
+    "",
+    "6005b5c7753eed4266d532a00315f7719fdfdec1bba79d941299cd81170a31bc"
+   ],
+   [
+    "msg-0177",
+    "chat",
+    "2026-09-30T14:34:00Z",
+    "Mateo Sandoval",
+    "#general",
+    "Happy Monday, everyone!",
+    "",
+    "29769d010da87c721398e341c8e442867ebc8e035b69769e8cf7346633466c6e"
+   ],
+   [
+    "msg-0178",
+    "chat",
+    "2026-09-30T14:57:00Z",
+    "Priya Farrow",
+    "#general",
+    "Reminder: timesheets are due Thursday.",
+    "",
+    "713eda222d138f4a9f069b75b7bf0774e8e4889420ac7ec521eea53c009172f2"
+   ],
+   [
+    "msg-0179",
+    "chat",
+    "2026-09-30T15:12:00Z",
+    "Luca Ostrander",
+    "#payments",
+    "Can someone cover the support queue for an hour at 17:30 UTC?",
+    "",
+    "fc5cd82f0d294f272781cc2442f99b6dfabccac35e991483483b1b652ca216cd"
+   ],
+   [
+    "msg-0180",
+    "chat",
+    "2026-09-30T20:50:00Z",
+    "Lars Thorne",
+    "#platform",
+    "Lunch order closes in ten minutes.",
+    "",
+    "9f7adac0e028408624f2413d8b6f0f50b3cb54058ff93482c80b0e10c8b631d8"
+   ],
+   [
+    "msg-0181",
+    "chat",
+    "2026-10-01T14:27:00Z",
+    "Tomas Kessler",
+    "#support",
+    "Adding the billing-api runbook (RB-05) to the help center index. It lists Sana Petrov as the owner of billing-api, so I am updating the escalation sheet to match.",
+    "RB-05",
+    "861186488eac183aaccf2dbfabdc62c4fc955468829fc920dab82f2138080f67"
+   ],
+   [
+    "msg-0182",
+    "chat",
+    "2026-10-01T15:36:00Z",
+    "Pavel Hollis",
+    "#support",
+    "Reminder: timesheets are due Tuesday.",
+    "",
+    "d00e1f1537e7a7bd05d294e95f491803faa3791c5ff339d35cd800c9403ecf80"
+   ],
+   [
+    "msg-0183",
+    "chat",
+    "2026-10-01T15:40:00Z",
+    "Selma Marsh",
+    "#payments",
+    "Quick poll: should we move the weekly sync to Monday?",
+    "",
+    "bc86ab4eacd18ef40c0ba99a66bc291213583df529b7382d4fe314191e403bdf"
+   ],
+   [
+    "msg-0184",
+    "chat",
+    "2026-10-01T15:43:00Z",
+    "Tomas Kessler",
+    "#support",
+    "Welcome back Priya!",
+    "",
+    "cd200acba144e980ca69eacc02e865aebf6ca4a5c2624b096d04d76cc94db2e3"
+   ],
+   [
+    "msg-0185",
+    "chat",
+    "2026-10-01T15:59:00Z",
+    "Omar Fenwick",
+    "#platform",
+    "Reminder: timesheets are due Tuesday.",
+    "",
+    "d00e1f1537e7a7bd05d294e95f491803faa3791c5ff339d35cd800c9403ecf80"
+   ],
+   [
+    "msg-0186",
+    "chat",
+    "2026-10-01T18:49:00Z",
+    "Aiko Rademacher",
+    "#payments",
+    "Can someone cover the support queue for an hour at 15:30 UTC?",
+    "",
+    "253ec5970f9f5ec666f6d059628111129588a5709d682fae87357d57e1548634"
+   ],
+   [
+    "msg-0187",
+    "chat",
+    "2026-10-01T21:20:00Z",
+    "Lars Thorne",
+    "#support",
+    "Happy Friday, everyone!",
+    "",
+    "40905db7c30b15865b57691b852649d5ebbaeb2a1ac7596818b6893db124cacd"
+   ],
+   [
+    "msg-0188",
+    "chat",
+    "2026-10-02T13:02:00Z",
+    "Mateo Sandoval",
+    "#payments",
+    "VPN is flaky for me this morning, anyone else?",
+    "",
+    "8fd67c24494f8f351670a1bc06195030eb2ee2f48e42cadfe8cf8cda9a1d3e5a"
+   ],
+   [
+    "msg-0189",
+    "chat",
+    "2026-10-02T13:15:00Z",
+    "Viktor Hartwell",
+    "#general",
+    "Happy Monday, everyone!",
+    "",
+    "29769d010da87c721398e341c8e442867ebc8e035b69769e8cf7346633466c6e"
+   ],
+   [
+    "msg-0190",
+    "chat",
+    "2026-10-02T13:50:00Z",
+    "Luca Ostrander",
+    "#growth",
+    "Fire drill at 17:30 UTC, please ignore the alarm.",
+    "",
+    "cfb31efa006b3e07518b111ac8e2ee8459e65a2f8cd3f0e1cf1ea60afeba84cc"
+   ],
+   [
+    "msg-0191",
+    "chat",
+    "2026-10-02T14:25:00Z",
+    "Sana Petrov",
+    "#payments",
+    "Deployed the backup verification change in ledger-db to staging, looks good.",
+    "",
+    "7f3d48ca1e41acb0012ca32180a5e77f1ebbd6e792895e7094c4ee7e789258ea"
+   ],
+   [
+    "msg-0192",
+    "chat",
+    "2026-10-02T17:44:00Z",
+    "Lars Thorne",
+    "#platform",
+    "Thanks Sana for the quick review.",
+    "",
+    "25264de6cea1e6556d583e777496a62567aa5f51828542a388935cf6a5e9d984"
+   ],
+   [
+    "msg-0193",
+    "chat",
+    "2026-10-02T20:03:00Z",
+    "Zara Lowell",
+    "#general",
+    "Does anyone have the link to the onboarding checklist?",
+    "",
+    "bd683fe3f7145b655c8b6252d6c6b4c583673aa2def98f6e732ff20649de881b"
+   ],
+   [
+    "msg-0194",
+    "chat",
+    "2026-10-02T22:36:00Z",
+    "Luca Ostrander",
+    "#platform",
+    "Closed TCK-0103, it goes out with the next release.",
+    "TCK-0103",
+    "4cf4a9b8631718a2973c58eaf95084cf9fc7e806b0fdaf45d12707edae6294d3"
+   ],
+   [
+    "msg-0195",
+    "chat",
+    "2026-10-05T13:10:00Z",
+    "Oskar Alvarez",
+    "#support",
+    "Welcome back Selma!",
+    "",
+    "32855af94b3b490fdfc2ef8dbef2198607956973172fc82026eefcc156898098"
+   ],
+   [
+    "msg-0196",
+    "chat",
+    "2026-10-05T15:33:00Z",
+    "Viktor Hartwell",
+    "#growth",
+    "I'm out on Tuesday, back the day after.",
+    "",
+    "1bc34124fc0d985f9f6d996472259cb1e2b39a986683176240685bc107f19133"
+   ],
+   [
+    "msg-0197",
+    "chat",
+    "2026-10-05T16:45:00Z",
+    "Tomas Kessler",
+    "#support",
+    "I'm out on Wednesday, back the day after.",
+    "",
+    "f8c07fee42ef3bfc0275beef94798ef9852bb2d4f6853b7fa4962192ec8af988"
+   ],
+   [
+    "msg-0198",
+    "chat",
+    "2026-10-05T17:26:00Z",
+    "Lars Thorne",
+    "#general",
+    "Kudos to Mateo for staying late on the release.",
+    "",
+    "4e8581144b5cabadf966477e37d47fa6a4a6ee5a433bb1907384b6a5d05f34d6"
+   ],
+   [
+    "msg-0199",
+    "chat",
+    "2026-10-05T18:21:00Z",
+    "Zara Lowell",
+    "#general",
+    "VPN is flaky for me this morning, anyone else?",
+    "",
+    "8fd67c24494f8f351670a1bc06195030eb2ee2f48e42cadfe8cf8cda9a1d3e5a"
+   ],
+   [
+    "msg-0200",
+    "chat",
+    "2026-10-05T18:36:00Z",
+    "Lars Thorne",
+    "#platform",
+    "Wrapped up tests for session expiry in auth, merging after lunch.",
+    "",
+    "0b12789cadfcdf0af76a97d9c591ac3fb308fa1cc93f3f788e87512d76a6f480"
+   ],
+   [
+    "msg-0201",
+    "chat",
+    "2026-10-05T18:41:00Z",
+    "Zara Lowell",
+    "#support",
+    "Reminder to update your out-of-office calendar.",
+    "",
+    "c9afbd88587f9976f9ca8b1c45776251113323f1f5686a473ccfb7f218309c00"
+   ],
+   [
+    "msg-0202",
+    "chat",
+    "2026-10-06T16:17:00Z",
+    "Priya Farrow",
+    "#platform",
+    "VPN is flaky for me this morning, anyone else?",
+    "",
+    "8fd67c24494f8f351670a1bc06195030eb2ee2f48e42cadfe8cf8cda9a1d3e5a"
+   ],
+   [
+    "msg-0203",
+    "chat",
+    "2026-10-06T21:30:00Z",
+    "Luca Ostrander",
+    "#support",
+    "I'm out on Wednesday, back the day after.",
+    "",
+    "f8c07fee42ef3bfc0275beef94798ef9852bb2d4f6853b7fa4962192ec8af988"
+   ],
+   [
+    "msg-0204",
+    "chat",
+    "2026-10-06T21:40:00Z",
+    "Omar Fenwick",
+    "#growth",
+    "Reminder to update your out-of-office calendar.",
+    "",
+    "c9afbd88587f9976f9ca8b1c45776251113323f1f5686a473ccfb7f218309c00"
+   ],
+   [
+    "msg-0205",
+    "chat",
+    "2026-10-07T13:39:00Z",
+    "Zara Lowell",
+    "#growth",
+    "Lunch order closes in ten minutes.",
+    "",
+    "9f7adac0e028408624f2413d8b6f0f50b3cb54058ff93482c80b0e10c8b631d8"
+   ],
+   [
+    "msg-0206",
+    "chat",
+    "2026-10-07T14:27:00Z",
+    "Pavel Hollis",
+    "#payments",
+    "Pushed a fix for reversal entry index in ledger-db; the cause was a stale cache entry.",
+    "",
+    "28581c5250f46d20946710c05f269c3463ee71e77252b207adabbb6163c46c3f"
+   ],
+   [
+    "msg-0207",
+    "chat",
+    "2026-10-07T16:51:00Z",
+    "Lars Thorne",
+    "#platform",
+    "Kudos to Yuki for staying late on the release.",
+    "",
+    "2bee0ad1c48bd9f247166752c266de07392980106cdcfc26e6b99e94f3128e0b"
+   ],
+   [
+    "msg-0208",
+    "chat",
+    "2026-10-08T00:36:00Z",
+    "Sana Petrov",
+    "#payments",
+    "Closed TCK-0111, it goes out with the next release.",
+    "TCK-0111",
+    "9bc0ed9b3a2f2142da6690cd0a276b3ff4b5dca23435f1fb23f659945a1e908f"
+   ],
+   [
+    "msg-0209",
+    "chat",
+    "2026-10-08T12:16:00Z",
+    "Omar Fenwick",
+    "#growth",
+    "TCK-0112 is done and waiting for review.",
+    "TCK-0112",
+    "d298d1a9564d962484703e690f5ed98b29a3fbd1d8a8047f1d182cd09d97e736"
+   ],
+   [
+    "msg-0210",
+    "chat",
+    "2026-10-08T14:51:00Z",
+    "Omar Fenwick",
+    "#support",
+    "Great work this week, Priya.",
+    "",
+    "39b995f9a2e194b0993d2e59cfe7af198f6ef8860c30a64a485d01162b2a5a34"
+   ],
+   [
+    "msg-0211",
+    "chat",
+    "2026-10-08T15:13:00Z",
+    "Mateo Sandoval",
+    "#payments",
+    "Postmortem PM-06 is published. Action items are listed at the bottom.",
+    "PM-06",
+    "ad519db6f726e8603441c3d368b047014246834a726b3fe47cdd8caf0f2616e8"
+   ],
+   [
+    "msg-0212",
+    "chat",
+    "2026-10-08T17:13:00Z",
+    "Lars Thorne",
+    "#platform",
+    "Rolled out the endpoint health check fix in webhooks to all tenants.",
+    "",
+    "0d22b9ea26c42fd4ae0f6214aa2156b18a29f2c330f39b86d35e2321b15362ab"
+   ],
+   [
+    "msg-0213",
+    "chat",
+    "2026-10-08T20:26:00Z",
+    "Omar Fenwick",
+    "#support",
+    "Fire drill at 17:30 UTC, please ignore the alarm.",
+    "",
+    "cfb31efa006b3e07518b111ac8e2ee8459e65a2f8cd3f0e1cf1ea60afeba84cc"
+   ],
+   [
+    "msg-0214",
+    "chat",
+    "2026-10-09T04:38:00Z",
+    "Oskar Alvarez",
+    "#platform",
+    "TCK-0115 is done and waiting for review.",
+    "TCK-0115",
+    "76511457fd4642a1f40187eb958598997d02f89e3ab204064469ca3eb9ecef81"
+   ],
+   [
+    "msg-0215",
+    "chat",
+    "2026-10-09T18:38:00Z",
+    "Pavel Hollis",
+    "#growth",
+    "Quick poll: should we move the weekly sync to Wednesday?",
+    "",
+    "ad8407f39ce414eb9017917da0ea14c0bb89f6387f04172d650c91b18704c611"
+   ],
+   [
+    "msg-0216",
+    "chat",
+    "2026-10-09T18:55:00Z",
+    "Sana Petrov",
+    "#payments",
+    "Deployed the connection pool limits change in ledger-db to staging, looks good.",
+    "",
+    "f30217880cff0826503393191cbc1810c4391352ddab6d625d6a258216318cb9"
+   ],
+   [
+    "msg-0217",
+    "chat",
+    "2026-10-09T19:24:00Z",
+    "Mateo Sandoval",
+    "#payments",
+    "Fire drill at 13:30 UTC, please ignore the alarm.",
+    "",
+    "8617aafc1db4844916dc230ba891569c869bd54a6e7cef4fad29d7ee92a173a9"
+   ],
+   [
+    "msg-0218",
+    "chat",
+    "2026-10-09T19:49:00Z",
+    "Pavel Hollis",
+    "#growth",
+    "Lunch order closes in ten minutes.",
+    "",
+    "9f7adac0e028408624f2413d8b6f0f50b3cb54058ff93482c80b0e10c8b631d8"
+   ],
+   [
+    "msg-0219",
+    "chat",
+    "2026-10-09T20:35:00Z",
+    "Priya Farrow",
+    "#general",
+    "VPN is flaky for me this morning, anyone else?",
+    "",
+    "8fd67c24494f8f351670a1bc06195030eb2ee2f48e42cadfe8cf8cda9a1d3e5a"
+   ],
+   [
+    "msg-0220",
+    "chat",
+    "2026-10-10T20:48:00Z",
+    "Zara Lowell",
+    "#support",
+    "Closed TCK-0119, it goes out with the next release.",
+    "TCK-0119",
+    "98ac775a944dfa3c11ddc843ee046ecf7a762c8dc37d59b8c775818138db8ed1"
+   ],
+   [
+    "msg-0148",
+    "chat",
+    "2026-09-22T17:31:00Z",
+    "Luca Ostrander",
+    "#platform",
+    "Per ADR-0009, I am now the owner of billing-api. Sana Petrov stays on as backup for 30 days. Send billing-api escalations to me.",
+    "ADR-0009",
+    "2f0a8504a086427fc1968fcdf7a78ea3456135a675483d1ece9f50e053de53b4"
+   ],
+   [
+    "TCK-0001",
+    "ticket",
+    "2026-08-17 16:43:00",
+    "Oskar Alvarez",
+    "Harden template variables in notifications",
+    "Picked this up from the backlog. Area: template variables in notifications. I traced it to a timezone assumption. I rewrote the check and ran the full suite. Closing once the next release goes out.",
+    null,
+    "199b1d96bb98ce5c5e37b92bd2f50a152cac975bd6763d32379672c3ecc4ce68"
+   ],
+   [
+    "TCK-0002",
+    "ticket",
+    "2026-08-17 17:31:00",
+    "Lars Thorne",
+    "Fix plan upgrade endpoint in billing-api",
+    "Picked this up from the backlog. Area: plan upgrade endpoint in billing-api. I traced it to a stale cache entry. I split the change into two small pull requests. Deployed to staging.",
+    null,
+    "c34cb348298b74450254600a08825997c95cb1a394e4bb9b1bc4ec6e8af58ffc"
+   ],
+   [
+    "TCK-0003",
+    "ticket",
+    "2026-08-17 19:08:00",
+    "Mateo Sandoval",
+    "Add tests for locale formatting in invoice-renderer",
+    "Following up on last week's discussion. Area: locale formatting in invoice-renderer. I traced it to a missing null check. I rewrote the check and ran the full suite. Will monitor for a few days.",
+    null,
+    "b35cbe1f8c8ee74d6da86c45ed10b713f57860909d4ffbdce95122f6901946b0"
+   ],
+   [
+    "TCK-0004",
+    "ticket",
+    "2026-08-17 20:54:00",
+    "Pavel Hollis",
+    "Add tests for unsubscribe links in notifications",
+    "Noticed this while on call. Area: unsubscribe links in notifications. I traced it to a slow query on a large tenant. I changed the handler and added a regression test. Will monitor for a few days.",
+    null,
+    "b6b7daed97c88d10deb79d115e32d7428bd7d1e691f548fb0a51e4b7445ff466"
+   ],
+   [
+    "TCK-0005",
+    "ticket",
+    "2026-08-18 13:22:00",
+    "Oskar Alvarez",
+    "Investigate replay tool regression in webhooks",
+    "Raised during code review. Area: replay tool in webhooks. I traced it to a missing null check. I patched it and verified against staging data. Rolled out to all tenants.",
+    null,
+    "877fa59157a7d39d1f56f552656c64d583cc3bc65e1f55dbf11c8a353cc32d6d"
+   ],
+   [
+    "TCK-0006",
+    "ticket",
+    "2026-08-18 20:39:00",
+    "Oskar Alvarez",
+    "Fix send queue in notifications",
+    "Noticed this while on call. Area: send queue in notifications. I traced it to a retry that fired twice. I split the change into two small pull requests. Deployed to staging.",
+    null,
+    "acfc06b35d8867f63444514d042eee09412235f3d9b7003a49ec50ecd1c80ebc"
+   ],
+   [
+    "TCK-0007",
+    "ticket",
+    "2026-08-18 21:23:00",
+    "Lars Thorne",
+    "Harden SSO callback in auth",
+    "Noticed this while on call. Area: SSO callback in auth. I traced it to a slow query on a large tenant. I shipped a fix behind a flag and watched the dashboards. Ready for review.",
+    null,
+    "37d8ea8ecaf84dd1e8303f4fc54b6ed4029a0e6ac9b4aad807c85372cafd2907"
+   ],
+   [
+    "TCK-0008",
+    "ticket",
+    "2026-08-19 15:08:00",
+    "Lars Thorne",
+    "Harden payload signing in webhooks",
+    "Raised during code review. Area: payload signing in webhooks. I traced it to a timezone assumption. I patched it and verified against staging data. Ready for review.",
+    null,
+    "679b174acca93891910c365c9e1a4886ed67ebef85120b583621e42f13436d17"
+   ],
+   [
+    "TCK-0009",
+    "ticket",
+    "2026-08-19 15:38:00",
+    "Tomas Kessler",
+    "Customer reports a missing line item on an invoice PDF",
+    "A customer on the Business plan wrote in about a missing line item on an invoice PDF. Tagging for triage.",
+    null,
+    "06da8e2b2004b9f6a693552e9cfe67e193026d9604487fb4f8f25d6fa7dbdf23"
+   ],
+   [
+    "TCK-0010",
+    "ticket",
+    "2026-08-19 17:11:00",
+    "Priya Farrow",
+    "Customer reports a CSV export that drops the last row",
+    "A customer on the Business plan wrote in about a CSV export that drops the last row. I could reproduce it once on a test account.",
+    null,
+    "6d8ac22c2b63beff358f814f81c5ea3024e170f62cd2edbfe5861da02ec6d04a"
+   ],
+   [
+    "TCK-0011",
+    "ticket",
+    "2026-08-19 17:13:00",
+    "Aiko Rademacher",
+    "Add tests for unsubscribe links in notifications",
+    "Raised during code review. Area: unsubscribe links in notifications. I traced it to a retry that fired twice. I shipped a fix behind a flag and watched the dashboards. Will monitor for a few days.",
+    null,
+    "73571429e2e5da83d46b4116faa13c5a320dad7f22bc022f53c72df5ab448e06"
+   ],
+   [
+    "TCK-0012",
+    "ticket",
+    "2026-08-19 20:45:00",
+    "Priya Farrow",
+    "Add tests for role permissions in admin-console",
+    "Noticed this while on call. Area: role permissions in admin-console. I traced it to a slow query on a large tenant. I patched it and verified against staging data. Will monitor for a few days.",
+    null,
+    "23696965fca98e9582174a8b7f734744def40395e7d2c0837af425990e1cae52"
+   ],
+   [
+    "TCK-0013",
+    "ticket",
+    "2026-08-21 16:05:00",
+    "Pavel Hollis",
+    "Investigate connection pool limits regression in ledger-db",
+    "Noticed this while on call. Area: connection pool limits in ledger-db. I traced it to a retry that fired twice. I split the change into two small pull requests. Deployed to staging.",
+    null,
+    "8aa26dece80e52538ef3230e88b191fd1122d6824c2c5c43e12665452934761f"
+   ],
+   [
+    "TCK-0014",
+    "ticket",
+    "2026-08-21 17:30:00",
+    "Luca Ostrander",
+    "Add tests for incident banner in status-page",
+    "Noticed this while on call. Area: incident banner in status-page. I traced it to an off-by-one in the date window. I patched it and verified against staging data. Ready for review.",
+    null,
+    "77e144ac910f2b623914214cd111d22ce7aacce3dd6be557eeff1d061c5d088c"
+   ],
+   [
+    "TCK-0015",
+    "ticket",
+    "2026-08-21 19:30:00",
+    "Lars Thorne",
+    "Fix rate limit on login in auth",
+    "Raised during code review. Area: rate limit on login in auth. I traced it to an off-by-one in the date window. I shipped a fix behind a flag and watched the dashboards. Will monitor for a few days.",
+    null,
+    "1d344e2941eb77df44e41ca062a1450683667f6b1cdc310bba1b98f20bc977a0"
+   ],
+   [
+    "TCK-0016",
+    "ticket",
+    "2026-08-21 20:53:00",
+    "Luca Ostrander",
+    "Tidy up customer search in admin-console",
+    "Following up on last week's discussion. Area: customer search in admin-console. I traced it to a config value that differed between environments. I rewrote the check and ran the full suite. Deployed to staging.",
+    null,
+    "72cb3d9866a452dbae53a625e16bff3e64623d26f3f7d33edc50d73f4ee4cdc3"
+   ],
+   [
+    "TCK-0017",
+    "ticket",
+    "2026-08-24 16:26:00",
+    "Zara Lowell",
+    "Customer reports tax rounded the wrong way on a credit note",
+    "A customer on the Basic plan wrote in about tax rounded the wrong way on a credit note. I could reproduce it once on a test account.",
+    null,
+    "341902eab3e4626fb0e25cdfd2164132230388b1cd9c64394e00944c16404fc2"
+   ],
+   [
+    "TCK-0018",
+    "ticket",
+    "2026-08-25 13:26:00",
+    "Pavel Hollis",
+    "Add tests for connection pool limits in ledger-db",
+    "Noticed this while on call. Area: connection pool limits in ledger-db. I traced it to an off-by-one in the date window. I changed the handler and added a regression test. Deployed to staging.",
+    null,
+    "8a08606b6461287612c1139bc562ee634f1c3e6ee2a6853d5a1a6205b37cedd6"
+   ],
+   [
+    "TCK-0019",
+    "ticket",
+    "2026-08-25 15:14:00",
+    "Priya Farrow",
+    "Add tests for audit trail view in admin-console",
+    "Following up on last week's discussion. Area: audit trail view in admin-console. I traced it to a slow query on a large tenant. I patched it and verified against staging data. Ready for review.",
+    null,
+    "db1a21a7ab4abe0e37be6b1cc054d7479f81499a3b6b86367077a39b8f192c51"
+   ],
+   [
+    "TCK-0020",
+    "ticket",
+    "2026-08-25 16:16:00",
+    "Pavel Hollis",
+    "Document session expiry for auth",
+    "Picked this up from the backlog. Area: session expiry in auth. I traced it to a stale cache entry. I patched it and verified against staging data. Deployed to staging.",
+    null,
+    "41e95b043ab618d21c7cf9c2d3ed36f83b75c866b0abc392397c88133fa5ddc1"
+   ],
+   [
+    "TCK-0021",
+    "ticket",
+    "2026-08-25 17:14:00",
+    "Viktor Hartwell",
+    "Document scheduled email report for reporting",
+    "Picked this up from the backlog. Area: scheduled email report in reporting. I traced it to a retry that fired twice. I changed the handler and added a regression test. Ready for review.",
+    null,
+    "7fbfd601236a38a87a5b9cc6017064405afb26a8abb0c510874154b2cc371445"
+   ],
+   [
+    "TCK-0022",
+    "ticket",
+    "2026-08-25 20:59:00",
+    "Sana Petrov",
+    "Document SSO callback for auth",
+    "Raised during code review. Area: SSO callback in auth. I traced it to a config value that differed between environments. I rewrote the check and ran the full suite. Will monitor for a few days.",
+    null,
+    "408f83ca1e9cf41d553b3ca6b9a083da0101aa56399d1e0bd55eb4d1d3ff8f45"
+   ],
+   [
+    "TCK-0023",
+    "ticket",
+    "2026-08-26 15:08:00",
+    "Priya Farrow",
+    "Customer reports webhook deliveries that arrive late",
+    "A customer on the Basic plan wrote in about webhook deliveries that arrive late. I could reproduce it once on a test account.",
+    null,
+    "6b2aad327e7574d6fd6a7322e60a010647e013299a400949a713907c38bec717"
+   ],
+   [
+    "TCK-0024",
+    "ticket",
+    "2026-08-26 19:20:00",
+    "Priya Farrow",
+    "Document role permissions for admin-console",
+    "Raised during code review. Area: role permissions in admin-console. I traced it to an off-by-one in the date window. I patched it and verified against staging data. Will monitor for a few days.",
+    null,
+    "efe0f9664ed922b80033e95f857b2a2a2f69752fe6111855146ae62c70ff7477"
+   ],
+   [
+    "TCK-0025",
+    "ticket",
+    "2026-08-26 21:24:00",
+    "Luca Ostrander",
+    "Tidy up currency conversion in billing-api",
+    "Noticed this while on call. Area: currency conversion in billing-api. I traced it to a timezone assumption. I split the change into two small pull requests. Ready for review.",
+    null,
+    "a806489f9b25b3c5f64b8ce4b39cc9c18ebf353f1eb6573b8f5699888e55abd9"
+   ],
+   [
+    "TCK-0026",
+    "ticket",
+    "2026-08-26 21:57:00",
+    "Pavel Hollis",
+    "Document password reset flow for auth",
+    "Raised during code review. Area: password reset flow in auth. I traced it to a missing null check. I shipped a fix behind a flag and watched the dashboards. Rolled out to all tenants.",
+    null,
+    "5c965a40adf7c5db6ff6585426e73f85aafda36c6e9b9177fd49337a9136cbeb"
+   ],
+   [
+    "TCK-0027",
+    "ticket",
+    "2026-08-27 14:42:00",
+    "Priya Farrow",
+    "Investigate uptime widget regression in status-page",
+    "Picked this up from the backlog. Area: uptime widget in status-page. I traced it to a missing null check. I rewrote the check and ran the full suite. Deployed to staging.",
+    null,
+    "6c2181eebe97a9673529855fe3181823a41a67080e7284c33777957c75096663"
+   ],
+   [
+    "TCK-0028",
+    "ticket",
+    "2026-08-27 21:01:00",
+    "Zara Lowell",
+    "Customer reports a receipt sent to the old billing contact",
+    "A customer on the Pro plan wrote in about a receipt sent to the old billing contact. They attached a screenshot.",
+    null,
+    "5740e72abaa5f887ad2b1ac1b59c14bf66da10ef7af00fc40d2de65367df1cab"
+   ],
+   [
+    "TCK-0029",
+    "ticket",
+    "2026-08-27 21:14:00",
+    "Viktor Hartwell",
+    "Harden connection pool limits in ledger-db",
+    "Picked this up from the backlog. Area: connection pool limits in ledger-db. I traced it to a slow query on a large tenant. I split the change into two small pull requests. Rolled out to all tenants.",
+    null,
+    "d792f67813813efa8f852f9a3f28faa3eef043eae0a79f5e1ecdf89fb4824bac"
+   ],
+   [
+    "TCK-0030",
+    "ticket",
+    "2026-08-28 15:58:00",
+    "Tomas Kessler",
+    "Customer reports a receipt sent to the old billing contact",
+    "A customer on the Basic plan wrote in about a receipt sent to the old billing contact. I could reproduce it once on a test account.",
+    null,
+    "90733c8949fde05cc0d57dad5a708cbb802b8ba10b00176cb92be12d788c9a83"
+   ],
+   [
+    "TCK-0031",
+    "ticket",
+    "2026-08-28 16:41:00",
+    "Pavel Hollis",
+    "Investigate SSO callback regression in auth",
+    "Raised during code review. Area: SSO callback in auth. I traced it to a timezone assumption. I patched it and verified against staging data. Ready for review.",
+    null,
+    "ea0ae4898c3c20afc7a5939462ea9d48ad0c88d2a2ab202c434d228eeba84b9a"
+   ],
+   [
+    "TCK-0032",
+    "ticket",
+    "2026-08-28 19:22:00",
+    "Priya Farrow",
+    "Document incident banner for status-page",
+    "Raised during code review. Area: incident banner in status-page. I traced it to a retry that fired twice. I split the change into two small pull requests. Closing once the next release goes out.",
+    null,
+    "8d8b6393923ea9cefb88bc9c366045933678511988e879d22ec8102b8aabcec3"
+   ],
+   [
+    "TCK-0033",
+    "ticket",
+    "2026-08-31 16:15:00",
+    "Oskar Alvarez",
+    "Rotate auth signing keys",
+    "Rotating the auth signing keys this sprint. Assigning it to Pavel Hollis, who owns auth. Please agree the cutover window with them.",
+    null,
+    "73426c86c3a834f84ff846460f12b7e75c42d10a002876f4ed22d39a6087db3d"
+   ],
+   [
+    "TCK-0034",
+    "ticket",
+    "2026-08-31 17:49:00",
+    "Luca Ostrander",
+    "Add tests for history view in status-page",
+    "Raised during code review. Area: history view in status-page. I traced it to a timezone assumption. I split the change into two small pull requests. Rolled out to all tenants.",
+    null,
+    "a7c4815037f0ad30776d309f81c8837cefe03db707a5a94a060aaf0f7d996e1a"
+   ],
+   [
+    "TCK-0035",
+    "ticket",
+    "2026-09-01 15:55:00",
+    "Tomas Kessler",
+    "Customer reports an invoice dated in the wrong month",
+    "A customer on the Business plan wrote in about an invoice dated in the wrong month. Waiting for them to confirm when it started.",
+    null,
+    "2437b8982d1af2e87fc5a99a2c0e900cfbc7717451b3b9d4b4e22db7240e8428"
+   ],
+   [
+    "TCK-0036",
+    "ticket",
+    "2026-09-01 16:47:00",
+    "Sana Petrov",
+    "Add tests for line item layout in invoice-renderer",
+    "Raised during code review. Area: line item layout in invoice-renderer. I traced it to a slow query on a large tenant. I split the change into two small pull requests. Closing once the next release goes out.",
+    null,
+    "288302c72401a1058e45f4a431c1e7e2e007ce305f8abc0268a7b11016ed76ab"
+   ],
+   [
+    "TCK-0037",
+    "ticket",
+    "2026-09-01 21:26:00",
+    "Viktor Hartwell",
+    "Harden dashboard filters in reporting",
+    "Following up on last week's discussion. Area: dashboard filters in reporting. I traced it to a stale cache entry. I patched it and verified against staging data. Ready for review.",
+    null,
+    "b9688dba45e1a46bb124e2365ab40cca35cb5b0ae121b521d5c5d7772b651f24"
+   ],
+   [
+    "TCK-0038",
+    "ticket",
+    "2026-09-02 13:02:00",
+    "Selma Marsh",
+    "Tidy up invoice list pagination in billing-api",
+    "Picked this up from the backlog. Area: invoice list pagination in billing-api. I traced it to an off-by-one in the date window. I rewrote the check and ran the full suite. Rolled out to all tenants.",
+    null,
+    "0b2c69e030b28981377934797cfcfbc58257ab74c8ba99bb9e06382bdcc2d148"
+   ],
+   [
+    "TCK-0039",
+    "ticket",
+    "2026-09-02 13:03:00",
+    "Aiko Rademacher",
+    "Harden delivery receipts in notifications",
+    "Raised during code review. Area: delivery receipts in notifications. I traced it to a slow query on a large tenant. I patched it and verified against staging data. Will monitor for a few days.",
+    null,
+    "ee1dd56201a0e1a22386cc03806548c5b7d04346cefc828fc1a77ed23df4543b"
+   ],
+   [
+    "TCK-0040",
+    "ticket",
+    "2026-09-02 17:28:00",
+    "Oskar Alvarez",
+    "Fix entry partitioning in ledger-db",
+    "Noticed this while on call. Area: entry partitioning in ledger-db. I traced it to a slow query on a large tenant. I rewrote the check and ran the full suite. Will monitor for a few days.",
+    null,
+    "8b5d5f3ea9ba15ae8f2fc351a618ee955eb267fd6c8282aafca40941d2f8c653"
+   ],
+   [
+    "TCK-0041",
+    "ticket",
+    "2026-09-02 20:57:00",
+    "Zara Lowell",
+    "Customer reports a missing line item on an invoice PDF",
+    "A customer on the Pro plan wrote in about a missing line item on an invoice PDF. They attached a screenshot.",
+    null,
+    "432b034a7cb6db687babb1d13d36f057493619dc1f0a3e276159b5efed6f6dc8"
+   ],
+   [
+    "TCK-0042",
+    "ticket",
+    "2026-09-03 13:26:00",
+    "Tomas Kessler",
+    "Customer reports a login loop on the customer portal",
+    "A customer on the Basic plan wrote in about a login loop on the customer portal. They asked for an update by the end of the week.",
+    null,
+    "d2ea8de28382e4ba8e1933e13ad15975b087b81b1a8cad2775263bdf428f2e24"
+   ],
+   [
+    "TCK-0043",
+    "ticket",
+    "2026-09-03 15:04:00",
+    "Oskar Alvarez",
+    "Add tests for incident banner in status-page",
+    "Raised during code review. Area: incident banner in status-page. I traced it to an off-by-one in the date window. I split the change into two small pull requests. Will monitor for a few days.",
+    null,
+    "a18ba37f9e10a4e18f00fb868d429847006e2851139638fa4c290bc960147e0f"
+   ],
+   [
+    "TCK-0044",
+    "ticket",
+    "2026-09-03 15:46:00",
+    "Tomas Kessler",
+    "Customer cannot receive paper invoices",
+    "A customer on the Pro plan asked for a paper copy of their invoices. They gave a callback number, +1-555-0159, and a mailing address: 984 Marlowe Court, Apt 2A, Northfield.",
+    null,
+    "fe556cc6c7a9ef159a5230b1618251cd1b6606907f7283c2391c0f2f4ac79948"
+   ],
+   [
+    "TCK-0045",
+    "ticket",
+    "2026-09-03 16:22:00",
+    "Oskar Alvarez",
+    "Tidy up subscriber emails in status-page",
+    "Raised during code review. Area: subscriber emails in status-page. I traced it to an off-by-one in the date window. I split the change into two small pull requests. Rolled out to all tenants.",
+    null,
+    "4883561ad92ebdac4b27273d654f85ef8d35c43c0cd26cfe6f946718acb707ff"
+   ],
+   [
+    "TCK-0046",
+    "ticket",
+    "2026-09-03 21:07:00",
+    "Sana Petrov",
+    "Document entry partitioning for ledger-db",
+    "Picked this up from the backlog. Area: entry partitioning in ledger-db. I traced it to a retry that fired twice. I shipped a fix behind a flag and watched the dashboards. Rolled out to all tenants.",
+    null,
+    "dfd3fc3334de1087861b7c21fe292f044b70fdafbc77882eae3d6d7bf11e5659"
+   ],
+   [
+    "TCK-0047",
+    "ticket",
+    "2026-09-03 21:41:00",
+    "Lars Thorne",
+    "Add tests for line item layout in invoice-renderer",
+    "Raised during code review. Area: line item layout in invoice-renderer. I traced it to a stale cache entry. I split the change into two small pull requests. Will monitor for a few days.",
+    null,
+    "63ada94846a684c3497a1bc58d11b90c3c5f486fe18a81d6841e02720c2f3a2d"
+   ],
+   [
+    "TCK-0048",
+    "ticket",
+    "2026-09-04 14:19:00",
+    "Zara Lowell",
+    "Customer reports tax rounded the wrong way on a credit note",
+    "A customer on the Business plan wrote in about tax rounded the wrong way on a credit note. Waiting for them to confirm when it started.",
+    null,
+    "3af9664022723550138e8bbb5a1887fa021647ad73af542fe01be7945018753f"
+   ],
+   [
+    "TCK-0049",
+    "ticket",
+    "2026-09-04 14:41:00",
+    "Zara Lowell",
+    "Customer reports a CSV export that drops the last row",
+    "A customer on the Business plan wrote in about a CSV export that drops the last row. I could reproduce it once on a test account.",
+    null,
+    "6d8ac22c2b63beff358f814f81c5ea3024e170f62cd2edbfe5861da02ec6d04a"
+   ],
+   [
+    "TCK-0050",
+    "ticket",
+    "2026-09-04 18:55:00",
+    "Pavel Hollis",
+    "Fix entry partitioning in ledger-db",
+    "Noticed this while on call. Area: entry partitioning in ledger-db. I traced it to a missing null check. I split the change into two small pull requests. Will monitor for a few days.",
+    null,
+    "c907d278e27eb22a2362fcf2d3c69ac8043bee5bc491bed02e2ce9b2ddaf56b7"
+   ],
+   [
+    "TCK-0051",
+    "ticket",
+    "2026-09-04 20:03:00",
+    "Viktor Hartwell",
+    "Harden reversal entry index in ledger-db",
+    "Following up on last week's discussion. Area: reversal entry index in ledger-db. I traced it to a timezone assumption. I changed the handler and added a regression test. Will monitor for a few days.",
+    null,
+    "433b4a00578b47b6bd2c4d01950e6262cbd10b3970379126c46410f4cce27db0"
+   ],
+   [
+    "TCK-0052",
+    "ticket",
+    "2026-09-04 21:27:00",
+    "Priya Farrow",
+    "Customer reports a payment link that expires too early",
+    "A customer on the Pro plan wrote in about a payment link that expires too early. They asked for an update by the end of the week.",
+    null,
+    "9d2dd7901f9f166a10a6f2b43dc75e90fdfe11bafef91b0cd66fdc620d4364c9"
+   ],
+   [
+    "TCK-0053",
+    "ticket",
+    "2026-09-07 17:54:00",
+    "Oskar Alvarez",
+    "Document batch sender for notifications",
+    "Picked this up from the backlog. Area: batch sender in notifications. I traced it to a timezone assumption. I split the change into two small pull requests. Ready for review.",
+    null,
+    "a5960d6576611c041c0513455d9b7231a593c9e437317b1befd37be55cbc61a0"
+   ],
+   [
+    "TCK-0054",
+    "ticket",
+    "2026-09-07 20:58:00",
+    "Priya Farrow",
+    "Document subscriber emails for status-page",
+    "Raised during code review. Area: subscriber emails in status-page. I traced it to a slow query on a large tenant. I shipped a fix behind a flag and watched the dashboards. Ready for review.",
+    null,
+    "182798f405bd421fc46c39fbf8a3fce882466f4b22a1db86e1e8f9d5a51f7a7d"
+   ],
+   [
+    "TCK-0055",
+    "ticket",
+    "2026-09-07 21:13:00",
+    "Viktor Hartwell",
+    "Harden CSV export in reporting",
+    "Following up on last week's discussion. Area: CSV export in reporting. I traced it to a timezone assumption. I patched it and verified against staging data. Rolled out to all tenants.",
+    null,
+    "0d762ee872a5e7bf8b56a73020290e54d74b09d02744ffe81680a4ee33fd050b"
+   ],
+   [
+    "TCK-0121",
+    "ticket",
+    "2026-09-07 21:15:00",
+    "Oskar Alvarez",
+    "Harden SAML assertion mapping in fernhill-sso",
+    "Noticed this while on call. Area: SAML assertion mapping in fernhill-sso. I traced it to a config value that differed between environments. I rewrote the check and ran the full suite. Rolled out to all tenants.",
+    null,
+    "f5630a09d4ad45cca3a475fe937b58508168d2dde4bc90fb3e01d96b4b303fb2"
+   ],
+   [
+    "TCK-0056",
+    "ticket",
+    "2026-09-08 13:39:00",
+    "Luca Ostrander",
+    "Investigate customer search regression in admin-console",
+    "Following up on last week's discussion. Area: customer search in admin-console. I traced it to a stale cache entry. I shipped a fix behind a flag and watched the dashboards. Ready for review.",
+    null,
+    "706e5615a63b1576cda8248c904ce0798cacb4725c44521a09219b12f35c59c0"
+   ],
+   [
+    "TCK-0057",
+    "ticket",
+    "2026-09-08 15:04:00",
+    "Tomas Kessler",
+    "Customer reports a status banner that never clears",
+    "A customer on the Pro plan wrote in about a status banner that never clears. They asked for an update by the end of the week.",
+    null,
+    "75060f9305f88968c0c40f77b37cf11a6fb7ae8a02af4dac6c851a2d1023ba80"
+   ],
+   [
+    "TCK-0058",
+    "ticket",
+    "2026-09-08 17:35:00",
+    "Mateo Sandoval",
+    "Fix line item layout in invoice-renderer",
+    "Noticed this while on call. Area: line item layout in invoice-renderer. I traced it to a missing null check. I patched it and verified against staging data. Ready for review.",
+    null,
+    "e131417a386edb6b72585d7fdc1a93ba28f1fa1e362d288b3db2c4d4c16d1bb2"
+   ],
+   [
+    "TCK-0059",
+    "ticket",
+    "2026-09-08 21:56:00",
+    "Pavel Hollis",
+    "Tidy up reversal entry index in ledger-db",
+    "Raised during code review. Area: reversal entry index in ledger-db. I traced it to a timezone assumption. I patched it and verified against staging data. Rolled out to all tenants.",
+    null,
+    "2e91028f0f04261574b0bdf1b505ffd256a44ec0ad1a23ca4c434b995f66f16e"
+   ],
+   [
+    "TCK-0060",
+    "ticket",
+    "2026-09-09 18:30:00",
+    "Pavel Hollis",
+    "Harden balance snapshot job in ledger-db",
+    "Raised during code review. Area: balance snapshot job in ledger-db. I traced it to a retry that fired twice. I split the change into two small pull requests. Rolled out to all tenants.",
+    null,
+    "a39b8ca268433f2e9470d11a371f9ae6dbad5cbc4850f5a3a339ce4d48b3e716"
+   ],
+   [
+    "TCK-0061",
+    "ticket",
+    "2026-09-09 19:04:00",
+    "Sana Petrov",
+    "Document balance snapshot job for ledger-db",
+    "Raised during code review. Area: balance snapshot job in ledger-db. I traced it to a config value that differed between environments. I rewrote the check and ran the full suite. Ready for review.",
+    null,
+    "193c23d1cf80af02431efe02282cca8c91aa024de1e96aafee0ce6054c771516"
+   ],
+   [
+    "TCK-0062",
+    "ticket",
+    "2026-09-09 20:04:00",
+    "Omar Fenwick",
+    "Document dashboard filters for reporting",
+    "Raised during code review. Area: dashboard filters in reporting. I traced it to a stale cache entry. I rewrote the check and ran the full suite. Rolled out to all tenants.",
+    null,
+    "87a39e8723a0edfa863c706e3903696bcbb34f460c6b34a00bda872ca072a28d"
+   ],
+   [
+    "TCK-0063",
+    "ticket",
+    "2026-09-09 20:57:00",
+    "Priya Farrow",
+    "Customer reports a refund that shows as pending for days",
+    "A customer on the Basic plan wrote in about a refund that shows as pending for days. Tagging for triage.",
+    null,
+    "52ea420e4e75863218c8a7787ef8a2b65dcffecc5ac50553a1f2f742a4db7ef3"
+   ],
+   [
+    "TCK-0064",
+    "ticket",
+    "2026-09-10 16:17:00",
+    "Oskar Alvarez",
+    "Add tests for batch sender in notifications",
+    "Noticed this while on call. Area: batch sender in notifications. I traced it to a missing null check. I shipped a fix behind a flag and watched the dashboards. Rolled out to all tenants.",
+    null,
+    "38a6039e5b7818dcaf88414b38f98839bfb7309c22ef1c4f73ec8bf77f3683a1"
+   ],
+   [
+    "TCK-0065",
+    "ticket",
+    "2026-09-10 17:49:00",
+    "Pavel Hollis",
+    "Tidy up rate limit on login in auth",
+    "Following up on last week's discussion. Area: rate limit on login in auth. I traced it to a config value that differed between environments. I split the change into two small pull requests. Ready for review.",
+    null,
+    "e19bc2af74b8c7e2fa9b3bc864c65362b4f2e12fcafed32512d40fca7b114442"
+   ],
+   [
+    "TCK-0122",
+    "ticket",
+    "2026-09-10 18:14:00",
+    "Oskar Alvarez",
+    "Harden CSV export in reporting",
+    "Following up on last week's discussion. Area: CSV export in reporting. I traced it to a config value that differed between environments. I shipped a fix behind a flag and watched the dashboards. Will monitor for a few days.",
+    null,
+    "767f5b999e1a72020ae564baaff09539e90ec0e0908357ba36b8f8e32198afa2"
+   ],
+   [
+    "TCK-0066",
+    "ticket",
+    "2026-09-10 18:21:00",
+    "Luca Ostrander",
+    "Add tests for month-end close query in ledger-db",
+    "Raised during code review. Area: month-end close query in ledger-db. I traced it to a timezone assumption. I shipped a fix behind a flag and watched the dashboards. Rolled out to all tenants.",
+    null,
+    "fec240c89ba6847a8eca04bd2a7b4f526891befc9643ec63f7abc3e1017187db"
+   ],
+   [
+    "TCK-0067",
+    "ticket",
+    "2026-09-10 18:59:00",
+    "Priya Farrow",
+    "Customer reports a login loop on the customer portal",
+    "A customer on the Pro plan wrote in about a login loop on the customer portal. They attached a screenshot.",
+    null,
+    "5f1372f0f2fbecfbd35448dcba84f22bb95ce7abe869e3dd5c7649d8b53c92c3"
+   ],
+   [
+    "TCK-0068",
+    "ticket",
+    "2026-09-10 19:43:00",
+    "Mateo Sandoval",
+    "Document reversal entry index for ledger-db",
+    "Following up on last week's discussion. Area: reversal entry index in ledger-db. I traced it to a config value that differed between environments. I split the change into two small pull requests. Rolled out to all tenants.",
+    null,
+    "7529cf14d0686c5c3163a9dccdd6feaaaf9a7f2085d47d5f7a7f4d72c2b04fd2"
+   ],
+   [
+    "TCK-0069",
+    "ticket",
+    "2026-09-10 20:56:00",
+    "Sana Petrov",
+    "Investigate locale formatting regression in invoice-renderer",
+    "Noticed this while on call. Area: locale formatting in invoice-renderer. I traced it to an off-by-one in the date window. I shipped a fix behind a flag and watched the dashboards. Will monitor for a few days.",
+    null,
+    "a04a30b3e0b9d080ce812a6f0e50bb4d9e8fdfda766bce5100be24495bd2e83b"
+   ],
+   [
+    "TCK-0123",
+    "ticket",
+    "2026-09-10 21:55:00",
+    "Oskar Alvarez",
+    "Add tests for login redirect in fernhill-sso",
+    "Picked this up from the backlog. Area: login redirect in fernhill-sso. I traced it to a slow query on a large tenant. I rewrote the check and ran the full suite. Deployed to staging.",
+    null,
+    "0948e9bb1ef62ea97bd1fd39340c02d6c4c47b71a13c051cb867c1288afb2e58"
+   ],
+   [
+    "TCK-0070",
+    "ticket",
+    "2026-09-11 17:43:00",
+    "Aiko Rademacher",
+    "Document revenue rollup for reporting",
+    "Following up on last week's discussion. Area: revenue rollup in reporting. I traced it to a slow query on a large tenant. I changed the handler and added a regression test. Ready for review.",
+    null,
+    "c0117848ae39c529e15ef1feafdb1ee2220f2d37f96ead2e9c5a91144d73ac55"
+   ],
+   [
+    "TCK-0071",
+    "ticket",
+    "2026-09-11 20:50:00",
+    "Lars Thorne",
+    "Document replay tool for webhooks",
+    "Following up on last week's discussion. Area: replay tool in webhooks. I traced it to a slow query on a large tenant. I changed the handler and added a regression test. Rolled out to all tenants.",
+    null,
+    "49028a73a2f706e2a18dea717ec6e0be597e3925ff2804ead10f7a7d901dd25f"
+   ],
+   [
+    "TCK-0072",
+    "ticket",
+    "2026-09-14 13:59:00",
+    "Selma Marsh",
+    "Tidy up plan upgrade endpoint in billing-api",
+    "Noticed this while on call. Area: plan upgrade endpoint in billing-api. I traced it to a retry that fired twice. I patched it and verified against staging data. Ready for review.",
+    null,
+    "d71d6e91a7df7615409ffa6378cd73685f18c1b319a0f02640c07cb1aef9221c"
+   ],
+   [
+    "TCK-0073",
+    "ticket",
+    "2026-09-14 16:07:00",
+    "Lars Thorne",
+    "Harden plan upgrade endpoint in billing-api",
+    "Noticed this while on call. Area: plan upgrade endpoint in billing-api. I traced it to a config value that differed between environments. I split the change into two small pull requests. Closing once the next release goes out.",
+    null,
+    "5781e69c58c7691e114e63db01d639e873d0ebf5209259395e1aa7ee4457537b"
+   ],
+   [
+    "TCK-0074",
+    "ticket",
+    "2026-09-14 16:18:00",
+    "Luca Ostrander",
+    "Investigate component grouping regression in status-page",
+    "Raised during code review. Area: component grouping in status-page. I traced it to a stale cache entry. I rewrote the check and ran the full suite. Ready for review.",
+    null,
+    "d242c824899b8e5b29cc59d3aa057f0ba6a42bc9ef394349fa92ae88cfb0437c"
+   ],
+   [
+    "TCK-0124",
+    "ticket",
+    "2026-09-14 18:04:00",
+    "Oskar Alvarez",
+    "Harden refund screen in admin-console",
+    "Picked this up from the backlog. Area: refund screen in admin-console. I traced it to a config value that differed between environments. I rewrote the check and ran the full suite. Will monitor for a few days.",
+    null,
+    "68c4a6356967b213477f49c4dbe83981e2e1d47e78ed82554454f124abe8c046"
+   ],
+   [
+    "TCK-0075",
+    "ticket",
+    "2026-09-14 20:57:00",
+    "Omar Fenwick",
+    "Tidy up unsubscribe links in notifications",
+    "Following up on last week's discussion. Area: unsubscribe links in notifications. I traced it to a missing null check. I shipped a fix behind a flag and watched the dashboards. Rolled out to all tenants.",
+    null,
+    "2dff99c74efbf613d43b508d90f8f6c608f10b3fe563a8521134bd7204281f43"
+   ],
+   [
+    "TCK-0076",
+    "ticket",
+    "2026-09-15 14:34:00",
+    "Priya Farrow",
+    "Customer reports duplicate invoice emails",
+    "A customer on the Business plan wrote in about duplicate invoice emails. Two more customers reported the same thing within the hour.",
+    null,
+    "77c6117cff02bf5dcf94ca5b268d0d5f2faeca704fa6e63becdef870dcf0d4f0"
+   ],
+   [
+    "TCK-0077",
+    "ticket",
+    "2026-09-15 16:34:00",
+    "Priya Farrow",
+    "Handoff: duplicate invoice emails (Support to Platform)",
+    "Handing this incident to Selma Marsh, Platform on-call. Context: customers on several plans report duplicate invoice emails since this morning. Support has paused manual resends and stays available for customer questions until the fix lands.",
+    "TCK-0076",
+    "113b5310aad742e1a92ddae70a97158a3dce9cbeea08045dd210a87e9091e215"
+   ],
+   [
+    "TCK-0078",
+    "ticket",
+    "2026-09-16 14:29:00",
+    "Luca Ostrander",
+    "Fix invoice list pagination in billing-api",
+    "Following up on last week's discussion. Area: invoice list pagination in billing-api. I traced it to a timezone assumption. I patched it and verified against staging data. Will monitor for a few days.",
+    null,
+    "f5bb0ff44b48015b4de3dbd78d4b37ce752348922b2b585bba51a1975e7ff291"
+   ],
+   [
+    "TCK-0125",
+    "ticket",
+    "2026-09-16 18:36:00",
+    "Oskar Alvarez",
+    "Document user provisioning for fernhill-sso",
+    "Picked this up from the backlog. Area: user provisioning in fernhill-sso. I traced it to a timezone assumption. I shipped a fix behind a flag and watched the dashboards. Closing once the next release goes out.",
+    null,
+    "e24da4d02e80c2bbae287022ef06779c902b4cf676b7e44b31576fdc439285ed"
+   ],
+   [
+    "TCK-0079",
+    "ticket",
+    "2026-09-16 20:55:00",
+    "Viktor Hartwell",
+    "Investigate entry partitioning regression in ledger-db",
+    "Noticed this while on call. Area: entry partitioning in ledger-db. I traced it to a config value that differed between environments. I shipped a fix behind a flag and watched the dashboards. Rolled out to all tenants.",
+    null,
+    "0810fc5bb042752f7a49767d4e7b2c3f3ef2249ddea75a2c62b3104e5b54b887"
+   ],
+   [
+    "TCK-0126",
+    "ticket",
+    "2026-09-17 13:16:00",
+    "Oskar Alvarez",
+    "Add tests for severity table in oncall-runbook",
+    "Following up on last week's discussion. Area: severity table in oncall-runbook. I traced it to a timezone assumption. I shipped a fix behind a flag and watched the dashboards. Closing once the next release goes out.",
+    null,
+    "fca39668e84bd5b184c91f12fca3b4588cd7259b569ec3aa3a47cee82b94f655"
+   ],
+   [
+    "TCK-0080",
+    "ticket",
+    "2026-09-17 14:43:00",
+    "Oskar Alvarez",
+    "Investigate event ordering regression in webhooks",
+    "Raised during code review. Area: event ordering in webhooks. I traced it to a timezone assumption. I split the change into two small pull requests. Deployed to staging.",
+    null,
+    "2d2a657d7893e920e700ff5f4aa77b4d0aa567ad4e6b342a0e2aad3005d528a8"
+   ],
+   [
+    "TCK-0081",
+    "ticket",
+    "2026-09-17 17:29:00",
+    "Viktor Hartwell",
+    "Tidy up scheduled email report in reporting",
+    "Following up on last week's discussion. Area: scheduled email report in reporting. I traced it to a retry that fired twice. I shipped a fix behind a flag and watched the dashboards. Ready for review.",
+    null,
+    "12dcffcf6bc3aac33f031795ab5a140071cfbf46068db18e0a3726577fe0abe2"
+   ],
+   [
+    "TCK-0127",
+    "ticket",
+    "2026-09-17 21:06:00",
+    "Oskar Alvarez",
+    "Investigate role permissions regression in admin-console",
+    "Noticed this while on call. Area: role permissions in admin-console. I traced it to a retry that fired twice. I changed the handler and added a regression test. Closing once the next release goes out.",
+    null,
+    "4f78055046231b8d783cadad805a8057e797261e0286c8248a27376a54868bb8"
+   ],
+   [
+    "TCK-0082",
+    "ticket",
+    "2026-09-18 15:59:00",
+    "Luca Ostrander",
+    "Tidy up reversal entry index in ledger-db",
+    "Noticed this while on call. Area: reversal entry index in ledger-db. I traced it to a slow query on a large tenant. I shipped a fix behind a flag and watched the dashboards. Ready for review.",
+    null,
+    "61dc36ca88f59a704a754080629e5428263d013ac77d1d8af3ceb7f6ffe02a6a"
+   ],
+   [
+    "TCK-0083",
+    "ticket",
+    "2026-09-18 17:42:00",
+    "Viktor Hartwell",
+    "Add tests for balance snapshot job in ledger-db",
+    "Raised during code review. Area: balance snapshot job in ledger-db. I traced it to a retry that fired twice. I rewrote the check and ran the full suite. Closing once the next release goes out.",
+    null,
+    "35770cea773c1ccf3f0d52578e864b7a1596dd8bf9df3e8cb654b6ae272c6145"
+   ],
+   [
+    "TCK-0084",
+    "ticket",
+    "2026-09-21 16:43:00",
+    "Tomas Kessler",
+    "Tidy up impersonation banner in admin-console",
+    "Following up on last week's discussion. Area: impersonation banner in admin-console. I traced it to a timezone assumption. I patched it and verified against staging data. Deployed to staging.",
+    null,
+    "bd9cb0b8dd17d47fd02ef12eb6e98dc9eb0a53429ed7563426d5dec62fc0f0b2"
+   ],
+   [
+    "TCK-0085",
+    "ticket",
+    "2026-09-21 19:00:00",
+    "Luca Ostrander",
+    "Tidy up coupon validation in billing-api",
+    "Picked this up from the backlog. Area: coupon validation in billing-api. I traced it to a retry that fired twice. I rewrote the check and ran the full suite. Rolled out to all tenants.",
+    null,
+    "79c87aa61901f79c99b319f5cc39b6db92c71edba59fa23065073af2a679aa7d"
+   ],
+   [
+    "TCK-0086",
+    "ticket",
+    "2026-09-21 19:55:00",
+    "Sana Petrov",
+    "Harden tax summary block in invoice-renderer",
+    "Picked this up from the backlog. Area: tax summary block in invoice-renderer. I traced it to a slow query on a large tenant. I split the change into two small pull requests. Will monitor for a few days.",
+    null,
+    "f066afaa2cd0cb0b9eee489bbde606e8261b7cc864ba37738ccb514ca8e22776"
+   ],
+   [
+    "TCK-0087",
+    "ticket",
+    "2026-09-22 19:05:00",
+    "Tomas Kessler",
+    "Customer reports a CSV export that drops the last row",
+    "A customer on the Basic plan wrote in about a CSV export that drops the last row. Waiting for them to confirm when it started.",
+    null,
+    "79d8dcf610a35bf75eef5f711d9c2c07eb9ebbb90db963ab91628b9808a93f88"
+   ],
+   [
+    "TCK-0088",
+    "ticket",
+    "2026-09-24 21:18:00",
+    "Viktor Hartwell",
+    "Add tests for connection pool limits in ledger-db",
+    "Noticed this while on call. Area: connection pool limits in ledger-db. I traced it to a missing null check. I changed the handler and added a regression test. Closing once the next release goes out.",
+    null,
+    "a040a887ab883f5cbd2ca1f56b0c7ac295eb98d4f4487ac98436fbd28dd21991"
+   ],
+   [
+    "TCK-0089",
+    "ticket",
+    "2026-09-25 14:45:00",
+    "Zara Lowell",
+    "Customer reports a payment link that expires too early",
+    "A customer on the Business plan wrote in about a payment link that expires too early. Waiting for them to confirm when it started.",
+    null,
+    "883069832a91c85290a0af05f3fae60c3b0d927a182c5ef02be2cd71c47e456d"
+   ],
+   [
+    "TCK-0090",
+    "ticket",
+    "2026-09-29 20:58:00",
+    "Aiko Rademacher",
+    "Investigate delivery receipts regression in notifications",
+    "Picked this up from the backlog. Area: delivery receipts in notifications. I traced it to a retry that fired twice. I split the change into two small pull requests. Closing once the next release goes out.",
+    null,
+    "acb75e87f353ff6bbf695266a3e1a73d6d64288535031fcc125163cf0e30955e"
+   ],
+   [
+    "TCK-0091",
+    "ticket",
+    "2026-09-30 13:44:00",
+    "Viktor Hartwell",
+    "Tidy up connection pool limits in ledger-db",
+    "Following up on last week's discussion. Area: connection pool limits in ledger-db. I traced it to a retry that fired twice. I shipped a fix behind a flag and watched the dashboards. Deployed to staging.",
+    null,
+    "535f45a0c522bcc113044d857bc65bb521d79f7dbd898c6965b8fc260c83adeb"
+   ],
+   [
+    "TCK-0092",
+    "ticket",
+    "2026-09-30 14:32:00",
+    "Priya Farrow",
+    "Document audit trail view for admin-console",
+    "Raised during code review. Area: audit trail view in admin-console. I traced it to a missing null check. I shipped a fix behind a flag and watched the dashboards. Will monitor for a few days.",
+    null,
+    "2eceb81ecef6679c3e999d1a8158a2e4603b9e14dc8408bf485294898860b3ae"
+   ],
+   [
+    "TCK-0093",
+    "ticket",
+    "2026-09-30 14:43:00",
+    "Viktor Hartwell",
+    "Investigate connection pool limits regression in ledger-db",
+    "Noticed this while on call. Area: connection pool limits in ledger-db. I traced it to a missing null check. I split the change into two small pull requests. Closing once the next release goes out.",
+    null,
+    "9de6ffe587142a49a66f68f352a312843adc6fc44668d61a7026699aed73c85d"
+   ],
+   [
+    "TCK-0094",
+    "ticket",
+    "2026-09-30 17:46:00",
+    "Zara Lowell",
+    "Customer reports a status banner that never clears",
+    "A customer on the Basic plan wrote in about a status banner that never clears. Tagging for triage.",
+    null,
+    "47f0032af39bd5c9bcf997f64db22d49b5124ff060b1522b5d22b153b70ed7b0"
+   ],
+   [
+    "TCK-0095",
+    "ticket",
+    "2026-09-30 20:45:00",
+    "Oskar Alvarez",
+    "Investigate proration rounding regression in billing-api",
+    "Noticed this while on call. Area: proration rounding in billing-api. I traced it to a stale cache entry. I split the change into two small pull requests. Rolled out to all tenants.",
+    null,
+    "fcc06ef6cfe0d11225b4920fc21b76963e357f66615d1edf687a2e55f3ab86ab"
+   ],
+   [
+    "TCK-0096",
+    "ticket",
+    "2026-09-30 21:29:00",
+    "Lars Thorne",
+    "Add tests for SSO callback in auth",
+    "Picked this up from the backlog. Area: SSO callback in auth. I traced it to a stale cache entry. I shipped a fix behind a flag and watched the dashboards. Will monitor for a few days.",
+    null,
+    "569aa98ac20a807bcb4c7a5b6079d268d5b034a91bc1c1aa4706062d6e89f3d2"
+   ],
+   [
+    "TCK-0097",
+    "ticket",
+    "2026-10-01 17:42:00",
+    "Viktor Hartwell",
+    "Add tests for timezone handling in reporting",
+    "Picked this up from the backlog. Area: timezone handling in reporting. I traced it to a retry that fired twice. I changed the handler and added a regression test. Rolled out to all tenants.",
+    null,
+    "5033302aeb43c0e38f73aa516d73d5c04a84c3419e7b3c1ecc32ef985a641f3f"
+   ],
+   [
+    "TCK-0098",
+    "ticket",
+    "2026-10-01 18:55:00",
+    "Luca Ostrander",
+    "Investigate password reset flow regression in auth",
+    "Following up on last week's discussion. Area: password reset flow in auth. I traced it to a config value that differed between environments. I shipped a fix behind a flag and watched the dashboards. Deployed to staging.",
+    null,
+    "039141103d624b53d197f1b461d4cee2a23d9345cb13b64a6336c9a404b24f56"
+   ],
+   [
+    "TCK-0099",
+    "ticket",
+    "2026-10-01 19:15:00",
+    "Lars Thorne",
+    "Investigate token signing regression in auth",
+    "Picked this up from the backlog. Area: token signing in auth. I traced it to a timezone assumption. I changed the handler and added a regression test. Will monitor for a few days.",
+    null,
+    "07e4a777a28aff9071efbdd1e78e85718854a4cf9bb6fdce12e379ff3b0fdc2a"
+   ],
+   [
+    "TCK-0100",
+    "ticket",
+    "2026-10-01 20:19:00",
+    "Luca Ostrander",
+    "Harden reversal entry index in ledger-db",
+    "Noticed this while on call. Area: reversal entry index in ledger-db. I traced it to an off-by-one in the date window. I split the change into two small pull requests. Closing once the next release goes out.",
+    null,
+    "583d94c0bc2d1d4c935c67b6a82cccb0f6c614725f77296b7c26658be59a2468"
+   ],
+   [
+    "TCK-0101",
+    "ticket",
+    "2026-10-02 16:16:00",
+    "Viktor Hartwell",
+    "Fix entry partitioning in ledger-db",
+    "Noticed this while on call. Area: entry partitioning in ledger-db. I traced it to a missing null check. I split the change into two small pull requests. Closing once the next release goes out.",
+    null,
+    "817279988c94ef25d86ec707d7da3c5721f37599b72dec57568e48dbf26cdc1c"
+   ],
+   [
+    "TCK-0102",
+    "ticket",
+    "2026-10-02 16:31:00",
+    "Yuki Moreau",
+    "Harden scheduled email report in reporting",
+    "Following up on last week's discussion. Area: scheduled email report in reporting. I traced it to a stale cache entry. I shipped a fix behind a flag and watched the dashboards. Rolled out to all tenants.",
+    null,
+    "cfdce14fd834f75660f9881b008d54011857977e6d0fc5eb772cbfcdbe7a6dc1"
+   ],
+   [
+    "TCK-0103",
+    "ticket",
+    "2026-10-02 18:36:00",
+    "Luca Ostrander",
+    "Tidy up refund screen in admin-console",
+    "Raised during code review. Area: refund screen in admin-console. I traced it to a missing null check. I shipped a fix behind a flag and watched the dashboards. Rolled out to all tenants.",
+    null,
+    "24341d0b99a5fdc9c0e51b30e662bd49f50201d7ba6eb36c0b005c405b814b2b"
+   ],
+   [
+    "TCK-0104",
+    "ticket",
+    "2026-10-05 14:20:00",
+    "Selma Marsh",
+    "Harden bulk actions in admin-console",
+    "Following up on last week's discussion. Area: bulk actions in admin-console. I traced it to a missing null check. I patched it and verified against staging data. Rolled out to all tenants.",
+    null,
+    "ddeff7f4b18e730d768e89d45531cb6a378daba0abc21e3417ddfbc8eee16200"
+   ],
+   [
+    "TCK-0105",
+    "ticket",
+    "2026-10-05 14:25:00",
+    "Lars Thorne",
+    "Add tests for event ordering in webhooks",
+    "Picked this up from the backlog. Area: event ordering in webhooks. I traced it to a config value that differed between environments. I changed the handler and added a regression test. Deployed to staging.",
+    null,
+    "c97431eb6f88566188ec23a89a659eff40b7a0fd21754b35eb56a8e18ad196f1"
+   ],
+   [
+    "TCK-0106",
+    "ticket",
+    "2026-10-05 18:46:00",
+    "Luca Ostrander",
+    "Investigate subscriber emails regression in status-page",
+    "Picked this up from the backlog. Area: subscriber emails in status-page. I traced it to an off-by-one in the date window. I rewrote the check and ran the full suite. Will monitor for a few days.",
+    null,
+    "f5ecad13879d93bda305b858a4a6a28654dd93bf0d8c03a7ff7fae9663427da4"
+   ],
+   [
+    "TCK-0107",
+    "ticket",
+    "2026-10-05 20:22:00",
+    "Oskar Alvarez",
+    "Add tests for replay tool in webhooks",
+    "Raised during code review. Area: replay tool in webhooks. I traced it to an off-by-one in the date window. I changed the handler and added a regression test. Deployed to staging.",
+    null,
+    "4f7d52af5c0a9f86777fc75750213643ca12b40158d13a13bb8940036b454eff"
+   ],
+   [
+    "TCK-0108",
+    "ticket",
+    "2026-10-05 21:03:00",
+    "Pavel Hollis",
+    "Tidy up retry backoff in webhooks",
+    "Following up on last week's discussion. Area: retry backoff in webhooks. I traced it to a slow query on a large tenant. I changed the handler and added a regression test. Ready for review.",
+    null,
+    "2b06c0f39a120fb4a09815a3f75012ee22f4f5c8aa48d8cc75e3cdee985aea72"
+   ],
+   [
+    "TCK-0109",
+    "ticket",
+    "2026-10-06 20:28:00",
+    "Viktor Hartwell",
+    "Tidy up endpoint health check in webhooks",
+    "Following up on last week's discussion. Area: endpoint health check in webhooks. I traced it to a timezone assumption. I rewrote the check and ran the full suite. Closing once the next release goes out.",
+    null,
+    "a964d192c311dcd129b41dfaec873da84abcf5d6d84d51333a2b2d914d0df9a2"
+   ],
+   [
+    "TCK-0110",
+    "ticket",
+    "2026-10-06 20:35:00",
+    "Selma Marsh",
+    "Investigate maintenance schedule regression in status-page",
+    "Noticed this while on call. Area: maintenance schedule in status-page. I traced it to a stale cache entry. I split the change into two small pull requests. Closing once the next release goes out.",
+    null,
+    "a25e61ba9b01e2790788e9fbc4874c18537230eac7facc5b1709298a943d7256"
+   ],
+   [
+    "TCK-0111",
+    "ticket",
+    "2026-10-06 20:36:00",
+    "Sana Petrov",
+    "Harden month-end close query in ledger-db",
+    "Noticed this while on call. Area: month-end close query in ledger-db. I traced it to an off-by-one in the date window. I changed the handler and added a regression test. Will monitor for a few days.",
+    null,
+    "150f69bd8905ea20f952de40df5df468b36528f9958094e1c18790cb0fa7cdce"
+   ],
+   [
+    "TCK-0112",
+    "ticket",
+    "2026-10-07 17:16:00",
+    "Omar Fenwick",
+    "Investigate timezone handling regression in reporting",
+    "Picked this up from the backlog. Area: timezone handling in reporting. I traced it to a slow query on a large tenant. I patched it and verified against staging data. Rolled out to all tenants.",
+    null,
+    "a26c3d8b100220b2c3744e30a6ea5e40738936f7ccfb49a077a4e8e6b1011071"
+   ],
+   [
+    "TCK-0113",
+    "ticket",
+    "2026-10-07 21:26:00",
+    "Selma Marsh",
+    "Harden invoice list pagination in billing-api",
+    "Following up on last week's discussion. Area: invoice list pagination in billing-api. I traced it to a retry that fired twice. I changed the handler and added a regression test. Will monitor for a few days.",
+    null,
+    "c77666e38b3bf4d46d995ba5f3181be7f8fe4ab10ee6e11a8cec3d3b8a6f8181"
+   ],
+   [
+    "TCK-0114",
+    "ticket",
+    "2026-10-08 13:57:00",
+    "Priya Farrow",
+    "Customer reports tax rounded the wrong way on a credit note",
+    "A customer on the Pro plan wrote in about tax rounded the wrong way on a credit note. They asked for an update by the end of the week.",
+    null,
+    "bb44422167a522641a44bbf9ea425b8336c2702c409f5f539d71a69dcafcb123"
+   ],
+   [
+    "TCK-0115",
+    "ticket",
+    "2026-10-08 14:38:00",
+    "Oskar Alvarez",
+    "Fix event ordering in webhooks",
+    "Noticed this while on call. Area: event ordering in webhooks. I traced it to a slow query on a large tenant. I rewrote the check and ran the full suite. Closing once the next release goes out.",
+    null,
+    "aa7d9bc86e331603f101b7a959fb9b91d67f774421888e225fd238dba3cc131a"
+   ],
+   [
+    "TCK-0116",
+    "ticket",
+    "2026-10-08 17:49:00",
+    "Tomas Kessler",
+    "Customer reports a status banner that never clears",
+    "A customer on the Business plan wrote in about a status banner that never clears. Tagging for triage.",
+    null,
+    "ccf90ce54f1eb59782178942e14d6a709c7bf311faf792e0cb1031999374c7e0"
+   ],
+   [
+    "TCK-0117",
+    "ticket",
+    "2026-10-08 19:52:00",
+    "Luca Ostrander",
+    "Document coupon validation for billing-api",
+    "Raised during code review. Area: coupon validation in billing-api. I traced it to an off-by-one in the date window. I patched it and verified against staging data. Ready for review.",
+    null,
+    "09a834c6b5ba2dfc376e9036e7ba7d320d67590a3b0cb79e348f1c7d9a4e4bb1"
+   ],
+   [
+    "TCK-0118",
+    "ticket",
+    "2026-10-08 20:50:00",
+    "Omar Fenwick",
+    "Fix revenue rollup in reporting",
+    "Picked this up from the backlog. Area: revenue rollup in reporting. I traced it to an off-by-one in the date window. I patched it and verified against staging data. Will monitor for a few days.",
+    null,
+    "516c6cf68aa9fc0dd555064bbde3acf1a54d6b5605064513108d2bbf08acc8d9"
+   ],
+   [
+    "TCK-0119",
+    "ticket",
+    "2026-10-09 17:48:00",
+    "Zara Lowell",
+    "Customer reports a coupon applied twice",
+    "A customer on the Business plan wrote in about a coupon applied twice. They asked for an update by the end of the week.",
+    null,
+    "ea827f502da4afbcc21d5b43e261bbe8806b62af46e7d48d51d44c474a975141"
+   ],
+   [
+    "TCK-0120",
+    "ticket",
+    "2026-10-09 21:38:00",
+    "Oskar Alvarez",
+    "Tidy up reversal entry index in ledger-db",
+    "Noticed this while on call. Area: reversal entry index in ledger-db. I traced it to a config value that differed between environments. I split the change into two small pull requests. Will monitor for a few days.",
+    null,
+    "9ba31cb4a498651a8b1a52a56d6c734e52d516f16bf8b2ec6039ee1749e8e09e"
+   ],
+   [
+    "DOC-01",
+    "doc",
+    "2026-08-17T12:00:00Z",
+    "Selma Marsh",
+    "Service catalog",
+    "Quillfield Billing service catalog, version 1 (2026-08-17).\n\n- billing-api: public API for plans, subscriptions and invoices. Owner: Sana Petrov (Payments).\n- invoice-renderer: turns invoices into PDFs and emails. Owner: Viktor Hartwell (Payments).\n- ledger-db: primary database for ledger entries. Owner: Mateo Sandoval (Payments).\n- auth: login, sessions and API keys. Owner: Pavel Hollis (Platform).\n- notifications: email and in-app messages to customers. Owner: Selma Marsh (Platform).\n- webhooks: outgoing event delivery to customer endpoints. Owner: Luca Ostrander (Platform).\n- reporting: scheduled reports and dashboards. Owner: Aiko Rademacher (Growth).\n- admin-console: internal tool for support and operations. Owner: Priya Farrow (Support).\n- status-page: public incident and uptime page. Owner: Tomas Kessler (Support).",
+    "",
+    "cf45b2625b0d7469dbf7e3ce38267c0bf58b8f7340b54bbbf46af4b504505d01"
+   ],
+   [
+    "DOC-02",
+    "doc",
+    "2026-08-17T12:30:00Z",
+    "Selma Marsh",
+    "Team roster",
+    "Quillfield Billing team roster (2026-08-17).\n- Mateo Sandoval: Payments Lead, Payments team.\n- Lars Thorne: Backend Engineer, Payments team.\n- Sana Petrov: Backend Engineer, Payments team.\n- Viktor Hartwell: Data Engineer, Payments team.\n- Selma Marsh: Platform Lead, Platform team.\n- Luca Ostrander: Site Reliability Engineer, Platform team.\n- Pavel Hollis: Backend Engineer, Platform team.\n- Oskar Alvarez: Security Engineer, Platform team.\n- Priya Farrow: Support Lead, Support team.\n- Tomas Kessler: Support Specialist, Support team.\n- Zara Lowell: Support Specialist, Support team.\n- Omar Fenwick: Growth Lead, Growth team.\n- Aiko Rademacher: Product Analyst, Growth team.\n- Yuki Moreau: Marketing Engineer, Growth team.",
+    "",
+    "f4ade04f08b5996982ec117777e68f7147af52e6f7a173e4f8657183c271d97c"
+   ],
+   [
+    "ARCH-01",
+    "doc",
+    "2026-08-17T12:45:00Z",
+    "Selma Marsh",
+    "Architecture overview",
+    "Quillfield Billing architecture overview (2026-08-17).\nEach line names a system and the system it needs in order to work.\n\n- notifications depends on invoice-renderer.\n- invoice-renderer depends on billing-api.\n- billing-api depends on ledger-db.\n- webhooks depends on billing-api.\n- admin-console depends on billing-api.\n- billing-api depends on auth.\n- reporting depends on ledger-db.\n- status-page depends on notifications.",
+    "",
+    "d7369e8cf69ef82f69fcf530699668081c9ce93b33dab3c760a0f8ec126ee0ce"
+   ],
+   [
+    "RB-01",
+    "doc",
+    "2026-08-17T15:40:00Z",
+    "Luca Ostrander",
+    "Runbook: webhooks",
+    "Runbook: webhooks (outgoing event delivery to customer endpoints).\nHealth check: the webhooks dashboard must be green.\nCommon alerts: error rate, latency, queue depth.\nEscalation: post in #platform and page the on-call engineer.",
+    "",
+    "609a2b252c28dbad68efaf9d6044318c23611eaad8ddc9f633b96e41d648d218"
+   ],
+   [
+    "DOC-03",
+    "doc",
+    "2026-08-18T14:04:00Z",
+    "Sana Petrov",
+    "Project charter: Ledger Hardening",
+    "Project charter: Ledger Hardening.\nLead: Sana Petrov (Payments).\nGoal: protect ledger integrity and speed up month-end close.\nSystems involved: ledger-db, reporting.\nTarget: week 8 of the plan.",
+    "",
+    "ed7e3ab9e1c1b2559637a28d36dac43d1cd54a81ed0fad476410781a2b0876ad"
+   ],
+   [
+    "DOC-04",
+    "doc",
+    "2026-08-18T14:13:00Z",
+    "Pavel Hollis",
+    "Project charter: Webhook v2",
+    "Project charter: Webhook v2.\nLead: Pavel Hollis (Platform).\nGoal: ordered, signed and replayable webhook delivery.\nSystems involved: webhooks, auth.\nTarget: week 8 of the plan.",
+    "",
+    "7472736abd97cc352fddccf44bcf946a2bb61391350bb64d501c85998325a5fe"
+   ],
+   [
+    "DOC-05",
+    "doc",
+    "2026-08-18T14:25:00Z",
+    "Sana Petrov",
+    "Project charter: Invoice Reliability",
+    "Project charter: Invoice Reliability.\nLead: Sana Petrov (Payments).\nGoal: make invoice creation and delivery boringly dependable.\nSystems involved: billing-api, invoice-renderer, notifications.\nTarget: week 7 of the plan.",
+    "",
+    "c8b67353b17749b2add74cbde3c9bf71373eb2daf81291bce63241e0c910b0ae"
+   ],
+   [
+    "DOC-06",
+    "doc",
+    "2026-08-18T14:31:00Z",
+    "Zara Lowell",
+    "Project charter: Support Console Refresh",
+    "Project charter: Support Console Refresh.\nLead: Zara Lowell (Support).\nGoal: faster customer lookup and safer refunds.\nSystems involved: admin-console, status-page.\nTarget: week 5 of the plan.",
+    "",
+    "b39696c720fb446cf26221f0776256fc5511754d0275551ba7513b8f289567be"
+   ],
+   [
+    "DOC-07",
+    "doc",
+    "2026-08-18T14:58:00Z",
+    "Omar Fenwick",
+    "Project charter: Self-Serve Onboarding",
+    "Project charter: Self-Serve Onboarding.\nLead: Omar Fenwick (Growth).\nGoal: let small businesses sign up and send a first invoice alone.\nSystems involved: auth, billing-api.\nTarget: week 6 of the plan.",
+    "",
+    "8b2f9a78b050e1a503640c8e24bcadb246e5d50ca49bdad4abc21484df8eeeea"
+   ],
+   [
+    "ADR-0001",
+    "doc",
+    "2026-08-18T15:15:00Z",
+    "Mateo Sandoval",
+    "ADR-0001: Idempotency keys on billing-api writes",
+    "ADR-0001: Idempotency keys on billing-api writes\nAuthor: Mateo Sandoval\nDraft opened: 2026-08-17. Status: accepted on 2026-08-18.\nContext: Client retries created duplicate charges in the sandbox.\nDecision: Every write endpoint of billing-api requires an Idempotency-Key header; keys are stored for 24 hours.\nConsequences: Clients must send a key. Replays return the original response.",
+    "",
+    "8bce1fd093cc7e4750fca6979465e417ec6835dd6d7515003dffef1e3201d1ed"
+   ],
+   [
+    "ADR-0002",
+    "doc",
+    "2026-08-18T15:21:00Z",
+    "Mateo Sandoval",
+    "ADR-0002: Append-only ledger entries",
+    "ADR-0002: Append-only ledger entries\nAuthor: Mateo Sandoval\nDraft opened: 2026-08-17. Status: accepted on 2026-08-18.\nContext: Edits to ledger rows made audits hard to follow.\nDecision: ledger-db stores entries as append-only rows; corrections are new reversing entries.\nConsequences: Reports must net entries. Storage grows faster.",
+    "",
+    "6cb3af460c27fe0b2a5c1b52a80e29cdc45d8c9edb641a6273d63df97cab1f86"
+   ],
+   [
+    "RB-02",
+    "doc",
+    "2026-08-18T20:05:00Z",
+    "Selma Marsh",
+    "Runbook: notifications",
+    "Runbook: notifications (email and in-app messages to customers).\nHealth check: the notifications dashboard must be green.\nCommon alerts: error rate, latency, queue depth.\nEscalation: post in #platform and page the on-call engineer.",
+    "",
+    "e42b84c739adcf56de2aed473e02f2a3f77f421cc061483b8e6867b1421a92e2"
+   ],
+   [
+    "RB-03",
+    "doc",
+    "2026-08-20T14:24:00Z",
+    "Aiko Rademacher",
+    "Runbook: reporting",
+    "Runbook: reporting (scheduled reports and dashboards).\nHealth check: the reporting dashboard must be green.\nCommon alerts: error rate, latency, queue depth.\nEscalation: post in #growth and page the on-call engineer.",
+    "",
+    "aeca9335e4c11b6cd4f936b843ead2cdd124c7ad5cb615085b75a48c4f22ed8c"
+   ],
+   [
+    "DOC-14",
+    "doc",
+    "2026-08-25T11:15:00Z",
+    "Oskar Alvarez",
+    "Integration: fernhill-sso",
+    "Integration: fernhill-sso (single sign-on for the customer Fernhill Outfitters).\nOwner: Oskar Alvarez (Platform).\nKind: customer integration.\nfernhill-sso depends on auth.\nFernhill Outfitters signs in through their own identity provider; fernhill-sso maps their users to Quillfield Billing accounts.\nThe certificate rollover steps for this integration are written down here and nowhere else.",
+    "",
+    "52afbeaf16d7a3826629b012e616bc26542ec7a62ce0ca074df287b2702ca0ec"
+   ],
+   [
+    "ADR-0004",
+    "doc",
+    "2026-08-25T15:04:00Z",
+    "Mateo Sandoval",
+    "ADR-0004: Render invoices synchronously",
+    "ADR-0004: Render invoices synchronously\nAuthor: Mateo Sandoval\nDraft opened: 2026-08-17. Status: accepted on 2026-08-25.\nContext: Invoice PDFs are small and rendering is fast in tests.\nDecision: billing-api renders the invoice PDF inside the request that creates the invoice.\nConsequences: Request latency depends on rendering. One code path to maintain.",
+    "",
+    "016a6699ade976c1f6456301d1913c9aa8b3a99d3d5d198a5fad78b9ffd81f24"
+   ],
+   [
+    "ADR-0003",
+    "doc",
+    "2026-08-25T15:37:00Z",
+    "Luca Ostrander",
+    "ADR-0003: Signed webhooks with retry backoff",
+    "ADR-0003: Signed webhooks with retry backoff\nAuthor: Luca Ostrander\nDraft opened: 2026-08-17. Status: accepted on 2026-08-25.\nContext: Customers could not verify who sent a webhook.\nDecision: webhooks signs payloads with a per-tenant secret and retries with exponential backoff for up to 24 hours.\nConsequences: Customers must verify signatures. Retries can reorder events.",
+    "",
+    "2795cae463243ef6a3b26325ad497ba68f77195a93b6a34a6ba4063af4826365"
+   ],
+   [
+    "RB-04",
+    "doc",
+    "2026-08-25T16:47:00Z",
+    "Viktor Hartwell",
+    "Runbook: invoice-renderer",
+    "Runbook: invoice-renderer (turns invoices into PDFs and emails).\nHealth check: the invoice-renderer dashboard must be green.\nCommon alerts: error rate, latency, queue depth.\nEscalation: post in #payments and page the on-call engineer.",
+    "",
+    "6081dde71ec5f418dc7aa0891777825a3245b323cf210997dadf53e8aa492753"
+   ],
+   [
+    "PM-01",
+    "doc",
+    "2026-08-27T14:28:00Z",
+    "Luca Ostrander",
+    "Postmortem: Delayed webhook deliveries",
+    "Postmortem: Delayed webhook deliveries\nDate of incident: 2026-08-26\nImpact: About 2% of webhook deliveries arrived more than 30 minutes late for three hours.\nRoot cause: A retry queue shared a worker pool with a bulk replay job.\nTimeline: detected 15:27 UTC, mitigated within the hour.\nAction items:\n- Separate the retry and replay worker pools.\n- Alert when the oldest queued delivery passes 10 minutes.",
+    "",
+    "98271a59ef11f9070183fa4bbb31047035b5a5c0b09503b514416b66ca7f1dcc"
+   ],
+   [
+    "RB-05",
+    "doc",
+    "2026-08-27T20:09:00Z",
+    "Sana Petrov",
+    "Runbook: billing-api",
+    "Runbook: billing-api (public API for plans, subscriptions and invoices).\nHealth check: the billing-api dashboard must be green.\nCommon alerts: error rate, latency, queue depth.\nEscalation: post in #payments and page the on-call engineer.\nOwner: Sana Petrov (Payments).",
+    "",
+    "d4dbe667718ee0a5f803272dfadf648e14df3f16572ca1f82540657d66bf6b2d"
+   ],
+   [
+    "RB-06",
+    "doc",
+    "2026-08-28T13:43:00Z",
+    "Tomas Kessler",
+    "Runbook: status-page",
+    "Runbook: status-page (public incident and uptime page).\nHealth check: the status-page dashboard must be green.\nCommon alerts: error rate, latency, queue depth.\nEscalation: post in #support and page the on-call engineer.",
+    "",
+    "e2ba7d936f117d71998963cb0e206413e9bf23457cf17afbe58808cb1fa84f34"
+   ],
+   [
+    "DOC-08",
+    "doc",
+    "2026-08-28T15:10:00Z",
+    "Oskar Alvarez",
+    "Weekly sync notes, week 2",
+    "- Walked through the on-call rota for the next two weeks.\n- Talked through the budget for tooling.\n- Agreed on a weekly demo slot.\n- Reviewed the open ticket queue and closed stale items.",
+    "",
+    "c1fc0b40386e35779ccca733b3ea0a98ef155fba9b13a2f45ea22c580e85c423"
+   ],
+   [
+    "RB-07",
+    "doc",
+    "2026-08-28T20:33:00Z",
+    "Priya Farrow",
+    "Runbook: admin-console",
+    "Runbook: admin-console (internal tool for support and operations).\nHealth check: the admin-console dashboard must be green.\nCommon alerts: error rate, latency, queue depth.\nEscalation: post in #support and page the on-call engineer.",
+    "",
+    "22fb694b42f53b04bf48655b1468bb9f2cc3dbfc2105f7045ec67f27def62095"
+   ],
+   [
+    "RB-10",
+    "doc",
+    "2026-08-31T16:13:00Z",
+    "Oskar Alvarez",
+    "Runbook: oncall-runbook",
+    "Runbook: oncall-runbook (the on-call runbook: paging, triage and incident handover).\nOwner: Oskar Alvarez (Platform).\nKind: on-call runbook.\nPaging: page the on-call engineer through the paging tool; a second page after 10 minutes goes to the team lead.\nTriage: pick the severity from the severity table, then open an incident channel.\nHandover: the outgoing on-call writes a handover note before the shift ends.",
+    "",
+    "abd505bc618f3cb137b1f340693e82488be653db81e1053a9b741cda718404bc"
+   ],
+   [
+    "ADR-0005",
+    "doc",
+    "2026-09-01T15:14:00Z",
+    "Selma Marsh",
+    "ADR-0005: SSO required for admin-console",
+    "ADR-0005: SSO required for admin-console\nAuthor: Selma Marsh\nDraft opened: 2026-08-24. Status: accepted on 2026-09-01.\nContext: Shared admin passwords were still in use.\nDecision: admin-console accepts only SSO logins through auth; local passwords are removed.\nConsequences: Support staff need SSO accounts before the cutover.",
+    "",
+    "dc6356cf2690b8a90417394397b8ff5c3838646a703ece3df2c2337e91e199a7"
+   ],
+   [
+    "ADR-0006",
+    "doc",
+    "2026-09-01T15:55:00Z",
+    "Priya Farrow",
+    "ADR-0006: Status page updates come from on-call",
+    "ADR-0006: Status page updates come from on-call\nAuthor: Priya Farrow\nDraft opened: 2026-08-24. Status: accepted on 2026-09-01.\nContext: Conflicting messages appeared on status-page during an incident.\nDecision: Only the on-call engineer or the support lead posts to status-page during an incident.\nConsequences: Fewer voices, slower first message.",
+    "",
+    "d9e6f1d29d75bee2693c5d0c4ff4ef24ab0ff8b1a2c36d53c51afcf6a354c85a"
+   ],
+   [
+    "ADR-0014",
+    "doc",
+    "2026-09-02T15:17:00Z",
+    "Oskar Alvarez",
+    "ADR-0014: Encrypt ledger-db backups with rotating keys",
+    "ADR-0014: Encrypt ledger-db backups with rotating keys\nAuthor: Oskar Alvarez\nDraft opened: 2026-08-24. Status: accepted on 2026-09-02.\nConstrains: ledger-db.\nContext: A backup copy of ledger-db could be read by anyone with access to the storage bucket.\nDecision: Every ledger-db backup is encrypted with a key that rotates every 90 days; a restore needs the current key from the security on-call.\nConsequences: Restores take a few minutes longer. Losing the key history makes old backups unreadable.",
+    "",
+    "8b07c7f7a531c5580e8a60cf8ade3bf5d3d8360dc5e2be1e001545842cc80b1a"
+   ],
+   [
+    "PM-02",
+    "doc",
+    "2026-09-03T14:17:00Z",
+    "Aiko Rademacher",
+    "Postmortem: Dashboard totals off by one day",
+    "Postmortem: Dashboard totals off by one day\nDate of incident: 2026-09-02\nImpact: Scheduled reports showed totals shifted by one day for tenants outside UTC.\nRoot cause: A report window used server time instead of tenant time.\nTimeline: detected 20:15 UTC, mitigated within the hour.\nAction items:\n- Store the tenant timezone with every report definition.\n- Add a timezone test to the report suite.",
+    "",
+    "fedf645d234d219812f8b9bebc0976976a850ccc90a07c98fcfe7a0f48c4f2c9"
+   ],
+   [
+    "RB-08",
+    "doc",
+    "2026-09-03T19:23:00Z",
+    "Pavel Hollis",
+    "Runbook: auth",
+    "Runbook: auth (login, sessions and API keys).\nHealth check: the auth dashboard must be green.\nCommon alerts: error rate, latency, queue depth.\nEscalation: post in #platform and page the on-call engineer.",
+    "",
+    "9c0e7ea8b47370cd8fb93f698c904f04ed24b3835899617a8c8a1a1dac5875c4"
+   ],
+   [
+    "RB-09",
+    "doc",
+    "2026-09-04T17:47:00Z",
+    "Mateo Sandoval",
+    "Runbook: ledger-db",
+    "Runbook: ledger-db (primary database for ledger entries).\nHealth check: the ledger-db dashboard must be green.\nCommon alerts: error rate, latency, queue depth.\nEscalation: post in #payments and page the on-call engineer.",
+    "",
+    "a1a0ed0c9e0e5f559a09f923ef4c377756cc1284463374cc222a4eeaee229af3"
+   ],
+   [
+    "ADR-0011",
+    "doc",
+    "2026-09-08T15:15:00Z",
+    "Viktor Hartwell",
+    "ADR-0011: Render invoices asynchronously through invoice-renderer",
+    "ADR-0011: Render invoices asynchronously through invoice-renderer\nAuthor: Viktor Hartwell\nDraft opened: 2026-08-31. Status: accepted on 2026-09-08.\nSupersedes: ADR-0004.\nContext: Synchronous rendering caused request timeouts for invoices with many line items.\nDecision: billing-api enqueues a render job and invoice-renderer produces the PDF; the API returns the invoice at once with a pending PDF link.\nConsequences: PDF links can be pending for a few seconds.",
+    "ADR-0004",
+    "1c57848fa5ab42ad252a2a5e43328aa88e20e0e85ca84d3c22f684d056e153c3"
+   ],
+   [
+    "ADR-0007",
+    "doc",
+    "2026-09-08T15:32:00Z",
+    "Selma Marsh",
+    "ADR-0007: Per-tenant rate limits in notifications",
+    "ADR-0007: Per-tenant rate limits in notifications\nAuthor: Selma Marsh\nDraft opened: 2026-08-31. Status: accepted on 2026-09-08.\nContext: One tenant's bulk send delayed everyone's email.\nDecision: notifications applies per-tenant send limits with a shared burst pool.\nConsequences: Large tenants may see queued sends.",
+    "",
+    "a6058043c2fb6b6b4ab9e5319ea79e1fb29298d5cc5e8a55a6a1e8833091f613"
+   ],
+   [
+    "ADR-0016",
+    "doc",
+    "2026-09-09T15:44:00Z",
+    "Pavel Hollis",
+    "ADR-0016: Rotate auth signing keys every 30 days",
+    "ADR-0016: Rotate auth signing keys every 30 days\nAuthor: Pavel Hollis\nCo-author: Oskar Alvarez\nDraft opened: 2026-08-31. Status: accepted on 2026-09-09.\nConstrains: auth.\nContext: Signing keys for auth had not been rotated since launch.\nDecision: auth rotates its token signing keys every 30 days; the security on-call runs the rotation.\nConsequences: Clients must fetch keys from the published key set.",
+    "",
+    "771d5f1f7e49a82304f3c9d4566405d8bd56cf1c250267ec31df06541f79a0ec"
+   ],
+   [
+    "PM-03",
+    "doc",
+    "2026-09-10T14:28:00Z",
+    "Mateo Sandoval",
+    "Postmortem: Invoice rendering timeouts",
+    "Postmortem: Invoice rendering timeouts\nDate of incident: 2026-09-09\nImpact: Invoices with more than 200 line items timed out for 90 minutes.\nRoot cause: Rendering ran inside the billing-api request and exceeded the gateway timeout.\nTimeline: detected 14:03 UTC, mitigated within the hour.\nDecision: ADR-0011 supersedes ADR-0004. Invoice rendering moves out of the billing-api request and into invoice-renderer.\nAction items:\n- Move rendering to a queue.\n- Add a pending-PDF state to the invoice page.",
+    "ADR-0011 ADR-0004",
+    "a604b4c4d75c54ef1e77f4f83b7519bfba22c28881a9186855b8aca7aa831881"
+   ],
+   [
+    "DOC-09",
+    "doc",
+    "2026-09-11T15:48:00Z",
+    "Sana Petrov",
+    "Weekly sync notes, week 4",
+    "- Planned the next release window.\n- Walked through the on-call rota for the next two weeks.\n- Agreed to tidy the shared documentation folder.\n- Agreed to keep deploys off Friday evenings.",
+    "",
+    "8926695c3a43f0ee001aa2589ff3424e4fa8824a6a45a1d3968141d4bb93fc6d"
+   ],
+   [
+    "DOC-10",
+    "doc",
+    "2026-09-11T17:13:00Z",
+    "Priya Farrow",
+    "Retrospective, week 4",
+    "Went well: Less weekend work; Good demos.\nTo improve: Too many meetings; Slow staging environment.",
+    "",
+    "1b726d8011583187dab7e68cd8f63d26adaaaf64168b5f53960aeda5284019f4"
+   ],
+   [
+    "ADR-0010",
+    "doc",
+    "2026-09-15T15:34:00Z",
+    "Luca Ostrander",
+    "ADR-0010: Audit logs kept for 400 days",
+    "ADR-0010: Audit logs kept for 400 days\nAuthor: Luca Ostrander\nDraft opened: 2026-08-31. Status: accepted on 2026-09-15.\nContext: Retention differed between services.\nDecision: auth and admin-console keep audit logs for 400 days, then archive them.\nConsequences: Storage cost rises slightly.",
+    "",
+    "cf70e828ad4c6a19e47d715b6c7aa594a89fadeb14f25b89720027470f90466d"
+   ],
+   [
+    "ADR-0008",
+    "doc",
+    "2026-09-15T15:42:00Z",
+    "Aiko Rademacher",
+    "ADR-0008: Reporting reads from a replica",
+    "ADR-0008: Reporting reads from a replica\nAuthor: Aiko Rademacher\nDraft opened: 2026-08-31. Status: accepted on 2026-09-15.\nContext: Heavy reports slowed down writes on the primary database.\nDecision: reporting queries a read replica of ledger-db; reports may lag by up to 5 minutes.\nConsequences: Dashboards show a freshness timestamp.",
+    "",
+    "8e5a857b799fb3518cda5a6aa8822fe6d7fac3736d96c1cdb853d50c235ce427"
+   ],
+   [
+    "ADR-0015",
+    "doc",
+    "2026-09-16T15:11:00Z",
+    "Oskar Alvarez",
+    "ADR-0015: Mask customer names in reporting exports",
+    "ADR-0015: Mask customer names in reporting exports\nAuthor: Oskar Alvarez\nDraft opened: 2026-09-07. Status: accepted on 2026-09-16.\nConstrains: reporting.\nContext: CSV exports from reporting carried customer names to people who only needed totals.\nDecision: reporting masks customer names in every CSV export unless the requester holds the export role.\nConsequences: Analysts ask for the export role when they need names.",
+    "",
+    "f5db7e8a069ad1c807dc1413e167ee868399947f9cfeeb770173059fa737b131"
+   ],
+   [
+    "ADR-0013",
+    "doc",
+    "2026-09-17T15:50:00Z",
+    "Yuki Moreau",
+    "ADR-0013: Revenue rollups read invoice state through billing-api",
+    "ADR-0013: Revenue rollups read invoice state through billing-api\nAuthor: Yuki Moreau\nDraft opened: 2026-09-07. Status: accepted on 2026-09-17.\nContext: Revenue rollups need invoice states, and totals built from ledger entries alone differed from the invoice list.\nDecision: reporting depends on billing-api: the revenue rollup calls the invoice list endpoint of billing-api in addition to reading ledger-db.\nConsequences: billing-api rate limits apply to reporting jobs. Reporting must handle API errors.",
+    "",
+    "b18a8b7da676821a8312718c3491d576e7b78c857f6c30f1cd70ba336604712c"
+   ],
+   [
+    "PM-04",
+    "doc",
+    "2026-09-18T14:34:00Z",
+    "Selma Marsh",
+    "Postmortem: Duplicate invoice emails",
+    "Postmortem: Duplicate invoice emails\nDate of incident: 2026-09-17\nImpact: Roughly 600 customers received each invoice email twice.\nRoot cause: A deploy restarted the sender while a batch was half sent, and the batch was replayed.\nTimeline: detected 13:05 UTC, mitigated within the hour.\nAction items:\n- Mark each message as sent before the next one starts.\n- Pause batch sends during deploys.",
+    "TCK-0076 TCK-0077",
+    "de4344fdf2b26cd948fa808adc1341f95d61f5e430e6e700b62602e38371ed67"
+   ],
+   [
+    "ADR-0009",
+    "doc",
+    "2026-09-22T15:28:00Z",
+    "Selma Marsh",
+    "ADR-0009: Transfer billing-api ownership from Sana Petrov to Luca Ostrander",
+    "ADR-0009: Transfer billing-api ownership from Sana Petrov to Luca Ostrander\nAuthor: Selma Marsh\nDraft opened: 2026-08-31. Status: accepted on 2026-09-22.\nContext: Sana Petrov is moving to full-time work on the Ledger Hardening project, and billing-api releases are tied to the platform release train.\nDecision: Ownership of billing-api transfers from Sana Petrov (Payments) to Luca Ostrander (Platform) effective 2026-09-22. Sana Petrov stays available as backup for 30 days.\nConsequences: Escalations for billing-api go to Luca Ostrander. The service catalog entry changes accordingly.",
+    "",
+    "b2d416f4b3c8e4f7f3b417aeb677085a7eb9f8bedd37b1866b9324159239a33a"
+   ],
+   [
+    "PM-05",
+    "doc",
+    "2026-09-24T14:10:00Z",
+    "Pavel Hollis",
+    "Postmortem: Login loop after certificate rotation",
+    "Postmortem: Login loop after certificate rotation\nDate of incident: 2026-09-23\nImpact: Some users could not log in for 40 minutes after a signing certificate was rotated.\nRoot cause: Old and new certificates were not served together during the switch.\nTimeline: detected 19:31 UTC, mitigated within the hour.\nAction items:\n- Serve both certificates for 24 hours during rotation.\n- Add a login check to the rotation runbook.",
+    "",
+    "7baf477acdb53decba9d43b0d1553b01b38e18c568e997360e4cbf7c76b97e1b"
+   ],
+   [
+    "DOC-15",
+    "doc",
+    "2026-09-25T10:00:00Z",
+    "Selma Marsh",
+    "Resignation: Oskar Alvarez",
+    "Resignation: Oskar Alvarez.\nOskar Alvarez (Platform, Security Engineer) resigned on 2026-09-25.\nLast day: 2026-10-09.\nUntil then Oskar Alvarez works as usual; the handover is planned with the Platform lead.",
+    "",
+    "516ced744223b622cc4245f5b2c8fc1bde1c136088f54085bb6df0bb2cd0065b"
+   ],
+   [
+    "DOC-11",
+    "doc",
+    "2026-09-25T15:56:00Z",
+    "Yuki Moreau",
+    "Weekly sync notes, week 6",
+    "- Agreed to tidy the shared documentation folder.\n- Agreed to keep deploys off Friday evenings.\n- Planned the next release window.\n- Talked through the budget for tooling.",
+    "",
+    "47b6a921ee82cb7dddc3670218f848a780e81213feedd2c5345605504daea659"
+   ],
+   [
+    "ADR-0012",
+    "doc",
+    "2026-09-29T15:12:00Z",
+    "Viktor Hartwell",
+    "ADR-0012: Schema freeze on ledger-db during month-end close",
+    "ADR-0012: Schema freeze on ledger-db during month-end close\nAuthor: Viktor Hartwell\nDraft opened: 2026-09-21. Status: accepted on 2026-09-29.\nContext: A migration during the close slowed ledger entries down.\nDecision: No schema changes on ledger-db from the 28th to the 3rd of each month.\nConsequences: Migrations are planned around the close.",
+    "",
+    "95f031c604f4036ec4669e87f4c3ac993400168daa7220cb094c87e061d230ce"
+   ],
+   [
+    "DOC-17",
+    "doc",
+    "2026-10-01T14:00:00Z",
+    "Oskar Alvarez",
+    "Handoff notes: Oskar Alvarez",
+    "Handoff notes: Oskar Alvarez.\nAnswers to the handoff questions, written before the last day (2026-10-09).\n- ADR-0014 constrains ledger-db: the backup key rotates every 90 days and lives with the security on-call; restoring an older backup needs the key that was current when it was taken.\n- ADR-0015 constrains reporting: masking runs in the CSV export step, and the Growth lead grants the export role.\n- fernhill-sso depends on auth: the SAML certificate for the customer rolls over once a year, two weeks before it expires, following the steps in DOC-14.\nNot covered here: oncall-runbook.",
+    "ADR-0014 ADR-0015 DOC-14",
+    "864d4055659226901fc9e75befe0e48eec70eaab51434b7fc88a1ce58caf3522"
+   ],
+   [
+    "DOC-18",
+    "doc",
+    "2026-10-02T15:00:00Z",
+    "Viktor Hartwell",
+    "Handoff review: Viktor Hartwell",
+    "Handoff review: Viktor Hartwell.\nI went through the handoff notes (DOC-17) with Oskar Alvarez and take over these decisions.\n- ADR-0014 constrains ledger-db: confirmed; I hold the key rotation schedule from now on.\n- ADR-0015 constrains reporting: confirmed; I review export role requests from now on.",
+    "DOC-17 ADR-0014 ADR-0015",
+    "922c418aa679f69f1d7eece039fd023839af3ff6ebb78c4ab361ba7fb6181ee8"
+   ],
+   [
+    "PM-06",
+    "doc",
+    "2026-10-08T14:13:00Z",
+    "Mateo Sandoval",
+    "Postmortem: Slow month-end close queries",
+    "Postmortem: Slow month-end close queries\nDate of incident: 2026-10-07\nImpact: The month-end close took four hours instead of one.\nRoot cause: A balance snapshot job competed with close queries for connections.\nTimeline: detected 19:57 UTC, mitigated within the hour.\nAction items:\n- Run the snapshot job outside the close window.\n- Raise the connection pool limit for close queries.",
+    "",
+    "e39eea8e2471e74b9b83558b62d730a23ea3b37617282f41882f7efc3802cd2b"
+   ],
+   [
+    "DOC-12",
+    "doc",
+    "2026-10-09T15:52:00Z",
+    "Lars Thorne",
+    "Weekly sync notes, week 8",
+    "- Reviewed the support response-time numbers.\n- Planned the next release window.\n- Discussed hiring plans for the next quarter.\n- Agreed to tidy the shared documentation folder.",
+    "",
+    "7d2e87165d660739f363d0951dff7318c24aae085f5b1b6bf5717f55b05aa27c"
+   ],
+   [
+    "DOC-13",
+    "doc",
+    "2026-10-09T17:28:00Z",
+    "Priya Farrow",
+    "Retrospective, week 8",
+    "Went well: Faster reviews; Good demos.\nTo improve: Too many meetings; Unclear priorities.",
+    "",
+    "6f0ceac6b6c48e328acd42cfdb0b0dcf5b0de2366ae14251f606777d7590eaeb"
+   ],
+   [
+    "DOC-16",
+    "doc",
+    "2026-10-09T22:00:00Z",
+    "Selma Marsh",
+    "Last day: Oskar Alvarez",
+    "Last day: Oskar Alvarez.\nOskar Alvarez (Platform, Security Engineer) leaves Quillfield Billing today, 2026-10-09. This record ends the roles below and names no successor.\n- Oskar Alvarez is no longer a member of the Platform team.\n- Oskar Alvarez no longer owns fernhill-sso.\n- Oskar Alvarez no longer owns oncall-runbook.",
+    "DOC-15",
+    "5cae64af2a839067c64abca7cd1a03174ffbc5ff13fe4f9c53fa6bcce8c58bb5"
+   ]
+  ],
+  "total": 403,
+  "timeUsed": 1399
+ }
+}

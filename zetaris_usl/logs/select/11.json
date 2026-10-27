@@ -1,0 +1,36 @@
+{
+ "n": 11,
+ "statement": "SELECT record_id, system, ts, author, body FROM lightning.metastore.wlwt.wlwt_usl.record WHERE record_id = 'msg-0148'",
+ "ok": true,
+ "rows": 1,
+ "seconds": 2.066,
+ "sample": [
+  {
+   "record_id": "msg-0148",
+   "system": "chat",
+   "ts": "2026-09-22T17:31:00Z",
+   "author": "Luca Ostrander",
+   "body": "Per ADR-0009, I am now the owner of billing-api. Sana Petrov stays on as backup for 30 days. Send billing-api escalations to me."
+  }
+ ],
+ "raw": {
+  "headers": [
+   "record_id",
+   "system",
+   "ts",
+   "author",
+   "body"
+  ],
+  "data": [
+   [
+    "msg-0148",
+    "chat",
+    "2026-09-22T17:31:00Z",
+    "Luca Ostrander",
+    "Per ADR-0009, I am now the owner of billing-api. Sana Petrov stays on as backup for 30 days. Send billing-api escalations to me."
+   ]
+  ],
+  "total": 1,
+  "timeUsed": 1991
+ }
+}

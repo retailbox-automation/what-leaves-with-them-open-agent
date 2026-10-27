@@ -1,0 +1,71 @@
+{
+ "n": 9,
+ "statement": "RUN DQ TABLE lightning.metastore.wlwt.wlwt_usl.record",
+ "ok": true,
+ "rows": 3,
+ "seconds": 11.024,
+ "sample": [
+  {
+   "name": "quotable",
+   "table": "record",
+   "type": "Custom Data Quality",
+   "total_record": "403",
+   "valid_record": "403",
+   "invalid_record": "0"
+  },
+  {
+   "name": "id_matches_system",
+   "table": "record",
+   "type": "Custom Data Quality",
+   "total_record": "403",
+   "valid_record": "403",
+   "invalid_record": "0"
+  },
+  {
+   "name": "record_id",
+   "table": "record",
+   "type": "Primary Key Constraint",
+   "total_record": "403",
+   "valid_record": "403",
+   "invalid_record": "0"
+  }
+ ],
+ "raw": {
+  "headers": [
+   "name",
+   "table",
+   "type",
+   "total_record",
+   "valid_record",
+   "invalid_record"
+  ],
+  "data": [
+   [
+    "quotable",
+    "record",
+    "Custom Data Quality",
+    "403",
+    "403",
+    "0"
+   ],
+   [
+    "id_matches_system",
+    "record",
+    "Custom Data Quality",
+    "403",
+    "403",
+    "0"
+   ],
+   [
+    "record_id",
+    "record",
+    "Primary Key Constraint",
+    "403",
+    "403",
+    "0"
+   ]
+  ],
+  "total": 3,
+  "timeUsed": 10952
+ }
+}

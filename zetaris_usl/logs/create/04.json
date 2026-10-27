@@ -1,0 +1,24 @@
+{
+ "n": 4,
+ "statement": "UPDATE USL lightning.metastore.wlwt.wlwt_usl SET DESCRIPTION 'What Leaves With Them: every chat message, ticket and document the Investigator may cite and the Verifier re-reads by record_id.'",
+ "ok": true,
+ "rows": 1,
+ "seconds": 0.156,
+ "sample": [
+  {
+   "updated": "true"
+  }
+ ],
+ "raw": {
+  "headers": [
+   "updated"
+  ],
+  "data": [
+   [
+    "true"
+   ]
+  ],
+  "total": 1,
+  "timeUsed": 95
+ }
+}
